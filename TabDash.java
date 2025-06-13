@@ -36,7 +36,7 @@ public class TabDash {
         DefaultListModel nameListModel = new DefaultListModel<>();
         JList nameList = new JList<>(nameListModel);
         JScrollPane nameScrollPane = new JScrollPane(nameList);
-        nameScrollPane.setBounds(0, 0, 200, 300);
+        nameScrollPane.setBounds(5, 20, 190, 300);
         panelWest.add(nameScrollPane);
     }
 }

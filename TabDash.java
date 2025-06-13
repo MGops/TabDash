@@ -1,5 +1,9 @@
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import java.awt.*;
 
 public class TabDash {
@@ -28,5 +32,11 @@ public class TabDash {
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);
+
+        DefaultListModel nameListModel = new DefaultListModel<>();
+        JList nameList = new JList<>(nameListModel);
+        JScrollPane nameScrollPane = new JScrollPane(nameList);
+        nameScrollPane.setBounds(0, 0, 200, 300);
+        panelWest.add(nameScrollPane);
     }
 }

@@ -44,23 +44,25 @@ public class TabDash {
         nameListModel.addElement("Tom");
         nameScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
         nameScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        nameScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panelWest.add(nameScrollPane);
-
-        JPanel panelCenter = new JPanel();
-        panelCenter.setBackground(Color.WHITE);
-        panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        mainPanel.add(panelCenter, BorderLayout.CENTER);
-
+        
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
         panelWest.add(Box.createRigidArea(new Dimension(0, 10)));
         buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));;
-        
+
         JButton addButton = new JButton("Add");
         buttonPanel.add(addButton);        
 
         JButton removeButton = new JButton("Remove");
         buttonPanel.add(removeButton);
         panelWest.add(buttonPanel);
+
+        JPanel panelCenter = new JPanel();
+        panelCenter.setBackground(Color.WHITE);
+        panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        mainPanel.add(panelCenter, BorderLayout.CENTER);
+
 
         frame.setVisible(true);
 

@@ -20,6 +20,7 @@ public class TabDash {
         
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(5,5)); 
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         frame.add(mainPanel);
         
         JPanel panelNorth = new JPanel();

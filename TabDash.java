@@ -4,7 +4,7 @@ import java.awt.*;
 public class TabDash {
     public TabDash() {
         JFrame frame = new JFrame("TabDash");
-        frame.setBounds(0, 0, 1000, 800);
+        frame.setBounds(0, 0, 1000, 700);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         

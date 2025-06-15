@@ -17,7 +17,7 @@ public class SidePanel extends JPanel{
 
         JList<String> nameList = new JList<>(nameListModel);
         JScrollPane nameScrollPane = new JScrollPane(nameList);
-        nameScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 700));
+        nameScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 600));
         nameScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         nameScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(nameScrollPane);

@@ -14,6 +14,8 @@ public class SidePanel extends JPanel{
 
         DefaultListModel<String> nameListModel = new DefaultListModel<>();
         nameListModel.addElement("Tom");
+        nameListModel.addElement("Harry");
+        nameListModel.addElement("Richard");
 
         JList<String> nameList = new JList<>(nameListModel);
         JScrollPane nameScrollPane = new JScrollPane(nameList);

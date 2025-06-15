@@ -4,7 +4,7 @@ import java.awt.*;
 public class SidePanel extends JPanel{
 
     public SidePanel() {
-        setPreferredSize(new Dimension(200, 500));
+        setPreferredSize(new Dimension(200, 700));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     
@@ -17,7 +17,7 @@ public class SidePanel extends JPanel{
 
         JList<String> nameList = new JList<>(nameListModel);
         JScrollPane nameScrollPane = new JScrollPane(nameList);
-        nameScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
+        nameScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 700));
         nameScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         nameScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(nameScrollPane);

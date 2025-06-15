@@ -4,7 +4,7 @@ import java.awt.*;
 public class TabDash {
     public TabDash() {
         JFrame frame = new JFrame("TabDash");
-        frame.setBounds(0, 0, 800, 500);
+        frame.setBounds(0, 0, 1000, 800);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -13,17 +13,13 @@ public class TabDash {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         frame.add(mainPanel);
         
-        JPanel panelNorth = new JPanel();
-        panelNorth.setBackground(Color.DARK_GRAY);
-        panelNorth.setPreferredSize(new Dimension(800,80));
+        HeaderPanel panelNorth = new HeaderPanel();
         mainPanel.add(panelNorth, BorderLayout.NORTH);
 
         SidePanel panelWest = new SidePanel();
         mainPanel.add(panelWest, BorderLayout.WEST);
 
-        JPanel panelCenter = new JPanel();
-        panelCenter.setBackground(Color.WHITE);
-        panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        ContentPanel panelCenter = new ContentPanel();
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);

@@ -1,14 +1,4 @@
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
+import javax.swing.*;
 import java.awt.*;
 
 public class TabDash {
@@ -28,41 +18,13 @@ public class TabDash {
         panelNorth.setPreferredSize(new Dimension(800,80));
         mainPanel.add(panelNorth, BorderLayout.NORTH);
 
-        JPanel panelWest = new JPanel();
-        panelWest.setPreferredSize(new Dimension(200,500));
-        panelWest.setLayout(new BoxLayout(panelWest, BoxLayout.Y_AXIS));
-        panelWest.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        SidePanel panelWest = new SidePanel();
         mainPanel.add(panelWest, BorderLayout.WEST);
-        
-        JLabel listLabel = new JLabel("Names");
-        listLabel.setAlignmentX(Component.CENTER_ALIGNMENT);;
-        panelWest.add(listLabel);
-        
-        DefaultListModel nameListModel = new DefaultListModel<>();
-        JList nameList = new JList<>(nameListModel);
-        JScrollPane nameScrollPane = new JScrollPane(nameList);
-        nameListModel.addElement("Tom");
-        nameScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
-        nameScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-        nameScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        panelWest.add(nameScrollPane);
-        
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
-        panelWest.add(Box.createRigidArea(new Dimension(0, 10)));
-        buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));;
-
-        JButton addButton = new JButton("Add");
-        buttonPanel.add(addButton);        
-
-        JButton removeButton = new JButton("Remove");
-        buttonPanel.add(removeButton);
-        panelWest.add(buttonPanel);
 
         JPanel panelCenter = new JPanel();
         panelCenter.setBackground(Color.WHITE);
         panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         mainPanel.add(panelCenter, BorderLayout.CENTER);
-
 
         frame.setVisible(true);
 

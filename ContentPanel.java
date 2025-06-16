@@ -10,17 +10,21 @@ public class ContentPanel extends JPanel{
     public ContentPanel() {
         setLayout(new BorderLayout());
         //setBackground(Color.WHITE);
-        setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        setBorder(BorderFactory.createEmptyBorder(5,5,40,5));
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
         JPanel panel1 = new JPanel();
-        panel1.add(new JLabel("Panel 1"));
-        tabbedPane.add("Tab 1", panel1);
+        panel1.add(new JLabel("Physical health"));
+        tabbedPane.add("Physical health", panel1);
 
         JPanel panel2 = new JPanel();
-        panel2.add(new JLabel("Panel 2"));
-        tabbedPane.add("Tab 2", panel2);
+        panel2.add(new JLabel("Medication"));
+        tabbedPane.add("Medication", panel2);
+
+        JPanel panel3 = new JPanel();
+        panel3.add(new JLabel("MHA"));
+        tabbedPane.add("MHA", panel3);
 
         add(tabbedPane);
     }

@@ -10,7 +10,7 @@ public class ContentPanel extends JPanel{
     public ContentPanel() {
         setLayout(new BorderLayout());
         //setBackground(Color.WHITE);
-        setBorder(BorderFactory.createEmptyBorder(5,5,40,5));
+        setBorder(BorderFactory.createEmptyBorder(5,5,50,5));
 
         JTabbedPane tabbedPane = new JTabbedPane();
 

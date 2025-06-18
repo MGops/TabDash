@@ -28,5 +28,4 @@ public class ContentPanel extends JPanel{
 
         add(tabbedPane);
     }
-    
 }

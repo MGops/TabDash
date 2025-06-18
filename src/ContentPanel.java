@@ -1,13 +1,17 @@
+package src;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class ContentPanel extends JPanel{
-    public ContentPanel() {
+    private MedicationDatabase medDatabase;
+
+    public ContentPanel(MedicationDatabase medDatabase) {
         setLayout(new BorderLayout());
         //setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(5,5,50,5));
@@ -19,8 +23,10 @@ public class ContentPanel extends JPanel{
         tabbedPane.add("Physical health", panel1);
 
         JPanel panel2 = new JPanel();
-        panel2.add(new JLabel("Medication"));
+        JButton addMedBtn = new JButton("Add medication");
+        panel2.add(addMedBtn);
         tabbedPane.add("Medication", panel2);
+
 
         JPanel panel3 = new JPanel();
         panel3.add(new JLabel("MHA"));

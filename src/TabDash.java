@@ -1,3 +1,4 @@
+package src;
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,6 +13,8 @@ public class TabDash {
         mainPanel.setLayout(new BorderLayout(5,5)); 
         mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         frame.add(mainPanel);
+
+        MedicationDatabase medDatabase = new MedicationDatabase();
         
         HeaderPanel panelNorth = new HeaderPanel();
         mainPanel.add(panelNorth, BorderLayout.NORTH);
@@ -19,7 +22,7 @@ public class TabDash {
         SidePanel panelWest = new SidePanel();
         mainPanel.add(panelWest, BorderLayout.WEST);
 
-        ContentPanel panelCenter = new ContentPanel();
+        ContentPanel panelCenter = new ContentPanel(medDatabase);
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);

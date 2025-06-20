@@ -1,11 +1,14 @@
 package src;
 
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class ContentPanel extends JPanel{
     private MedicationDatabase medDatabase;
     private JLabel totalAcbScore;
+    private JTable medicationTable;
+    private ArrayList<String> currentMedications;
     
     public ContentPanel(MedicationDatabase medDatabase) {
         setLayout(new BorderLayout());
@@ -24,7 +27,7 @@ public class ContentPanel extends JPanel{
 
         String[] columnNames = {"#", "Medication", "ACB Score"};
         Object[][] data = {};
-        JTable medicationTable = new JTable(data, columnNames);
+        medicationTable = new JTable(data, columnNames);
         JScrollPane medScrollPane = new JScrollPane(medicationTable);
         panel2.add(medScrollPane, BorderLayout.CENTER);        
 

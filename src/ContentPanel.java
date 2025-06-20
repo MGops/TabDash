@@ -2,6 +2,7 @@ package src;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -23,10 +24,16 @@ public class ContentPanel extends JPanel{
         tabbedPane.add("Physical health", panel1);
 
         JPanel panel2 = new JPanel();
-        JButton addMedBtn = new JButton("Add medication");
-        panel2.add(addMedBtn);
+        panel2.setLayout(new BorderLayout());
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        panel2.add(buttonPanel, BorderLayout.SOUTH);
+
         tabbedPane.add("Medication", panel2);
 
+        JButton addMedBtn = new JButton("Add medication");
+        buttonPanel.add(addMedBtn);
 
         JPanel panel3 = new JPanel();
         panel3.add(new JLabel("MHA"));

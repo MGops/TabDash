@@ -35,6 +35,9 @@ public class ContentPanel extends JPanel{
         JButton addMedBtn = new JButton("Add medication");
         buttonPanel.add(addMedBtn);
 
+        JLabel totalAcbScore = new JLabel("Total ACB Score: 0");
+        buttonPanel.add(totalAcbScore);
+
         JPanel panel3 = new JPanel();
         panel3.add(new JLabel("MHA"));
         tabbedPane.add("MHA", panel3);

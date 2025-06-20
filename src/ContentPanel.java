@@ -1,14 +1,7 @@
 package src;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+
+import java.awt.*;
+import javax.swing.*;
 
 public class ContentPanel extends JPanel{
     private MedicationDatabase medDatabase;
@@ -28,6 +21,12 @@ public class ContentPanel extends JPanel{
         JPanel panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         tabbedPane.add("Medication", panel2);
+
+        String[] columnNames = {"#", "Medication", "ACB Score"};
+        Object[][] data = {};
+        JTable medicationTable = new JTable(data, columnNames);
+        JScrollPane medScrollPane = new JScrollPane(medicationTable);
+        panel2.add(medScrollPane, BorderLayout.CENTER);        
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));

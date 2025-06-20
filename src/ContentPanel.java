@@ -2,6 +2,7 @@ package src;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -11,7 +12,8 @@ import javax.swing.JTabbedPane;
 
 public class ContentPanel extends JPanel{
     private MedicationDatabase medDatabase;
-
+    private JLabel totalAcbScore;
+    
     public ContentPanel(MedicationDatabase medDatabase) {
         setLayout(new BorderLayout());
         //setBackground(Color.WHITE);
@@ -25,17 +27,18 @@ public class ContentPanel extends JPanel{
 
         JPanel panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
+        tabbedPane.add("Medication", panel2);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         panel2.add(buttonPanel, BorderLayout.SOUTH);
 
-        tabbedPane.add("Medication", panel2);
+        totalAcbScore = new JLabel();
+        updateTotalACB();
 
         JButton addMedBtn = new JButton("Add medication");
         buttonPanel.add(addMedBtn);
-
-        JLabel totalAcbScore = new JLabel("Total ACB Score: 0");
+        buttonPanel.add(Box.createHorizontalStrut(20));
         buttonPanel.add(totalAcbScore);
 
         JPanel panel3 = new JPanel();
@@ -43,5 +46,9 @@ public class ContentPanel extends JPanel{
         tabbedPane.add("MHA", panel3);
 
         add(tabbedPane);
+    }
+
+    private void updateTotalACB() {
+        totalAcbScore.setText("Total ACB Score: " + 0);
     }
 }

@@ -41,6 +41,20 @@ public class ContentPanel extends JPanel{
         JButton addMedBtn = new JButton("Add medication");
         addMedBtn.addActionListener(e -> {
             String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
+            JComboBox<String> medComboBox = new JComboBox<>(medicationNames);
+            medComboBox.setEditable(true);
+
+            int result = JOptionPane.showConfirmDialog(
+                this,
+                medComboBox,
+                "Select or enter medication",
+                JOptionPane.OK_CANCEL_OPTION
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                String selectedMed = (String) medComboBox.getSelectedItem();
+                System.out.println("Selected: " + selectedMed);
+            }
         });
         buttonPanel.add(addMedBtn);
 

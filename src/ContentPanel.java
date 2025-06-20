@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -34,12 +35,15 @@ public class ContentPanel extends JPanel{
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         panel2.add(buttonPanel, BorderLayout.SOUTH);
-
         totalAcbScore = new JLabel();
         updateTotalACB();
 
         JButton addMedBtn = new JButton("Add medication");
+        addMedBtn.addActionListener(e -> {
+            String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
+        });
         buttonPanel.add(addMedBtn);
+
         buttonPanel.add(Box.createHorizontalStrut(20));
         buttonPanel.add(totalAcbScore);
 

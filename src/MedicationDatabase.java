@@ -32,4 +32,8 @@ public class MedicationDatabase {
     public Integer getACBScore(String medName) {
         return acbScore.get(medName);
     }
+
+    public HashMap<String, Integer> getAllMedications() {
+        return new HashMap<>(acbScore);
+    }
 }

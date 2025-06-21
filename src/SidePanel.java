@@ -44,14 +44,10 @@ public class SidePanel extends JPanel{
 
         nameList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                System.out.println("Listener fired!");
                 if (!e.getValueIsAdjusting()) {
-                    System.out.println("Not adjusting!");
                     int selectedIndex = nameList.getSelectedIndex();
-                    System.out.println("Selected index: " + selectedIndex);
                     if (selectedIndex >= 0) {
                         tabDash.setCurrentPatient(selectedIndex);
-                        System.out.println("Selected patient: " + tabDash.getCurrentPatient().getPatientId());
                     }
                 }
             }

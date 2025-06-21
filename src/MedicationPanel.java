@@ -8,14 +8,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class MedicationPanel extends JPanel {
     private MedicationDatabase medDatabase;
     private JLabel totalAcbScore;
     private JTable medicationTable;
+    private TabDash tabDash;
 
-    public MedicationPanel(MedicationDatabase medDatabase) {
+    public MedicationPanel(MedicationDatabase medDatabase, TabDash tabDash) {
         this.medDatabase = medDatabase;
+        this.tabDash = tabDash;
         setLayout(new BorderLayout());
         initialiseComponents();
     }
@@ -110,6 +113,7 @@ public class MedicationPanel extends JPanel {
         add(medScrollPane, BorderLayout.WEST);
         add(buttonPanel, BorderLayout.SOUTH);
 
+        loadPatientMedications();
     }
 
     private void updateTotalACB() {
@@ -122,4 +126,17 @@ public class MedicationPanel extends JPanel {
             totalAcbScore.setText("Total ACB Score: " + total);
         }
     
+    private void loadPatientMedications() {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        HashMap<String, Integer> patientMeds = currentPatient.getMedications();
+
+        DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
+        model.setRowCount(0);
+
+        for (String medName : patientMeds.keySet()) {
+            Integer acbScore = patientMeds.get(medName);
+            model.addRow(new Object[]{ medName, acbScore});
+        }
+        updateTotalACB();
+    }
 }

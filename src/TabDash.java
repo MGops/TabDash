@@ -5,7 +5,11 @@ import java.awt.*;
 public class TabDash {
     public TabDash() {
         JFrame frame = new JFrame("TabDash");
-        frame.setBounds(0, 0, 1000, 700);
+        // frame.setBounds(0, 0, 1000, 700);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) (screenSize.width * 0.75);
+        int height = (int) (screenSize.height * 0.75);
+        frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         

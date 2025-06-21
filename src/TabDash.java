@@ -1,9 +1,22 @@
 package src;
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class TabDash {
+    private List<Patient> patients;
+    private Patient currentPatient;
+
     public TabDash() {
+        patients = new ArrayList<>();
+
+        patients.add(new Patient("AB 123456"));
+        patients.add(new Patient("CD 678907"));
+        patients.add(new Patient("EF 234561"));
+
+        currentPatient = patients.get(0);
+
         JFrame frame = new JFrame("TabDash");
         // frame.setBounds(0, 0, 1000, 700);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -30,5 +43,23 @@ public class TabDash {
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);
+    }
+
+    public List<String> getPatientNames() {
+        List<String> names = new ArrayList<>();
+        for (Patient patient : patients) {
+            names.add(patient.getPatientId());
+        }
+        return names;
+    }
+
+    public Patient getCurrentPatient() {
+        return currentPatient;
+    }
+
+    public void setCurrentPatient(int index) {
+        if (index >=0 && index < patients.size()) {
+            currentPatient = patients.get(index);
+        }
     }
 }

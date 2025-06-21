@@ -25,93 +25,9 @@ public class ContentPanel extends JPanel{
         panel1.add(new JLabel("Physical health"));
         tabbedPane.add("Physical health", panel1);
 
-        JPanel panel2 = new JPanel();
-        panel2.setLayout(new BorderLayout());
-        tabbedPane.add("Medication", panel2);
-
-        String[] columnNames = {"Medication", "ACB Score"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-        medicationTable = new JTable(tableModel);
-        medicationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        medicationTable.setRowSelectionAllowed(true);
-        medicationTable.setFillsViewportHeight(true);
-        medicationTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    int row = medicationTable.rowAtPoint(e.getPoint());
-                    if (row >= 0) {
-                        medicationTable.setRowSelectionInterval(row, row);
-                        JPopupMenu popup = new JPopupMenu();
-                        JMenuItem removeItem = new JMenuItem("Remove");
-                        removeItem.addActionListener(ae -> {
-                            DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
-                            model.removeRow(row);
-                            updateTotalACB();
-                        });
-                        popup.add(removeItem);
-                        popup.show(medicationTable, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
-        JScrollPane medScrollPane = new JScrollPane(medicationTable);
-        medScrollPane.setPreferredSize((new Dimension(300,300)));
-        panel2.add(medScrollPane, BorderLayout.WEST);        
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        panel2.add(buttonPanel, BorderLayout.SOUTH);
-        totalAcbScore = new JLabel();
-        updateTotalACB();
-
-        JButton addMedBtn = new JButton("Add medication");
-        addMedBtn.addActionListener(e -> {
-            String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
-            java.util.Arrays.sort(medicationNames);
-            JComboBox<String> medComboBox = new JComboBox<>(medicationNames);
-            medComboBox.setEditable(true);
-            int result = JOptionPane.showConfirmDialog(
-                this,
-                medComboBox,
-                "Select or enter medication",
-                JOptionPane.OK_CANCEL_OPTION
-            );
-            if (result == JOptionPane.OK_OPTION) {
-                String selectedMed = (String) medComboBox.getSelectedItem();
-                if (selectedMed != null && !selectedMed.trim().isEmpty()) {
-                    DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
-                    boolean alreadyExists = false;
-                    for (int row = 0; row < model.getRowCount(); row++) {
-                        String existingMed = (String) model.getValueAt(row, 0);
-                        if (existingMed.equalsIgnoreCase(selectedMed)) {
-                            alreadyExists = true;
-                            break;
-                        }
-                    }
-                    if (alreadyExists) {
-                        JOptionPane.showMessageDialog(this, 
-                        "'" + selectedMed + "'" + "is already in the medication list.",
-                        "Duplicate Medication",
-                        JOptionPane.WARNING_MESSAGE);
-                    return;
-                    }
-
-                    Integer acbScore = medDatabase.getACBScore(selectedMed);
-                    if (acbScore == null) {
-                        acbScore = 0;
-                    }
-                    
-                    int rowNumber = model.getRowCount() + 1;
-                    model.addRow(new Object[] {selectedMed, acbScore});
-                    updateTotalACB();
-                }
-            }
-        });
-        buttonPanel.add(addMedBtn);
-
-        buttonPanel.add(Box.createHorizontalStrut(20));
-        buttonPanel.add(totalAcbScore);
+        MedicationPanel medicationPanel = new MedicationPanel(medDatabase);
+        tabbedPane.add("Medication", medicationPanel);
+        
 
         JPanel panel3 = new JPanel();
         panel3.add(new JLabel("MHA"));

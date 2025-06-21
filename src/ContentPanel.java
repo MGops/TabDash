@@ -56,7 +56,8 @@ public class ContentPanel extends JPanel{
             }
         });
         JScrollPane medScrollPane = new JScrollPane(medicationTable);
-        panel2.add(medScrollPane, BorderLayout.CENTER);        
+        medScrollPane.setPreferredSize((new Dimension(300,300)));
+        panel2.add(medScrollPane, BorderLayout.WEST);        
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -67,6 +68,7 @@ public class ContentPanel extends JPanel{
         JButton addMedBtn = new JButton("Add medication");
         addMedBtn.addActionListener(e -> {
             String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
+            java.util.Arrays.sort(medicationNames);
             JComboBox<String> medComboBox = new JComboBox<>(medicationNames);
             medComboBox.setEditable(true);
             int result = JOptionPane.showConfirmDialog(
@@ -78,11 +80,28 @@ public class ContentPanel extends JPanel{
             if (result == JOptionPane.OK_OPTION) {
                 String selectedMed = (String) medComboBox.getSelectedItem();
                 if (selectedMed != null && !selectedMed.trim().isEmpty()) {
+                    DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
+                    boolean alreadyExists = false;
+                    for (int row = 0; row < model.getRowCount(); row++) {
+                        String existingMed = (String) model.getValueAt(row, 0);
+                        if (existingMed.equalsIgnoreCase(selectedMed)) {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+                    if (alreadyExists) {
+                        JOptionPane.showMessageDialog(this, 
+                        "'" + selectedMed + "'" + "is already in the medication list.",
+                        "Duplicate Medication",
+                        JOptionPane.WARNING_MESSAGE);
+                    return;
+                    }
+
                     Integer acbScore = medDatabase.getACBScore(selectedMed);
                     if (acbScore == null) {
                         acbScore = 0;
                     }
-                    DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
+                    
                     int rowNumber = model.getRowCount() + 1;
                     model.addRow(new Object[] {selectedMed, acbScore});
                     updateTotalACB();

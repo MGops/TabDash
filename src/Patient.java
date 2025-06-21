@@ -15,4 +15,25 @@ public class Patient {
     public String getPatientId() {
         return patientId;
     }
+
+    public void addMedication(String medication, Integer acbScore) {
+        medications.put(medication, acbScore);
+    }
+
+    public void removeMedication(String medication) {
+        medications.remove(medication);
+    }
+
+    public int getTotalACBScore() {
+        Integer totalACBScore = 0;
+
+        for (Integer acbScore : medications.values()) {
+            totalACBScore += acbScore;
+        }
+        return totalACBScore;
+    }
+
+    public HashMap<String, Integer> getMedications() {
+        return medications;
+    }
 }

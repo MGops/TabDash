@@ -36,7 +36,7 @@ public class TabDash {
         HeaderPanel panelNorth = new HeaderPanel();
         mainPanel.add(panelNorth, BorderLayout.NORTH);
 
-        SidePanel panelWest = new SidePanel();
+        SidePanel panelWest = new SidePanel(this);
         mainPanel.add(panelWest, BorderLayout.WEST);
 
         ContentPanel panelCenter = new ContentPanel(medDatabase);

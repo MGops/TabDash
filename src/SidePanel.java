@@ -1,10 +1,18 @@
 package src;
+
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.util.List;
 
 public class SidePanel extends JPanel{
+    private TabDash tabDash;
 
-    public SidePanel() {
+    public SidePanel(TabDash tabDash) {
+        this.tabDash = tabDash;
+        tabDash.getPatientNames();
+
         setPreferredSize(new Dimension(200, 700));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -14,28 +22,10 @@ public class SidePanel extends JPanel{
         add(listLabel);
 
         DefaultListModel<String> nameListModel = new DefaultListModel<>();
-            
-        nameListModel.addElement("AB 123456");
-        nameListModel.addElement("CD 678907");
-        nameListModel.addElement("EF 234561");
-        nameListModel.addElement("GH 789012");
-        nameListModel.addElement("IJ 345678");
-        nameListModel.addElement("KL 890123");
-        nameListModel.addElement("MN 456789");
-        nameListModel.addElement("OP 901234");
-        nameListModel.addElement("QR 567890");
-        nameListModel.addElement("ST 012345");
-        nameListModel.addElement("UV 678901");
-        nameListModel.addElement("WX 234567");
-        nameListModel.addElement("YZ 789012");
-        nameListModel.addElement("AC 345678");
-        nameListModel.addElement("BD 890123");
-        nameListModel.addElement("CE 456789");
-        nameListModel.addElement("DF 901234");
-        nameListModel.addElement("EG 567890");
-        nameListModel.addElement("FH 012345");
-        nameListModel.addElement("GI 678901");
-
+        List<String> patientNames = tabDash.getPatientNames();
+        for (String name: patientNames) {
+            nameListModel.addElement(name);
+        }
         JList<String> nameList = new JList<>(nameListModel);
         JScrollPane nameScrollPane = new JScrollPane(nameList);
         nameScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 600));
@@ -50,6 +40,21 @@ public class SidePanel extends JPanel{
         buttonPanel.add(new JButton("Add"));
         buttonPanel.add(new JButton("Remove"));
         add(buttonPanel);
+
+
+        nameList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                System.out.println("Listener fired!");
+                if (!e.getValueIsAdjusting()) {
+                    System.out.println("Not adjusting!");
+                    int selectedIndex = nameList.getSelectedIndex();
+                    System.out.println("Selected index: " + selectedIndex);
+                    if (selectedIndex >= 0) {
+                        tabDash.setCurrentPatient(selectedIndex);
+                        System.out.println("Selected patient: " + tabDash.getCurrentPatient().getPatientId());
+                    }
+                }
+            }
+        });
     }
 }
-

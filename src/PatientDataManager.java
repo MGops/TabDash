@@ -37,5 +37,40 @@ public class PatientDataManager {
             System.err.println("Error saving patients: " + e.getMessage());
         }
     }
+
     
+    public static List<Patient> loadAllPatients() {
+        List<Patient> patients = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE))) {
+            String line;
+            Patient currentPatient = null;
+
+            while ((line = reader.readLine()) != null)  {
+                line = line.trim();
+                
+                if (line.startsWith("\"") && line.contains("\":")) {
+                    String patientId = line.substring(1, line.indexOf("\":"));
+                    currentPatient = new Patient(patientId);
+                    patients.add(currentPatient);
+                }
+
+                else if (currentPatient != null && line.startsWith("\"") && line.contains(":") && !line.contains("medications")) {
+                    String medName = line.substring(1, line.indexOf("\":"));
+                    String scoreStr = line.substring(line.indexOf(":") + 1).replace(",", "").trim();
+                    try {
+                        Integer acbScore = Integer.parseInt(scoreStr);
+                        currentPatient.addMedication(medName, acbScore);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid ACB score for " + medName + ": " + scoreStr);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No existing patient data found. Starting fresh");
+        } catch (IOException e) {
+            System.err.println("Error loading patients: " + e.getMessage());
+        }
+        return patients;
+    }
 }

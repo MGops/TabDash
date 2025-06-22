@@ -21,7 +21,7 @@ public class TabDash {
         
         currentPatient = patients.get(0);
 
-        JFrame frame = new JFrame("TabDash");
+        JFrame frame = new JFrame("Dashboard");
         // frame.setBounds(0, 0, 1000, 700);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) (screenSize.width * 0.75);

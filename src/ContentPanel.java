@@ -15,6 +15,7 @@ public class ContentPanel extends JPanel{
         tabbedPane.add("Physical health", new PhysicalHealthPanel());
         tabbedPane.add("Medication", medicationPanel);
         tabbedPane.add("MHA", new MHAPanel());
+        tabbedPane.add("Dementia", new DementiaTab());
 
         add(tabbedPane);
     }

@@ -6,8 +6,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class MedicationPanel extends JPanel {
@@ -45,8 +43,13 @@ public class MedicationPanel extends JPanel {
                         JMenuItem removeItem = new JMenuItem("Remove");
                         removeItem.addActionListener(ae -> {
                             DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
+                            String medName = (String) model.getValueAt(row, 0);
                             model.removeRow(row);
                             updateTotalACB();
+
+                            Patient currentPatient = tabDash.getCurrentPatient();
+                            currentPatient.removeMedication(medName);
+                            tabDash.onPatientDataChanged();
                         });
                         popup.add(removeItem);
                         popup.show(medicationTable, e.getX(), e.getY());
@@ -69,7 +72,7 @@ public class MedicationPanel extends JPanel {
             JComboBox<String> medComboBox = new JComboBox<>(medicationNames);
             medComboBox.setEditable(true);
             int result = JOptionPane.showConfirmDialog(
-                this,
+                medicationTable,
                 medComboBox,
                 "Select or enter medication",
                 JOptionPane.OK_CANCEL_OPTION
@@ -99,9 +102,12 @@ public class MedicationPanel extends JPanel {
                         acbScore = 0;
                     }
                     
-                    int rowNumber = model.getRowCount() + 1;
                     model.addRow(new Object[] {selectedMed, acbScore});
                     updateTotalACB();
+
+                    Patient currentPatient = tabDash.getCurrentPatient();
+                    currentPatient.addMedication(selectedMed, acbScore);
+                    tabDash.onPatientDataChanged();
                 }
             }
         });
@@ -138,5 +144,9 @@ public class MedicationPanel extends JPanel {
             model.addRow(new Object[]{ medName, acbScore});
         }
         updateTotalACB();
+    }
+
+    public void refreshForNewPatient() {
+        loadPatientMedications();
     }
 }

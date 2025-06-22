@@ -7,14 +7,18 @@ import java.util.ArrayList;
 public class TabDash {
     private List<Patient> patients;
     private Patient currentPatient;
+    private MedicationPanel medicationPanel;
 
     public TabDash() {
         patients = new ArrayList<>();
-
         patients.add(new Patient("AB 123456"));
         patients.add(new Patient("CD 678907"));
         patients.add(new Patient("EF 234561"));
 
+        for (Patient patient : patients) {
+            PatientDataManager.loadPatient(patient);
+        }
+        
         currentPatient = patients.get(0);
 
         JFrame frame = new JFrame("TabDash");
@@ -39,7 +43,9 @@ public class TabDash {
         SidePanel panelWest = new SidePanel(this);
         mainPanel.add(panelWest, BorderLayout.WEST);
 
-        ContentPanel panelCenter = new ContentPanel(medDatabase, this);
+        
+        medicationPanel = new MedicationPanel(medDatabase, this);
+        ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel);
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);
@@ -60,6 +66,16 @@ public class TabDash {
     public void setCurrentPatient(int index) {
         if (index >=0 && index < patients.size()) {
             currentPatient = patients.get(index);
+        }
+    }
+
+    public void onPatientDataChanged() {
+        PatientDataManager.savePatient(currentPatient);
+    }
+
+    public void refreshMedicationPanel() {
+        if (medicationPanel != null) {
+            medicationPanel.refreshForNewPatient();
         }
     }
 }

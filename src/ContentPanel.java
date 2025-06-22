@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class ContentPanel extends JPanel{
     
-    public ContentPanel(MedicationDatabase medDatabase, TabDash tabDash) {
+    public ContentPanel(MedicationDatabase medDatabase, TabDash tabDash, MedicationPanel medicationPanel) {
         setLayout(new BorderLayout());
         //setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(5,5,50,5));
@@ -13,7 +13,7 @@ public class ContentPanel extends JPanel{
         JTabbedPane tabbedPane = new JTabbedPane();
 
         tabbedPane.add("Physical health", new PhysicalHealthPanel());
-        tabbedPane.add("Medication", new MedicationPanel(medDatabase, tabDash));
+        tabbedPane.add("Medication", medicationPanel);
         tabbedPane.add("MHA", new MHAPanel());
 
         add(tabbedPane);

@@ -11,7 +11,6 @@ public class SidePanel extends JPanel{
 
     public SidePanel(TabDash tabDash) {
         this.tabDash = tabDash;
-        tabDash.getPatientNames();
 
         setPreferredSize(new Dimension(200, 700));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -48,6 +47,7 @@ public class SidePanel extends JPanel{
                     int selectedIndex = nameList.getSelectedIndex();
                     if (selectedIndex >= 0) {
                         tabDash.setCurrentPatient(selectedIndex);
+                        tabDash.refreshMedicationPanel();
                     }
                 }
             }

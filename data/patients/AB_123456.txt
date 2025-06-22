@@ -1,4 +1,0 @@
-Paroxetine,3
-Clozapine,3
-Trazodone,1
-Diazepam,1

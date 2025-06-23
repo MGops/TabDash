@@ -38,7 +38,39 @@ public class MHAPanel extends JPanel{
     }
 
     private JPanel createTopSection() {
-        return new JPanel();
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        topPanel.setBorder(BorderFactory.createTitledBorder("Patient Status"));
+
+        topPanel.add(new JLabel("Admission date: "));
+        JTextField admissionDateField = new JTextField(10);
+        topPanel.add(admissionDateField);
+
+        topPanel.add(Box.createHorizontalStrut(20));
+
+        topPanel.add(new JLabel("Status"));
+
+        ButtonGroup statusGroup = new ButtonGroup();
+        JRadioButton informalBtn = new JRadioButton("Informal");
+        JRadioButton section2Btn = new JRadioButton("Section 2");
+        JRadioButton section3Btn = new JRadioButton("Section 3");
+        JRadioButton dolsBtn = new JRadioButton("DOLS");
+
+        statusGroup.add(informalBtn);
+        statusGroup.add(section2Btn);
+        statusGroup.add(section3Btn);
+        statusGroup.add(dolsBtn);
+
+        topPanel.add(informalBtn);
+        topPanel.add(section2Btn);
+        topPanel.add(section3Btn);
+        topPanel.add(dolsBtn);
+
+        informalBtn.setSelected(true);
+
+        topPanel.add(Box.createHorizontalStrut(30));
+
+        return topPanel;
     }
 
     private JPanel createMiddleSection() {

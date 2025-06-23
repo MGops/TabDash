@@ -48,6 +48,11 @@ public class MHAPanel extends JPanel{
 
         topPanel.add(Box.createHorizontalStrut(20));
 
+        JCheckBox mh03CheckBox = new JCheckBox("MH03 completed");
+        topPanel.add(mh03CheckBox);
+
+        topPanel.add(Box.createHorizontalStrut(20));
+
         topPanel.add(new JLabel("Status"));
 
         ButtonGroup statusGroup = new ButtonGroup();
@@ -65,6 +70,17 @@ public class MHAPanel extends JPanel{
         topPanel.add(section2Btn);
         topPanel.add(section3Btn);
         topPanel.add(dolsBtn);
+
+        topPanel.add(Box.createHorizontalStrut(20));
+        JTextField detentionDateTF = new JTextField("Date detained");
+        detentionDateTF.setForeground(Color.GRAY);
+        detentionDateTF.setVisible(false);
+        topPanel.add(detentionDateTF);
+
+        section2Btn.addActionListener(e -> detentionDateTF.setVisible(true));
+        section3Btn.addActionListener(e -> detentionDateTF.setVisible(true));
+        informalBtn.addActionListener(e -> detentionDateTF.setVisible(false));
+        dolsBtn.addActionListener(e -> detentionDateTF.setVisible(false));
 
         informalBtn.setSelected(true);
 

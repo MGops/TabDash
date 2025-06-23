@@ -12,9 +12,9 @@ public class ContentPanel extends JPanel{
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
+        tabbedPane.add("MHA", new MHAPanel(tabDash));
         tabbedPane.add("Physical health", new PhysicalHealthPanel());
         tabbedPane.add("Medication", medicationPanel);
-        tabbedPane.add("MHA", new MHAPanel(tabDash));
         tabbedPane.add("Dementia", new DementiaTab());
 
         add(tabbedPane);

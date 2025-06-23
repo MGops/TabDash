@@ -1,9 +1,8 @@
 package src;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-
 import java.awt.*;
+import java.text.SimpleDateFormat;
 
 public class MHAPanel extends JPanel{
     private TabDash tabDash;
@@ -41,9 +40,12 @@ public class MHAPanel extends JPanel{
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBorder(BorderFactory.createTitledBorder("Patient Status"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         topPanel.add(new JLabel("Admission date: "));
-        JTextField admissionDateField = new JTextField(10);
+        JFormattedTextField admissionDateField = new JFormattedTextField(dateFormat);
+        admissionDateField.setColumns(10);
+        admissionDateField.setValue(new java.util.Date());
         topPanel.add(admissionDateField);
 
         topPanel.add(Box.createHorizontalStrut(20));
@@ -53,7 +55,7 @@ public class MHAPanel extends JPanel{
 
         topPanel.add(Box.createHorizontalStrut(20));
 
-        topPanel.add(new JLabel("Status"));
+        topPanel.add(new JLabel("Status:"));
 
         ButtonGroup statusGroup = new ButtonGroup();
         JRadioButton informalBtn = new JRadioButton("Informal");
@@ -72,19 +74,35 @@ public class MHAPanel extends JPanel{
         topPanel.add(dolsBtn);
 
         topPanel.add(Box.createHorizontalStrut(20));
-        JTextField detentionDateTF = new JTextField("Date detained");
-        detentionDateTF.setForeground(Color.GRAY);
-        detentionDateTF.setVisible(false);
-        topPanel.add(detentionDateTF);
 
-        section2Btn.addActionListener(e -> detentionDateTF.setVisible(true));
-        section3Btn.addActionListener(e -> detentionDateTF.setVisible(true));
-        informalBtn.addActionListener(e -> detentionDateTF.setVisible(false));
-        dolsBtn.addActionListener(e -> detentionDateTF.setVisible(false));
+        JFormattedTextField detentionDateField = new JFormattedTextField(dateFormat);
+        detentionDateField.setColumns(10);
+        detentionDateField.setValue(new java.util.Date());
+        detentionDateField.setVisible(false);
+        topPanel.add(detentionDateField);
+
+        section2Btn.addActionListener(e -> {
+            detentionDateField.setVisible(true);
+            topPanel.revalidate();
+            topPanel.repaint();
+        });
+        section3Btn.addActionListener(e -> {
+            detentionDateField.setVisible(true);
+            topPanel.revalidate();
+            topPanel.repaint();
+        });
+        informalBtn.addActionListener(e -> {
+            detentionDateField.setVisible(false);
+            topPanel.revalidate();
+            topPanel.repaint();
+        });
+        dolsBtn.addActionListener(e -> { 
+            detentionDateField.setVisible(false);
+            topPanel.revalidate();
+            topPanel.repaint();
+        });
 
         informalBtn.setSelected(true);
-
-        topPanel.add(Box.createHorizontalStrut(30));
 
         return topPanel;
     }
@@ -97,3 +115,4 @@ public class MHAPanel extends JPanel{
             return new JPanel();
         }
 }
+

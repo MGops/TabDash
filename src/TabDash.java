@@ -24,7 +24,7 @@ public class TabDash {
         JFrame frame = new JFrame("Dashboard");
         // frame.setBounds(0, 0, 1000, 700);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) (screenSize.width * 0.75);
+        int width = (int) (screenSize.width * 0.7);
         int height = (int) (screenSize.height * 0.75);
         frame.setSize(width, height);
         frame.setLocationRelativeTo(null);

@@ -139,49 +139,57 @@ public class MHAPanel extends JPanel{
     private JPanel createExpiryPanel() {
         JPanel expiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         expiryPanel.setBorder(BorderFactory.createTitledBorder("Section Status"));
-
         // Section Expiry
         expiryPanel.add(new JLabel("Section Expires: "));
         JLabel sectionTrafficLight = new JLabel("🟡");
         expiryPanel.add(sectionTrafficLight);
         JLabel sectionExpiryLabel = new JLabel("25/01/2025 (28 days)");
         expiryPanel.add(sectionExpiryLabel);
-
         expiryPanel.add(Box.createHorizontalStrut(30));
-
         // 3 month rule with traffic light
         expiryPanel.add(new JLabel("Consent to treatment (3 month rule): "));
         JLabel threeMthTrafficLight = new JLabel("🔴");
         expiryPanel.add(threeMthTrafficLight);
         JLabel threeMonthLabel = new JLabel("15 days remaining");
         expiryPanel.add(threeMonthLabel);
-        
         return expiryPanel;
     }
 
     private JPanel createCapacityPanel() {
         JPanel capacityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         capacityPanel.setBorder(BorderFactory.createTitledBorder("Capacity to CTT"));
-
         capacityPanel.add(new JLabel("Has capacity: "));
-
         ButtonGroup capacityGroup = new ButtonGroup();
         JRadioButton noCapacityBtn = new JRadioButton("No");
         JRadioButton yesCapacityBtn = new JRadioButton("Yes");
-
         capacityGroup.add(noCapacityBtn);
         capacityGroup.add(yesCapacityBtn);
-
         capacityPanel.add(noCapacityBtn);
         capacityPanel.add(yesCapacityBtn);
-
         noCapacityBtn.setSelected(true);
-        
         return capacityPanel;
     }
 
     private JPanel createPathwayPanel() {
-        return new JPanel();
+        JPanel pathwayPanel = new JPanel();
+        pathwayPanel.setLayout(new CardLayout());
+        // Create 2 different pathway panels
+        JPanel noCapacityPanel = createNoCapacityPathway();
+        JPanel hasCapacityPanel = createHasCapacityPathway();
+        // Add both panels to CardLayout
+        pathwayPanel.add(noCapacityPanel, "NO_CAPACITY");
+        pathwayPanel.add(hasCapacityPanel, "HAS_CAPACITY");
+        return pathwayPanel;
+    }
+
+    private JPanel createNoCapacityPathway() {
+        JPanel panel = new JPanel();
+        return panel;
+    }
+
+    private JPanel createHasCapacityPathway() {
+        JPanel panel = new JPanel();
+        return panel;
     }
 
     private JPanel createAlertPanel() {

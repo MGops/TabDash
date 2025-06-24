@@ -3,6 +3,7 @@ package src;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.Flow;
 
 public class MHAPanel extends JPanel{
     private TabDash tabDash;
@@ -36,6 +37,8 @@ public class MHAPanel extends JPanel{
         return separator;
     }
 
+    // TOP SECTION
+
     private JPanel createTopSection() {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -44,7 +47,7 @@ public class MHAPanel extends JPanel{
 
         topPanel.add(new JLabel("Admission date: "));
         JFormattedTextField admissionDateField = new JFormattedTextField(dateFormat);
-        admissionDateField.setColumns(10);
+        admissionDateField.setColumns(8);
         admissionDateField.setValue(new java.util.Date());
         topPanel.add(admissionDateField);
 
@@ -76,7 +79,7 @@ public class MHAPanel extends JPanel{
         topPanel.add(Box.createHorizontalStrut(20));
 
         JFormattedTextField detentionDateField = new JFormattedTextField(dateFormat);
-        detentionDateField.setColumns(10);
+        detentionDateField.setColumns(8);
         detentionDateField.setValue(new java.util.Date());
         detentionDateField.setVisible(false);
         topPanel.add(detentionDateField);
@@ -107,12 +110,79 @@ public class MHAPanel extends JPanel{
         return topPanel;
     }
 
+    // MIDDLE SECTION
+
     private JPanel createMiddleSection() {
-            return new JPanel();
-        }
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
+        middlePanel.setBorder(BorderFactory.createTitledBorder("MHA Management"));
+
+        // Section 1: Expiry dates with traffic lights
+        JPanel expiryPanel = createExpiryPanel();
+        middlePanel.add(expiryPanel);
+
+        // Section 2: Capacity assessment
+        JPanel capacityPanel = createCapacityPanel();
+        middlePanel.add(capacityPanel);
+
+        //Section 3: Capacity-dependent content
+        JPanel pathwayPanel = createPathwayPanel();
+        middlePanel.add(pathwayPanel);
+
+        // Section 4: Medication alert
+        JPanel alertPanel = createAlertPanel();
+        middlePanel.add(alertPanel);
+
+        return middlePanel;
+    }
+
+    private JPanel createExpiryPanel() {
+        JPanel expiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        expiryPanel.setBorder(BorderFactory.createTitledBorder("Section Status"));
+
+        // Section Expiry
+        expiryPanel.add(new JLabel("Section Expires: "));
+        JLabel sectionTrafficLight = new JLabel("🟡");
+        expiryPanel.add(sectionTrafficLight);
+        JLabel sectionExpiryLabel = new JLabel("25/01/2025 (28 days)");
+        expiryPanel.add(sectionExpiryLabel);
+
+        expiryPanel.add(Box.createHorizontalStrut(30));
+
+        // 3 month rule with traffic light
+        expiryPanel.add(new JLabel("Consent to treatment (3 month rule): "));
+        JLabel threeMthTrafficLight = new JLabel("🔴");
+        expiryPanel.add(threeMthTrafficLight);
+        JLabel threeMonthLabel = new JLabel("15 days remaining");
+        expiryPanel.add(threeMonthLabel);
+        
+        return expiryPanel;
+    }
+
+    private JPanel createCapacityPanel() {
+        return new JPanel();
+    }
+
+    private JPanel createPathwayPanel() {
+        return new JPanel();
+    }
+
+    private JPanel createAlertPanel() {
+        return new JPanel();
+    }
 
     private JPanel createBottomSection() {
-            return new JPanel();
+        return new JPanel();
+    }
+
+    private String getThreeMthTrafficLightIcon(int daysRemaining) {
+        if (daysRemaining > 42) {
+            return "🟢";
+        } else if (daysRemaining >= 30) {
+            return "🟡";
+        } else {
+            return "🔴";
         }
+    }
 }
 

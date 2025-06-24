@@ -160,7 +160,24 @@ public class MHAPanel extends JPanel{
     }
 
     private JPanel createCapacityPanel() {
-        return new JPanel();
+        JPanel capacityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        capacityPanel.setBorder(BorderFactory.createTitledBorder("Capacity to CTT"));
+
+        capacityPanel.add(new JLabel("Has capacity: "));
+
+        ButtonGroup capacityGroup = new ButtonGroup();
+        JRadioButton noCapacityBtn = new JRadioButton("No");
+        JRadioButton yesCapacityBtn = new JRadioButton("Yes");
+
+        capacityGroup.add(noCapacityBtn);
+        capacityGroup.add(yesCapacityBtn);
+
+        capacityPanel.add(noCapacityBtn);
+        capacityPanel.add(yesCapacityBtn);
+
+        noCapacityBtn.setSelected(true);
+        
+        return capacityPanel;
     }
 
     private JPanel createPathwayPanel() {

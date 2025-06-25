@@ -1,5 +1,6 @@
 package src;
 
+import java.awt.Container;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,9 @@ public class MHAPanel extends JPanel{
     private JCheckBox t3CheckBox;
     private JPanel s62Panel;
     private JPanel soadPanel;
+    private JCheckBox mh03CheckBox;
+    private JPanel middleSection;
+    private JPanel bottomSection;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -21,8 +25,8 @@ public class MHAPanel extends JPanel{
 
     private void initialiseComponents() {
         JPanel topSection = createTopSection();
-        JPanel middleSection = createMiddleSection();
-        JPanel bottomSection = createBottomSection();
+        middleSection = createMiddleSection();
+        bottomSection = createBottomSection();
 
         JPanel mainContainer = new JPanel();
         mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
@@ -34,6 +38,8 @@ public class MHAPanel extends JPanel{
         mainContainer.add(bottomSection);
     
         add(mainContainer, BorderLayout.CENTER);
+        
+        enableMHAFunctionality(false);
     }
 
     private JSeparator createSeparator() {
@@ -58,7 +64,7 @@ public class MHAPanel extends JPanel{
 
         topPanel.add(Box.createHorizontalStrut(20));
 
-        JCheckBox mh03CheckBox = new JCheckBox("MH03 completed");
+        mh03CheckBox = new JCheckBox("MH03 completed");
         topPanel.add(mh03CheckBox);
 
         topPanel.add(Box.createHorizontalStrut(20));
@@ -112,6 +118,11 @@ public class MHAPanel extends JPanel{
 
         informalBtn.setSelected(true);
 
+        mh03CheckBox.addActionListener(e -> {
+            boolean mh03Completed = mh03CheckBox.isSelected();
+            enableMHAFunctionality(mh03Completed);
+        });
+        
         return topPanel;
     }
 
@@ -312,6 +323,32 @@ public class MHAPanel extends JPanel{
         return alertPanel;
     }
 
+    private JPanel createBottomSection() {
+        return new JPanel();
+    }
+
+    // HELPER METHODS
+    
+    private void enableMHAFunctionality(boolean enabled) {
+        enableComponentsRecursively(middleSection, enabled);
+        if (enabled) {
+            middleSection.setBackground(null);
+        } else {
+            middleSection.setBackground(Color.LIGHT_GRAY);
+        }
+        middleSection.repaint();
+    }
+
+    private void enableComponentsRecursively(Container container, boolean enabled) {
+        container.setEnabled(enabled);
+        for (Component component :container.getComponents()) {
+            component.setEnabled(enabled);
+            if (component instanceof Container) {
+                enableComponentsRecursively((Container) component, enabled);
+            }
+        }
+    }
+
     private void showMedicationReviewDialog() {
         String[] options = {"Review S62", "Review T2", "Review T3", "No action needed"};
         int choice = JOptionPane.showOptionDialog(
@@ -330,16 +367,14 @@ public class MHAPanel extends JPanel{
         }
     }
 
-    private void hideAlert(JLabel icon, JLabel message, JButton yes, JButton no) {
+
+        private void hideAlert(JLabel icon, JLabel message, JButton yes, JButton no) {
         icon.setVisible(false);
         message.setVisible(false);
         yes.setVisible(false);
         no.setVisible(false);
     }
 
-    private JPanel createBottomSection() {
-        return new JPanel();
-    }
 
     private void showCapacityChangeMh03Alert() { // shows alert to redo MH03 when capacity changed
         int result = JOptionPane.showConfirmDialog(

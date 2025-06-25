@@ -176,11 +176,13 @@ public class MHAPanel extends JPanel{
         noCapacityBtn.addActionListener(e -> {
             CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
             cardLayout.show(pathwayPanel, "NO_CAPACITY");
+            showCapacityChangeMh03Alert();
         });
 
         yesCapacityBtn.addActionListener(e -> {
             CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
             cardLayout.show(pathwayPanel, "HAS_CAPACITY");
+            showCapacityChangeMh03Alert();
         });
 
         return capacityPanel;
@@ -224,7 +226,7 @@ public class MHAPanel extends JPanel{
         JFormattedTextField s62DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         s62DateField.setColumns(8);
         s62Panel.add(s62DateField);
-        s62Panel.setVisible(true);
+        s62Panel.setVisible(false);
         panel.add(s62Panel);
         // T3 section
         JPanel t3Panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -338,6 +340,25 @@ public class MHAPanel extends JPanel{
     private JPanel createBottomSection() {
         return new JPanel();
     }
+
+    private void showCapacityChangeMh03Alert() { // shows alert to redo MH03 when capacity changed
+        int result = JOptionPane.showConfirmDialog(
+            this,
+            "Capacity status changed. Please redo MH03 form.\n\nDo you want to update MH03 now?", 
+            "Capacity changed",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        if (result == JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Please complete MH03 form again.",
+                "MH03 Reset",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
 
     private String getThreeMthTrafficLightIcon(int daysRemaining) {
         if (daysRemaining > 42) {

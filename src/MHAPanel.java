@@ -3,13 +3,15 @@ package src;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.concurrent.Flow;
 
 public class MHAPanel extends JPanel{
     private TabDash tabDash;
     private JRadioButton noCapacityBtn;
     private JRadioButton yesCapacityBtn;
     private JPanel pathwayPanel;
+    private JCheckBox t3CheckBox;
+    private JPanel s62Panel;
+    private JPanel soadPanel;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -180,7 +182,7 @@ public class MHAPanel extends JPanel{
             CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
             cardLayout.show(pathwayPanel, "HAS_CAPACITY");
         });
-        
+
         return capacityPanel;
     }
 
@@ -202,7 +204,7 @@ public class MHAPanel extends JPanel{
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder("SOAD Pathway (no capacity)"));
         // SOAD Request section
-        JPanel soadPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        soadPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JCheckBox soadRequestedChk = new JCheckBox("SOAD requested");
         soadPanel.add(soadRequestedChk);
         soadPanel.add(new JLabel("Date sent"));
@@ -212,21 +214,21 @@ public class MHAPanel extends JPanel{
         soadPanel.add(new JLabel("Reference: "));
         JTextField soadRefField = new JTextField(10);
         soadPanel.add(soadRefField);
-        soadPanel.add(soadRefField);
+        panel.add(soadPanel);
 
         // S62 section(will appear after 3 months)
-        JPanel s62Panel = new JPanel((new FlowLayout(FlowLayout.LEFT)));
+        s62Panel = new JPanel((new FlowLayout(FlowLayout.LEFT)));
         JCheckBox s62CompletedChk = new JCheckBox("S62 completed");
         s62Panel.add(s62CompletedChk);
         s62Panel.add(new JLabel("Date: "));
         JFormattedTextField s62DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         s62DateField.setColumns(8);
         s62Panel.add(s62DateField);
-        s62Panel.setVisible(false);
+        s62Panel.setVisible(true);
         panel.add(s62Panel);
         // T3 section
         JPanel t3Panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JCheckBox t3CheckBox = new JCheckBox("T3 Provided");
+        t3CheckBox = new JCheckBox("T3 Provided");
         t3Panel.add(t3CheckBox);
         t3Panel.add(new JLabel("Date: "));
         JFormattedTextField t3DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
@@ -237,6 +239,21 @@ public class MHAPanel extends JPanel{
         t3ReviewDateField.setColumns(8);
         t3Panel.add(t3ReviewDateField);
         panel.add(t3Panel);
+
+        t3CheckBox.addActionListener(e -> {
+            boolean t3Selected = t3CheckBox.isSelected();
+
+            if (t3Selected) {
+                soadPanel.setVisible(false);
+                s62Panel.setVisible(false);
+            } else {
+                soadPanel.setVisible(true);
+                s62Panel.setVisible(false);
+            }
+            panel.revalidate();
+            panel.repaint();
+        });
+
         return panel;
     }
 
@@ -307,7 +324,7 @@ public class MHAPanel extends JPanel{
         );
 
         if (choice >= 0) {
-            JOptionPane.showMessageDialog(this, "You selected" + options[choice]);
+            JOptionPane.showMessageDialog(this, "You selected: " + options[choice]);
         }
     }
 

@@ -182,18 +182,126 @@ public class MHAPanel extends JPanel{
         return pathwayPanel;
     }
 
+
     private JPanel createNoCapacityPathway() {
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder("SOAD Pathway (no capacity)"));
+        // SOAD Request section
+        JPanel soadPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JCheckBox soadRequestedChk = new JCheckBox("SOAD requested");
+        soadPanel.add(soadRequestedChk);
+        soadPanel.add(new JLabel("Date sent"));
+        JFormattedTextField soadDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        soadDateField.setColumns(8);
+        soadPanel.add(soadDateField);
+        soadPanel.add(new JLabel("Reference: "));
+        JTextField soadRefField = new JTextField(10);
+        soadPanel.add(soadRefField);
+        soadPanel.add(soadRefField);
+
+        // S62 section(will appear after 3 months)
+        JPanel s62Panel = new JPanel((new FlowLayout(FlowLayout.LEFT)));
+        JCheckBox s62CompletedChk = new JCheckBox("S62 completed");
+        s62Panel.add(s62CompletedChk);
+        s62Panel.add(new JLabel("Date: "));
+        JFormattedTextField s62DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        s62DateField.setColumns(8);
+        s62Panel.add(s62DateField);
+        s62Panel.setVisible(false);
+        panel.add(s62Panel);
+        // T3 section
+        JPanel t3Panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JCheckBox t3CheckBox = new JCheckBox("T3 Provided");
+        t3Panel.add(t3CheckBox);
+        t3Panel.add(new JLabel("Date: "));
+        JFormattedTextField t3DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t3DateField.setColumns(8);
+        t3Panel.add(t3DateField);
+        t3Panel.add(new JLabel("Review due: "));
+        JFormattedTextField t3ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t3ReviewDateField.setColumns(8);
+        t3Panel.add(t3ReviewDateField);
+        panel.add(t3Panel);
         return panel;
     }
 
     private JPanel createHasCapacityPathway() {
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder("T2 Pathway (has capacity)"));
+        JPanel t2Panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JCheckBox t2CheckBox = new JCheckBox("T2 completed");
+        t2Panel.add(t2CheckBox);
+        t2Panel.add(new JLabel("Date: "));
+        JFormattedTextField t2DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t2DateField.setColumns(8);
+        t2Panel.add(t2DateField);
+        t2Panel.add(new JLabel("Review date: "));
+        JFormattedTextField t2ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t2ReviewDateField.setColumns(8);
+        t2Panel.add(t2ReviewDateField);
+        panel.add(t2Panel);
         return panel;
     }
 
     private JPanel createAlertPanel() {
-        return new JPanel();
+        JPanel alertPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        alertPanel.setBorder(BorderFactory.createTitledBorder("Alerts"));
+        //Medication change alert - intitially hidden
+        JLabel alertIcon = new JLabel("❗");
+        JLabel alertMessage = new JLabel("Medication changed- review required");
+        JButton yesBtn = new JButton("Yes");
+        JButton noBtn = new JButton("No");
+        // Set small button size
+        yesBtn.setPreferredSize(new Dimension(50, 25));
+        noBtn.setPreferredSize(new Dimension(50,25));;
+        alertPanel.add(alertIcon);
+        alertPanel.add(alertMessage);
+        alertPanel.add(Box.createHorizontalStrut(10));
+        alertPanel.add(yesBtn);
+        alertPanel.add(noBtn);
+
+        alertIcon.setVisible(false);
+        alertMessage.setVisible(false);
+        yesBtn.setVisible(false);
+        noBtn.setVisible(false);
+
+        yesBtn.addActionListener(e -> {
+            showMedicationReviewDialog();
+            hideAlert(alertIcon, alertMessage, yesBtn, noBtn);
+        });
+
+        noBtn.addActionListener(e -> {
+            hideAlert(alertIcon, alertMessage, yesBtn, noBtn);
+        });
+
+        return alertPanel;
+    }
+
+    private void showMedicationReviewDialog() {
+        String[] options = {"Review S62", "Review T2", "Review T3", "No action needed"};
+        int choice = JOptionPane.showOptionDialog(
+            this, 
+            "Medication has changed. What needs to be reviewed?",
+            "Medication Review",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null, 
+            options,
+            options[0]
+        );
+
+        if (choice >= 0) {
+            JOptionPane.showMessageDialog(this, "You selected" + options[choice]);
+        }
+    }
+
+    private void hideAlert(JLabel icon, JLabel message, JButton yes, JButton no) {
+        icon.setVisible(false);
+        message.setVisible(false);
+        yes.setVisible(false);
+        no.setVisible(false);
     }
 
     private JPanel createBottomSection() {

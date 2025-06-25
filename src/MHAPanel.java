@@ -7,6 +7,9 @@ import java.util.concurrent.Flow;
 
 public class MHAPanel extends JPanel{
     private TabDash tabDash;
+    private JRadioButton noCapacityBtn;
+    private JRadioButton yesCapacityBtn;
+    private JPanel pathwayPanel;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -160,18 +163,29 @@ public class MHAPanel extends JPanel{
         capacityPanel.setBorder(BorderFactory.createTitledBorder("Capacity to CTT"));
         capacityPanel.add(new JLabel("Has capacity: "));
         ButtonGroup capacityGroup = new ButtonGroup();
-        JRadioButton noCapacityBtn = new JRadioButton("No");
-        JRadioButton yesCapacityBtn = new JRadioButton("Yes");
+        noCapacityBtn = new JRadioButton("No");
+        yesCapacityBtn = new JRadioButton("Yes");
         capacityGroup.add(noCapacityBtn);
         capacityGroup.add(yesCapacityBtn);
         capacityPanel.add(noCapacityBtn);
         capacityPanel.add(yesCapacityBtn);
         noCapacityBtn.setSelected(true);
+        
+        noCapacityBtn.addActionListener(e -> {
+            CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
+            cardLayout.show(pathwayPanel, "NO_CAPACITY");
+        });
+
+        yesCapacityBtn.addActionListener(e -> {
+            CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
+            cardLayout.show(pathwayPanel, "HAS_CAPACITY");
+        });
+        
         return capacityPanel;
     }
 
     private JPanel createPathwayPanel() {
-        JPanel pathwayPanel = new JPanel();
+        pathwayPanel = new JPanel();
         pathwayPanel.setLayout(new CardLayout());
         // Create 2 different pathway panels
         JPanel noCapacityPanel = createNoCapacityPathway();

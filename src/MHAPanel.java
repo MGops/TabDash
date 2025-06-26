@@ -29,6 +29,7 @@ public class MHAPanel extends JPanel{
     private JLabel threeMthTrafficLight;
     private JRadioButton section2Btn;
     private JRadioButton section3Btn;
+    private Date originalDetentionDate;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -128,12 +129,16 @@ public class MHAPanel extends JPanel{
         informalBtn.addActionListener(e -> {
             detentionDateLbl.setVisible(false);
             detentionDateField.setVisible(false);
+            clearExpiryDisplays();
+            originalDetentionDate = null;
             topPanel.revalidate();
             topPanel.repaint();
         });
         dolsBtn.addActionListener(e -> { 
             detentionDateLbl.setVisible(false);
             detentionDateField.setVisible(false);
+            clearExpiryDisplays();
+            originalDetentionDate = null;
             topPanel.revalidate();
             topPanel.repaint();
         });
@@ -448,7 +453,7 @@ public class MHAPanel extends JPanel{
     }
 
 
-        private void hideAlert(JLabel icon, JLabel message, JButton yes, JButton no) {
+    private void hideAlert(JLabel icon, JLabel message, JButton yes, JButton no) {
         icon.setVisible(false);
         message.setVisible(false);
         yes.setVisible(false);
@@ -475,11 +480,26 @@ public class MHAPanel extends JPanel{
     }
 
 
-
     private void updateDateCalculations() {
+        // Do not update if MHO3 is not completed
+        if (!mh03CheckBox.isSelected()) {
+            return;
+        }
+
         if (detentionDateField.getValue() == null) return;
         
+        // Check if patient is currently detained
+        if (!section2Btn.isSelected() && !section3Btn.isSelected()) {
+            clearExpiryDisplays();
+            return;
+        }
         Date detentionDate = (Date) detentionDateField.getValue();
+
+        //Store original detention date (first time detention date is set)
+        if (originalDetentionDate == null) {
+            originalDetentionDate = detentionDate;
+        }
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(detentionDate);
 
@@ -556,6 +576,17 @@ public class MHAPanel extends JPanel{
                 // Ignore parsing errors while date still being typed
             }
         });
+    }
+
+    private void clearExpiryDisplays() {
+        sectionExpiryLabel.setText("");
+        sectionTrafficLight.setText("");
+        threeMonthLabel.setText("");
+        threeMthTrafficLight.setText("");
+
+        if (s62Panel != null) {
+            s62Panel.setVisible(false);
+        }
     }
 }
 

@@ -1,7 +1,9 @@
 package src;
 
-import java.awt.Container;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
 import java.awt.*;
 import java.text.SimpleDateFormat;
 
@@ -53,7 +55,9 @@ public class MHAPanel extends JPanel{
     private JPanel createTopSection() {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        topPanel.setBorder(BorderFactory.createTitledBorder("Patient Status"));
+        TitledBorder topBorder = BorderFactory.createTitledBorder("Patient Status");
+        topBorder.setTitleJustification(TitledBorder.CENTER);
+        topPanel.setBorder(topBorder);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         topPanel.add(new JLabel("Admission date: "));
@@ -130,8 +134,10 @@ public class MHAPanel extends JPanel{
 
     private JPanel createMiddleSection() {
         JPanel middlePanel = new JPanel();
+        TitledBorder middleBorder = BorderFactory.createTitledBorder("MHA Management");
+        middleBorder.setTitleJustification(TitledBorder.CENTER);
+        middlePanel.setBorder(middleBorder);
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
-        middlePanel.setBorder(BorderFactory.createTitledBorder("MHA Management"));
 
         // Section 1: Expiry dates with traffic lights
         JPanel expiryPanel = createExpiryPanel();
@@ -324,19 +330,52 @@ public class MHAPanel extends JPanel{
     }
 
     private JPanel createBottomSection() {
-        return new JPanel();
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        TitledBorder bottomBorder = BorderFactory.createTitledBorder("Leave & Tribunal Management");
+        bottomBorder.setTitleJustification(TitledBorder.CENTER);
+        bottomPanel.setBorder(bottomBorder);
+        JPanel leavePanel = createLeavePanel();
+        JPanel tribunalPanel = createTribunalPanel();
+        bottomPanel.add(leavePanel, BorderLayout.WEST);
+        bottomPanel.add(tribunalPanel, BorderLayout.EAST);
+        return bottomPanel;
+    }
+
+    private JPanel createLeavePanel() {
+        JPanel leavePanel = new JPanel();
+        leavePanel.setLayout(new BoxLayout(leavePanel, BoxLayout.Y_AXIS));
+        leavePanel.setBorder(BorderFactory.createTitledBorder("Leave Records"));
+        leavePanel.setPreferredSize(new Dimension(300, 120));
+
+        JLabel placeholder = new JLabel("Leave records will go here");
+        leavePanel.add(placeholder);
+        return leavePanel;
+    }
+
+    private JPanel createTribunalPanel() {
+        JPanel tribunalPanel = new JPanel();
+        tribunalPanel.setLayout(new BoxLayout(tribunalPanel, BoxLayout.Y_AXIS));
+        tribunalPanel.setBorder(BorderFactory.createTitledBorder("Tribunal information"));
+        tribunalPanel.setPreferredSize(new Dimension(350, 120));
+        JLabel placeholder = new JLabel("Tribunal information will go here");
+        tribunalPanel.add(placeholder);
+        return tribunalPanel;
     }
 
     // HELPER METHODS
     
     private void enableMHAFunctionality(boolean enabled) {
         enableComponentsRecursively(middleSection, enabled);
+        enableComponentsRecursively(bottomSection, enabled);
         if (enabled) {
             middleSection.setBackground(null);
+            bottomSection.setBackground(null);
         } else {
             middleSection.setBackground(Color.LIGHT_GRAY);
+            bottomSection.setBackground(Color.LIGHT_GRAY);
         }
         middleSection.repaint();
+        bottomSection.repaint();
     }
 
     private void enableComponentsRecursively(Container container, boolean enabled) {

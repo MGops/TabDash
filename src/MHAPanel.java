@@ -3,9 +3,13 @@ package src;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import java.awt.*;
+import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MHAPanel extends JPanel{
     private TabDash tabDash;
@@ -23,6 +27,8 @@ public class MHAPanel extends JPanel{
     private JLabel threeMonthLabel;
     private JLabel sectionTrafficLight;
     private JLabel threeMthTrafficLight;
+    private JRadioButton section2Btn;
+    private JRadioButton section3Btn;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -82,8 +88,8 @@ public class MHAPanel extends JPanel{
 
         ButtonGroup statusGroup = new ButtonGroup();
         JRadioButton informalBtn = new JRadioButton("Informal");
-        JRadioButton section2Btn = new JRadioButton("Section 2");
-        JRadioButton section3Btn = new JRadioButton("Section 3");
+        section2Btn = new JRadioButton("Section 2");
+        section3Btn = new JRadioButton("Section 3");
         JRadioButton dolsBtn = new JRadioButton("DOLS");
 
         statusGroup.add(informalBtn);
@@ -98,6 +104,9 @@ public class MHAPanel extends JPanel{
 
         topPanel.add(Box.createHorizontalStrut(20));
 
+        JLabel detentionDateLbl = new JLabel("Date detained");
+        topPanel.add(detentionDateLbl);
+        detentionDateLbl.setVisible(false);
         detentionDateField = new JFormattedTextField(dateFormat);
         detentionDateField.setColumns(8);
         detentionDateField.setValue(new java.util.Date());
@@ -105,25 +114,52 @@ public class MHAPanel extends JPanel{
         topPanel.add(detentionDateField);
 
         section2Btn.addActionListener(e -> {
+            detentionDateLbl.setVisible(true);
             detentionDateField.setVisible(true);
             topPanel.revalidate();
             topPanel.repaint();
         });
         section3Btn.addActionListener(e -> {
+            detentionDateLbl.setVisible(true);
             detentionDateField.setVisible(true);
             topPanel.revalidate();
             topPanel.repaint();
         });
         informalBtn.addActionListener(e -> {
+            detentionDateLbl.setVisible(false);
             detentionDateField.setVisible(false);
             topPanel.revalidate();
             topPanel.repaint();
         });
         dolsBtn.addActionListener(e -> { 
+            detentionDateLbl.setVisible(false);
             detentionDateField.setVisible(false);
             topPanel.revalidate();
             topPanel.repaint();
         });
+
+        detentionDateField.addPropertyChangeListener("value", e -> { // update calculations when detention date changes
+            if (detentionDateField.getValue() != null) {
+                updateDateCalculations();
+            }
+        });
+
+        // Realtime update as date is typed
+        detentionDateField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                delayUpdateDateCalc();
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                delayUpdateDateCalc();
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                delayUpdateDateCalc();
+            }
+        });
+
 
         informalBtn.setSelected(true);
 
@@ -168,16 +204,16 @@ public class MHAPanel extends JPanel{
         expiryPanel.setBorder(BorderFactory.createTitledBorder("Section Status"));
         // Section Expiry
         expiryPanel.add(new JLabel("Section Expires: "));
-        sectionTrafficLight = new JLabel("🟡");
+        sectionTrafficLight = new JLabel("");
         expiryPanel.add(sectionTrafficLight);
-        sectionExpiryLabel = new JLabel("25/01/2025 (28 days)");
+        sectionExpiryLabel = new JLabel("");
         expiryPanel.add(sectionExpiryLabel);
         expiryPanel.add(Box.createHorizontalStrut(30));
         // 3 month rule with traffic light
-        expiryPanel.add(new JLabel("Consent to treatment (3 month rule): "));
-        threeMthTrafficLight = new JLabel("🔴");
+        expiryPanel.add(new JLabel("Consent to treatment (3 month rule)"));
+        threeMthTrafficLight = new JLabel("");
         expiryPanel.add(threeMthTrafficLight);
-        threeMonthLabel = new JLabel("15 days remaining");
+        threeMonthLabel = new JLabel("");
         expiryPanel.add(threeMonthLabel);
         return expiryPanel;
     }
@@ -439,6 +475,54 @@ public class MHAPanel extends JPanel{
     }
 
 
+
+    private void updateDateCalculations() {
+        if (detentionDateField.getValue() == null) return;
+        
+        Date detentionDate = (Date) detentionDateField.getValue();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(detentionDate);
+
+        Date sectionExpiry; // Calculate seciton expiry based on section type
+        if (section2Btn.isSelected()) {
+            cal.add(Calendar.DAY_OF_MONTH, 28);
+            sectionExpiry = cal.getTime();
+        } else if (section3Btn.isSelected()) {
+            cal.add(Calendar.MONTH, 6);
+            sectionExpiry = cal.getTime();
+        } else {
+            return;
+        }
+
+        cal.setTime(detentionDate); // Calculate 3 month-rule expiries
+        cal.add(Calendar.MONTH, 3);
+        Date threeMthExpiry = cal.getTime();
+
+        updateExpiryDisplays(sectionExpiry, threeMthExpiry);
+    }
+
+    private void updateExpiryDisplays(Date sectionExpiry, Date threeMthExpiry) {
+        SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date today = new Date();
+
+        //Calculate days remaining for each deadline
+        long sectionDaysRemaining = (sectionExpiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+        long threeMthDaysRemaining = (threeMthExpiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+
+        //Update section expiry display
+        sectionExpiryLabel.setText(displayFormat.format(sectionExpiry) + " (in " + sectionDaysRemaining + " days)");
+        sectionTrafficLight.setText(getSectionExpiryTrafficLightIcon((int)sectionDaysRemaining));
+
+        // Update 3-mth rule display 
+        threeMonthLabel.setText(threeMthDaysRemaining + " days remaining");
+        threeMthTrafficLight.setText(getThreeMthTrafficLightIcon((int)threeMthDaysRemaining));
+    
+        // Show/hide S62 panel based on 3 mth rule
+        if (threeMthDaysRemaining <= 0 && s62Panel != null) {
+            s62Panel.setVisible(true);
+        }
+    }
+
     private String getThreeMthTrafficLightIcon(int daysRemaining) {
         if (daysRemaining > 42) {
             return "🟢";
@@ -447,6 +531,31 @@ public class MHAPanel extends JPanel{
         } else {
             return "🔴";
         }
+    }
+    
+    private String getSectionExpiryTrafficLightIcon(int daysRemaining) {
+        if (daysRemaining > 14) {
+            return "🟢";
+        } else if (daysRemaining >= 7) {
+            return "🟡";
+        } else {
+            return "🔴";
+        }
+    }
+
+
+    private void delayUpdateDateCalc() {
+        SwingUtilities.invokeLater(() -> {
+            try { // try to parse the current text as a date
+                if (detentionDateField.getText() != null && !detentionDateField.getText().trim().isEmpty()) {
+                    // Force the field to commit its current value
+                    detentionDateField.commitEdit();
+                    updateDateCalculations();
+                }
+            } catch (Exception e) {
+                // Ignore parsing errors while date still being typed
+            }
+        });
     }
 }
 

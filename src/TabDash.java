@@ -8,6 +8,7 @@ public class TabDash {
     private List<Patient> patients;
     private Patient currentPatient;
     private MedicationPanel medicationPanel;
+    private MHAPanel mhaPanel;
 
     public TabDash() {
         patients = new ArrayList<>();
@@ -45,7 +46,8 @@ public class TabDash {
 
         
         medicationPanel = new MedicationPanel(medDatabase, this);
-        ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel);
+        mhaPanel = new MHAPanel(this);
+        ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel, mhaPanel);
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);

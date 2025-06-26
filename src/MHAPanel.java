@@ -534,7 +534,7 @@ public class MHAPanel extends JPanel{
         sectionTrafficLight.setText(getSectionExpiryTrafficLightIcon((int)sectionDaysRemaining));
 
         // Update 3-mth rule display 
-        threeMonthLabel.setText(threeMthDaysRemaining + " days remaining");
+        threeMonthLabel.setText(displayFormat.format(threeMthExpiry) + " --> " + threeMthDaysRemaining + " days remaining");
         threeMthTrafficLight.setText(getThreeMthTrafficLightIcon((int)threeMthDaysRemaining));
     
         // Show/hide S62 panel based on 3 mth rule
@@ -587,6 +587,21 @@ public class MHAPanel extends JPanel{
         if (s62Panel != null) {
             s62Panel.setVisible(false);
         }
+    }
+
+    public void refreshForNewPatient() {
+        clearAllFields();
+    }
+
+    public void clearAllFields() {
+        mh03CheckBox.setSelected(false);
+        detentionDateField.setValue(new Date());
+        originalDetentionDate = null;
+        clearExpiryDisplays();
+        noCapacityBtn.setSelected(true);
+        CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
+        cardLayout.show(pathwayPanel, "NO_CAPACITY");
+        enableMHAFunctionality(false);
     }
 }
 

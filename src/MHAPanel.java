@@ -18,6 +18,11 @@ public class MHAPanel extends JPanel{
     private JCheckBox mh03CheckBox;
     private JPanel middleSection;
     private JPanel bottomSection;
+    private JFormattedTextField detentionDateField;
+    private JLabel sectionExpiryLabel;
+    private JLabel threeMonthLabel;
+    private JLabel sectionTrafficLight;
+    private JLabel threeMthTrafficLight;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -93,7 +98,7 @@ public class MHAPanel extends JPanel{
 
         topPanel.add(Box.createHorizontalStrut(20));
 
-        JFormattedTextField detentionDateField = new JFormattedTextField(dateFormat);
+        detentionDateField = new JFormattedTextField(dateFormat);
         detentionDateField.setColumns(8);
         detentionDateField.setValue(new java.util.Date());
         detentionDateField.setVisible(false);
@@ -163,16 +168,16 @@ public class MHAPanel extends JPanel{
         expiryPanel.setBorder(BorderFactory.createTitledBorder("Section Status"));
         // Section Expiry
         expiryPanel.add(new JLabel("Section Expires: "));
-        JLabel sectionTrafficLight = new JLabel("🟡");
+        sectionTrafficLight = new JLabel("🟡");
         expiryPanel.add(sectionTrafficLight);
-        JLabel sectionExpiryLabel = new JLabel("25/01/2025 (28 days)");
+        sectionExpiryLabel = new JLabel("25/01/2025 (28 days)");
         expiryPanel.add(sectionExpiryLabel);
         expiryPanel.add(Box.createHorizontalStrut(30));
         // 3 month rule with traffic light
         expiryPanel.add(new JLabel("Consent to treatment (3 month rule): "));
-        JLabel threeMthTrafficLight = new JLabel("🔴");
+        threeMthTrafficLight = new JLabel("🔴");
         expiryPanel.add(threeMthTrafficLight);
-        JLabel threeMonthLabel = new JLabel("15 days remaining");
+        threeMonthLabel = new JLabel("15 days remaining");
         expiryPanel.add(threeMonthLabel);
         return expiryPanel;
     }

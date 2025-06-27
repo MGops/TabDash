@@ -46,8 +46,8 @@ public class TabDash {
 
         
         medicationPanel = new MedicationPanel(medDatabase, this);
-        mhaPanel = new MHAPanel(this);
-        ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel, mhaPanel);
+        ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel);
+        mhaPanel = panelCenter.getMHAPanel();
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);
@@ -78,6 +78,15 @@ public class TabDash {
     public void refreshMedicationPanel() {
         if (medicationPanel != null) {
             medicationPanel.refreshForNewPatient();
+        }
+    }
+
+    public void refreshAllPanels() {
+        if (medicationPanel != null) {
+            medicationPanel.refreshForNewPatient();
+        }
+        if (mhaPanel != null) {
+            mhaPanel.refreshForNewPatient();
         }
     }
 }

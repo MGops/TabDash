@@ -47,7 +47,7 @@ public class SidePanel extends JPanel{
                     int selectedIndex = nameList.getSelectedIndex();
                     if (selectedIndex >= 0) {
                         tabDash.setCurrentPatient(selectedIndex);
-                        tabDash.refreshMedicationPanel();
+                        tabDash.refreshAllPanels();
                     }
                 }
             }

@@ -92,4 +92,28 @@ public class Patient {
 
     public String getSoadReference() {return soadReference;}
     public void setSoadReference(String soadReference) {this.soadReference = soadReference;}
+
+    public boolean isS62Completed() {return s62Completed;}
+    public void sets62Completed(boolean s62Completed) {this.s62Completed = s62Completed;}
+
+    public Date get62Date() {return s62Date;}
+    public void setS62Date(Date s62Date) {this.s62Date = s62Date;}
+
+    public boolean isT3Provided() {return t3Provided;}
+    public void setT3Provided(boolean t3Provided) {this.t3Provided = t3Provided;}
+
+    public Date getT3Date() {return t3Date;}
+    public void setT3Date(Date t3Date) {this.t3Date = t3Date;}
+
+    public Date getT3ReviewDate() {return t3ReviewDate;}
+    public void setT3ReviewDate(Date t3ReviewDate) {this.t3ReviewDate = t3ReviewDate;}
+
+    public boolean isT2Completed() {return t2Completed;}
+    public void setT2Completed(boolean t2Completed) {this.t2Completed = t2Completed;}
+
+    public Date getT2Date() {return t2Date;}
+    public void setT2Date(Date t2Date) {this.t2Date = t2Date;}
+
+    public Date getT2ReviewDate() {return t2ReviewDate;}
+    public void setT2ReviewDate(Date t2ReviewDate) {this.t2ReviewDate = t2ReviewDate;}
 }

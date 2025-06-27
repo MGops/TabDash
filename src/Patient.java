@@ -30,6 +30,17 @@ public class Patient {
 
     }
 
+    private void initialiseMHAFields() {
+        this.mh03Completed = false;
+        this.sectionStatus = "Informal";
+        this.admissionDate = new Date();
+        this.capacity = "No";
+        this.soadRequested = false;
+        this.s62Completed = false;
+        this.t3Provided = false;
+        this.t2Completed = false;
+    }
+
     public String getPatientId() {
         return patientId;
     }
@@ -54,4 +65,31 @@ public class Patient {
     public HashMap<String, Integer> getMedications() {
         return medications;
     }
+
+    public boolean isMh03Completed() {return mh03Completed;}
+    public void setMh03Completed(boolean mh03Completed) {this.mh03Completed = mh03Completed;}
+
+    public String getSectionStatus() {return sectionStatus;}
+    public void setSectionStatus(String sectionStatus) {this.sectionStatus = sectionStatus;}
+
+    public Date getAdmissionDate() {return admissionDate;}
+    public void setAdmissionDate(Date admissionDate) {this.admissionDate = admissionDate;}
+
+    public Date getDetentionDate() {return detentionDate;}
+    public void setDetentionDate(Date detentionDate) {this.detentionDate = detentionDate;}
+
+    public Date getOriginalDetentionDate() {return originalDetentionDate;}
+    public void setOriginalDetentionDate(Date originalDetentionDate) {this.originalDetentionDate = originalDetentionDate;}
+
+    public String getCapacity() {return capacity;}
+    public void setCapacity(String capacity) {this.capacity = capacity;}
+
+    public boolean isSoadRequested() {return soadRequested;}
+    public void setSoadRequested(boolean soadRequested) {this.soadRequested = soadRequested;}
+
+    public Date getSoadDate() {return soadDate;}
+    public void setSoadDate(Date soadDate) {this.soadDate = soadDate;}
+
+    public String getSoadReference() {return soadReference;}
+    public void setSoadReference(String soadReference) {this.soadReference = soadReference;}
 }

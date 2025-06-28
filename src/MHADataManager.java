@@ -1,7 +1,10 @@
 package src;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -65,5 +68,94 @@ public class MHADataManager {
 
     private static String formatDate(Date date) {
         return date != null ? dateFormat.format(date) : "null";
+    }
+
+    public static void loadPatientMHA(Patient patient) {
+        String filename = MHA_DIR + patient.getPatientId().replace(" ", "_") + ".txt";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("=", 2);
+                if (parts.length == 2) {
+                    String key = parts[0].trim();
+                    String value = parts[1].trim();
+                    
+                    switch (key) {
+                        case "mh03_completed":
+                            patient.setMh03Completed(Boolean.parseBoolean(value));
+                            break;
+                        case "section_status":
+                            patient.setSectionStatus(value);
+                            break;
+                        case "admission_date":
+                            patient.setAdmissionDate(parseDate(value)); 
+                            break;
+                        case "detention_date":
+                            patient.setDetentionDate(parseDate(value));
+                            break;
+                        case "original_detention_date":
+                            patient.setOriginalDetentionDate(parseDate(value));
+                            break;
+                        case "capacity":
+                            patient.setCapacity(value);
+                            break;
+                        case "soad_requested":
+                            patient.setSoadRequested(Boolean.parseBoolean(value));
+                            break;
+                        case "soad_date":
+                            patient.setSoadRequested(Boolean.parseBoolean(value));
+                            break;
+                        case "soad_reference":
+                            patient.setSoadReference(value.isEmpty() ? null : value);
+                            break;
+                        case "s62_completed":
+                            patient.sets62Completed(Boolean.parseBoolean(value));
+                            break;
+                        case "s62_date":
+                            patient.setS62Date(parseDate(value));
+                            break;
+                        case "t3_provided":
+                            patient.setT3Provided(Boolean.parseBoolean(value));
+                            break;
+                        case "t3_date":
+                            patient.setT3Date(parseDate(value));
+                            break;
+                        case "t3_review_date":
+                            patient.setT3ReviewDate(parseDate(value));
+                            break;
+                        case "t2_completed":
+                            patient.setT2Completed(Boolean.parseBoolean(value));
+                            break;
+                        case "t2_date":
+                            patient.setT2Date(parseDate(value));
+                            break;
+                        case "t2_review_date":
+                            patient.setT2ReviewDate(parseDate(value));
+                            break;
+                        default:
+                            System.out.println("Unknown MHA field: " + key);
+                            break;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            // No file exists yet- eg. for new patients
+            System.out.println("No MHA data found for " + patient.getPatientId()); 
+        } catch (IOException e) {
+            System.err.println("Error loading MHA data for " + patient.getPatientId() + ": " + e.getMessage());
+        }
+    }
+
+    private static Date parseDate (String dateStr) {
+        if (dateStr == null || dateStr.equals("null") || dateStr.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return dateFormat.parse(dateStr);
+        } catch (Exception e) {
+            System.err.println("Error parsing date: " + dateStr);
+            return null;
+        }
     }
 }

@@ -40,6 +40,24 @@ public class MHADataManager {
             writer.newLine();
             writer.write("soad_date=" + formatDate(patient.getSoadDate()));
             writer.newLine();
+            writer.write("soad_reference=" + patient.getSoadReference() != null ? patient.getSoadReference() : "");
+            writer.newLine();
+            writer.write("s62_completed=" + patient.isS62Completed());
+            writer.newLine();
+            writer.write("s62_date=" + formatDate(patient.get62Date()));
+            writer.newLine();
+            writer.write("t3_provided=" + patient.isT3Provided());
+            writer.newLine();
+            writer.write("t3_date=" + formatDate(patient.getT3Date()));
+            writer.newLine();
+            writer.write("t3_review_date=" + formatDate(patient.getT3ReviewDate()));
+            writer.newLine();
+            writer.write("t2_completed=" + patient.isT2Completed());
+            writer.newLine();
+            writer.write("t2_date=" + formatDate(patient.get62Date()));
+            writer.newLine();
+            writer.write("t2_review_date=" + formatDate(patient.getT2ReviewDate()));
+            writer.newLine();
         } catch (IOException e) {
             System.err.println("Error saving MHA data for " + patient.getPatientId() + ": " + e.getMessage());
         }

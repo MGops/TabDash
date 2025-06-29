@@ -699,5 +699,78 @@ public class MHAPanel extends JPanel{
         updateDateCalculations();
         enableMHAFunctionality(patient.isMh03Completed());
     }
+
+    private void saveCurrentPatientMHA() {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient != null) {
+            MHADataManager.savePatientMHA(currentPatient);
+        }
+    }
+
+    private void updatePatientAndSave() {
+        // Update the Patient object with current GUI values, then save
+        updatePatientFromFields();
+        saveCurrentPatientMHA();
+    }
+
+    private void updatePatientFromFields() {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) return;
+
+        // Update Patient object with current GUI values
+        currentPatient.setMh03Completed(mh03CheckBox.isSelected());
+        currentPatient.setSectionStatus(getCurrentSectionStatus());
+
+        if (admissionDateField.getValue() instanceof Date) {
+            currentPatient.setAdmissionDate((Date) admissionDateField.getValue());
+        }
+
+        if (detentionDateField.getValue() instanceof Date) {
+            currentPatient.setDetentionDate((Date) detentionDateField.getValue());
+        }
+
+        currentPatient.setCapacity(noCapacityBtn.isSelected() ? "No" : "Yes");
+
+        // Update pathway-specific fields
+        currentPatient.setSoadRequested(soadRequestedChk.isSelected());
+        if (soadDateField.getValue() instanceof Date) {
+            currentPatient.setSoadDate((Date) soadDateField.getValue());
+        }
+        currentPatient.setSoadReference(soadRefField.getText().isEmpty() ? null :soadRefField.getText());
+
+        currentPatient.sets62Completed(s62CompletedChk.isSelected());
+        if (s62DateField.getValue() instanceof Date) {
+            currentPatient.setS62Date((Date) s62DateField.getValue());
+        }
+
+        currentPatient.sets62Completed((s62CompletedChk.isSelected()));
+        if (s62DateField.getValue() instanceof Date) {
+            currentPatient.setS62Date((Date) s62DateField.getValue());
+        }
+
+        currentPatient.setT3Provided(t3CheckBox.isSelected());
+        if (t3DateField.getValue() instanceof Date) {
+            currentPatient.setT3Date((Date) t3DateField.getValue());
+        }
+        if (t3ReviewDateField.getValue() instanceof Date) {
+            currentPatient.setT3ReviewDate((Date) t3ReviewDateField.getValue());
+        }
+
+        currentPatient.setT2Completed(t2CheckBox.isSelected());
+        if (t2DateField.getValue() instanceof Date) {
+            currentPatient.setT2Date((Date) t2DateField.getValue());
+        }
+        if (t2ReviewDateField.getValue() instanceof Date) {
+            currentPatient.setT2ReviewDate((Date) t2ReviewDateField.getValue());
+        }
+    }
+
+    private String getCurrentSectionStatus() {
+        if (informalBtn.isSelected()) return "Informal";
+        if (section2Btn.isSelected()) return "Section2";
+        if (section3Btn.isSelected()) return "Section3";
+        if (dolsBtn.isSelected()) return "DOLS";
+        return "Informal";
+    }
 }
 

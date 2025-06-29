@@ -393,6 +393,11 @@ public class MHAPanel extends JPanel{
         t2ReviewDateField.setColumns(8);
         t2Panel.add(t2ReviewDateField);
         panel.add(t2Panel);
+        
+        t2CheckBox.addActionListener(e -> updatePatientAndSave());
+        t2DateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
+        t2ReviewDateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
+        
         return panel;
     }
 

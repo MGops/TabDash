@@ -127,17 +127,25 @@ public class MHAPanel extends JPanel{
         detentionDateField.setVisible(false);
         topPanel.add(detentionDateField);
 
+        //Listener for automatic saving
+        mh03CheckBox.addActionListener(e -> updatePatientAndSave());
+        
+        // Add to admission date field
+        admissionDateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
+
         section2Btn.addActionListener(e -> {
             detentionDateLbl.setVisible(true);
             detentionDateField.setVisible(true);
             topPanel.revalidate();
             topPanel.repaint();
+            updatePatientAndSave();
         });
         section3Btn.addActionListener(e -> {
             detentionDateLbl.setVisible(true);
             detentionDateField.setVisible(true);
             topPanel.revalidate();
             topPanel.repaint();
+            updatePatientAndSave();
         });
         informalBtn.addActionListener(e -> {
             detentionDateLbl.setVisible(false);
@@ -146,6 +154,7 @@ public class MHAPanel extends JPanel{
             originalDetentionDate = null;
             topPanel.revalidate();
             topPanel.repaint();
+            updatePatientAndSave();
         });
         dolsBtn.addActionListener(e -> { 
             detentionDateLbl.setVisible(false);
@@ -154,11 +163,13 @@ public class MHAPanel extends JPanel{
             originalDetentionDate = null;
             topPanel.revalidate();
             topPanel.repaint();
+            updatePatientAndSave();
         });
 
         detentionDateField.addPropertyChangeListener("value", e -> { // update calculations when detention date changes
             if (detentionDateField.getValue() != null) {
                 updateDateCalculations();
+                updatePatientAndSave();
             }
         });
 
@@ -253,12 +264,14 @@ public class MHAPanel extends JPanel{
             CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
             cardLayout.show(pathwayPanel, "NO_CAPACITY");
             showCapacityChangeMh03Alert();
+            updatePatientAndSave();
         });
 
         yesCapacityBtn.addActionListener(e -> {
             CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
             cardLayout.show(pathwayPanel, "HAS_CAPACITY");
             showCapacityChangeMh03Alert();
+            updatePatientAndSave();
         });
 
         return capacityPanel;
@@ -332,6 +345,35 @@ public class MHAPanel extends JPanel{
             panel.repaint();
         });
 
+        soadRequestedChk.addActionListener(e -> updatePatientAndSave());
+        soadDateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
+        soadRefField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {updatePatientAndSave();}
+            public void removeUpdate(DocumentEvent e) {updatePatientAndSave();}
+            public void changedUpdate(DocumentEvent e) {updatePatientAndSave();}        
+        });
+
+        s62CompletedChk.addActionListener(e -> updatePatientAndSave());
+        s62DateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
+
+        //Modify existing T3 ActionListener
+        t3CheckBox.addActionListener(e -> {
+            boolean t3Selected = t3CheckBox.isSelected();
+            if (t3Selected) {
+                soadPanel.setVisible(false);
+                s62Panel.setVisible(false);
+            } else {
+                soadPanel.setVisible(true);
+                s62Panel.setVisible(true);
+            }
+            panel.revalidate();
+            panel.repaint();
+            updatePatientAndSave();
+        });
+
+        t3DateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
+        t3ReviewDateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
+        
         return panel;
     }
 

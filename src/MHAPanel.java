@@ -30,6 +30,19 @@ public class MHAPanel extends JPanel{
     private JRadioButton section2Btn;
     private JRadioButton section3Btn;
     private Date originalDetentionDate;
+    private JFormattedTextField admissionDateField;
+    private JRadioButton informalBtn;
+    private JRadioButton dolsBtn;
+    private JCheckBox soadRequestedChk;
+    private JFormattedTextField soadDateField;
+    private JTextField soadRefField;
+    private JCheckBox s62CompletedChk;
+    private JFormattedTextField s62DateField;
+    private JFormattedTextField t3DateField;
+    private JFormattedTextField t3ReviewDateField;
+    private JCheckBox t2CheckBox;
+    private JFormattedTextField t2DateField;
+    private JFormattedTextField t2ReviewDateField;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -73,7 +86,7 @@ public class MHAPanel extends JPanel{
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         topPanel.add(new JLabel("Admission date: "));
-        JFormattedTextField admissionDateField = new JFormattedTextField(dateFormat);
+        admissionDateField = new JFormattedTextField(dateFormat);
         admissionDateField.setColumns(8);
         admissionDateField.setValue(new java.util.Date());
         topPanel.add(admissionDateField);
@@ -88,10 +101,10 @@ public class MHAPanel extends JPanel{
         topPanel.add(new JLabel("Status:"));
 
         ButtonGroup statusGroup = new ButtonGroup();
-        JRadioButton informalBtn = new JRadioButton("Informal");
+        informalBtn = new JRadioButton("Informal");
         section2Btn = new JRadioButton("Section 2");
         section3Btn = new JRadioButton("Section 3");
-        JRadioButton dolsBtn = new JRadioButton("DOLS");
+        dolsBtn = new JRadioButton("DOLS");
 
         statusGroup.add(informalBtn);
         statusGroup.add(section2Btn);
@@ -270,23 +283,23 @@ public class MHAPanel extends JPanel{
         panel.setBorder(BorderFactory.createTitledBorder("SOAD Pathway (no capacity)"));
         // SOAD Request section
         soadPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JCheckBox soadRequestedChk = new JCheckBox("SOAD requested");
+        soadRequestedChk = new JCheckBox("SOAD requested");
         soadPanel.add(soadRequestedChk);
         soadPanel.add(new JLabel("Date sent"));
-        JFormattedTextField soadDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        soadDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         soadDateField.setColumns(8);
         soadPanel.add(soadDateField);
         soadPanel.add(new JLabel("Reference: "));
-        JTextField soadRefField = new JTextField(10);
+        soadRefField = new JTextField(10);
         soadPanel.add(soadRefField);
         panel.add(soadPanel);
 
         // S62 section(will appear after 3 months)
         s62Panel = new JPanel((new FlowLayout(FlowLayout.LEFT)));
-        JCheckBox s62CompletedChk = new JCheckBox("S62 completed");
+        s62CompletedChk = new JCheckBox("S62 completed");
         s62Panel.add(s62CompletedChk);
         s62Panel.add(new JLabel("Date: "));
-        JFormattedTextField s62DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        s62DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         s62DateField.setColumns(8);
         s62Panel.add(s62DateField);
         s62Panel.setVisible(false);
@@ -296,11 +309,11 @@ public class MHAPanel extends JPanel{
         t3CheckBox = new JCheckBox("T3 Provided");
         t3Panel.add(t3CheckBox);
         t3Panel.add(new JLabel("Date: "));
-        JFormattedTextField t3DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t3DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         t3DateField.setColumns(8);
         t3Panel.add(t3DateField);
         t3Panel.add(new JLabel("Review due: "));
-        JFormattedTextField t3ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t3ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         t3ReviewDateField.setColumns(8);
         t3Panel.add(t3ReviewDateField);
         panel.add(t3Panel);
@@ -327,14 +340,14 @@ public class MHAPanel extends JPanel{
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder("T2 Pathway (has capacity)"));
         JPanel t2Panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JCheckBox t2CheckBox = new JCheckBox("T2 completed");
+        t2CheckBox = new JCheckBox("T2 completed");
         t2Panel.add(t2CheckBox);
         t2Panel.add(new JLabel("Date: "));
-        JFormattedTextField t2DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t2DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         t2DateField.setColumns(8);
         t2Panel.add(t2DateField);
         t2Panel.add(new JLabel("Review date: "));
-        JFormattedTextField t2ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        t2ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         t2ReviewDateField.setColumns(8);
         t2Panel.add(t2ReviewDateField);
         panel.add(t2Panel);
@@ -591,6 +604,13 @@ public class MHAPanel extends JPanel{
 
     public void refreshForNewPatient() {
         clearAllFields();
+
+        // Load the new patient's MHA data from file
+        Patient currentPatient = tabDash.getCurrentPatient();
+        MHADataManager.loadPatientMHAdata(currentPatient);
+        
+        // Populate GUI fields with loaded data
+        populateFieldsFromPatient(currentPatient);
     }
 
     public void clearAllFields() {
@@ -602,6 +622,82 @@ public class MHAPanel extends JPanel{
         CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
         cardLayout.show(pathwayPanel, "NO_CAPACITY");
         enableMHAFunctionality(false);
+    }
+
+    // Method to read from Patient and populate GUI components
+    private void populateFieldsFromPatient(Patient patient) {
+        // Set MH03 checkbox
+        mh03CheckBox.setSelected(patient.isMh03Completed());
+
+        // Set admission date
+        if (patient.getAdmissionDate() != null) {
+            admissionDateField.setValue(patient.getAdmissionDate());
+        }
+                
+        // Set section status radio buttons
+        String sectionStatus = patient.getSectionStatus();
+        informalBtn.setSelected(sectionStatus.equals("Informal"));
+        section2Btn.setSelected(sectionStatus.equals("Section2"));
+        section3Btn.setSelected(sectionStatus.equals("Section3"));
+        dolsBtn.setSelected(sectionStatus.equals("DOLS"));
+
+        // Set detention date if exists
+        if (patient.getDetentionDate() != null) {
+            detentionDateField.setValue(patient.getDetentionDate());
+            // Show detention field if patient is detained
+            if (sectionStatus.equals("Section2") || sectionStatus.equals("Section3")) {
+                detentionDateField.setVisible(true);
+            }
+        }
+        
+        // Set capacity radio buttons
+        String capacity = patient.getCapacity();
+        noCapacityBtn.setSelected(capacity.equals("No"));
+        yesCapacityBtn.setSelected(capacity.equals("Yes"));
+        
+        CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
+        if (capacity.equals("No")) {
+            cardLayout.show(pathwayPanel, "NO_CAPACITY");
+
+            // Populate SOAD pathway fields
+            soadRequestedChk.setSelected((patient.isSoadRequested()));
+            if(patient.getSoadDate() != null) {
+                soadDateField.setValue(patient.getSoadReference());
+            }
+            if(patient.getSoadReference() != null) {
+                soadRefField.setText(patient.getSoadReference());
+            }
+            
+            // Populate S62 fields
+            s62CompletedChk.setSelected(patient.isS62Completed());
+            if (patient.getS62Date() != null) {
+                s62DateField.setValue(patient.getS62Date());
+            }
+
+            // Populate T3 fields
+            t3CheckBox.setSelected(patient.isT3Provided());
+            if (patient.getT3Date() != null) {
+                t3DateField.setValue(patient.getT3Date());
+            }
+            if (patient.getT3ReviewDate() != null) {
+                t3ReviewDateField.setValue(patient.getT3ReviewDate());
+            }
+        } else {
+            cardLayout.show(pathwayPanel, "HAS_CAPACITY");
+
+            // Populate T2 pathway fields
+            t2CheckBox.setSelected(patient.isT2Completed());
+            if (patient.getT2Date() != null) {
+                t2DateField.setValue(patient.getT2Date());
+            }
+            if (patient.getT2ReviewDate() != null) {
+                t2ReviewDateField.setValue(patient.getT2ReviewDate());
+            }
+        }
+
+        // Update displays and calculations
+        updateDateCalculations();
+        enableMHAFunctionality(patient.isMh03Completed());
     }
 }
 

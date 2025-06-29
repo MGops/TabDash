@@ -96,7 +96,7 @@ public class Patient {
     public boolean isS62Completed() {return s62Completed;}
     public void sets62Completed(boolean s62Completed) {this.s62Completed = s62Completed;}
 
-    public Date get62Date() {return s62Date;}
+    public Date getS62Date() {return s62Date;}
     public void setS62Date(Date s62Date) {this.s62Date = s62Date;}
 
     public boolean isT3Provided() {return t3Provided;}

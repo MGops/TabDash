@@ -47,7 +47,7 @@ public class MHADataManager {
             writer.newLine();
             writer.write("s62_completed=" + patient.isS62Completed());
             writer.newLine();
-            writer.write("s62_date=" + formatDate(patient.get62Date()));
+            writer.write("s62_date=" + formatDate(patient.getS62Date()));
             writer.newLine();
             writer.write("t3_provided=" + patient.isT3Provided());
             writer.newLine();
@@ -57,7 +57,7 @@ public class MHADataManager {
             writer.newLine();
             writer.write("t2_completed=" + patient.isT2Completed());
             writer.newLine();
-            writer.write("t2_date=" + formatDate(patient.get62Date()));
+            writer.write("t2_date=" + formatDate(patient.getS62Date()));
             writer.newLine();
             writer.write("t2_review_date=" + formatDate(patient.getT2ReviewDate()));
             writer.newLine();
@@ -70,7 +70,7 @@ public class MHADataManager {
         return date != null ? dateFormat.format(date) : "null";
     }
 
-    public static void loadPatientMHA(Patient patient) {
+    public static void loadPatientMHAdata(Patient patient) {
         String filename = MHA_DIR + patient.getPatientId().replace(" ", "_") + ".txt";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {

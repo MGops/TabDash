@@ -7,6 +7,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,6 +45,7 @@ public class MHAPanel extends JPanel{
     private JCheckBox t2CheckBox;
     private JFormattedTextField t2DateField;
     private JFormattedTextField t2ReviewDateField;
+    private boolean autoSaveEnabled = true;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -88,6 +91,7 @@ public class MHAPanel extends JPanel{
         topPanel.add(new JLabel("Admission date: "));
         admissionDateField = new JFormattedTextField(dateFormat);
         admissionDateField.setColumns(8);
+        addDateFieldClearingListener(admissionDateField);
         admissionDateField.setValue(new java.util.Date());
         topPanel.add(admissionDateField);
 
@@ -123,6 +127,7 @@ public class MHAPanel extends JPanel{
         detentionDateLbl.setVisible(false);
         detentionDateField = new JFormattedTextField(dateFormat);
         detentionDateField.setColumns(8);
+        addDateFieldClearingListener(detentionDateField);
         detentionDateField.setValue(new java.util.Date());
         detentionDateField.setVisible(false);
         topPanel.add(detentionDateField);
@@ -301,6 +306,7 @@ public class MHAPanel extends JPanel{
         soadPanel.add(new JLabel("Date sent"));
         soadDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         soadDateField.setColumns(8);
+        addDateFieldClearingListener(soadDateField);
         soadPanel.add(soadDateField);
         soadPanel.add(new JLabel("Reference: "));
         soadRefField = new JTextField(10);
@@ -314,6 +320,7 @@ public class MHAPanel extends JPanel{
         s62Panel.add(new JLabel("Date: "));
         s62DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         s62DateField.setColumns(8);
+        addDateFieldClearingListener(s62DateField);
         s62Panel.add(s62DateField);
         s62Panel.setVisible(false);
         panel.add(s62Panel);
@@ -324,6 +331,7 @@ public class MHAPanel extends JPanel{
         t3Panel.add(new JLabel("Date: "));
         t3DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         t3DateField.setColumns(8);
+        addDateFieldClearingListener(t3DateField);
         t3Panel.add(t3DateField);
         t3Panel.add(new JLabel("Review due: "));
         t3ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
@@ -387,17 +395,19 @@ public class MHAPanel extends JPanel{
         t2Panel.add(new JLabel("Date: "));
         t2DateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         t2DateField.setColumns(8);
+        addDateFieldClearingListener(t2DateField);
         t2Panel.add(t2DateField);
         t2Panel.add(new JLabel("Review date: "));
         t2ReviewDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
         t2ReviewDateField.setColumns(8);
+        addDateFieldClearingListener(t2ReviewDateField);
         t2Panel.add(t2ReviewDateField);
         panel.add(t2Panel);
         
         t2CheckBox.addActionListener(e -> updatePatientAndSave());
         t2DateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
         t2ReviewDateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
-        
+
         return panel;
     }
 
@@ -660,19 +670,66 @@ public class MHAPanel extends JPanel{
         populateFieldsFromPatient(currentPatient);
     }
 
-    public void clearAllFields() {
+    private void clearAllFields() {
+        autoSaveEnabled = false;
+        // Reset top section
         mh03CheckBox.setSelected(false);
+        admissionDateField.setValue(new Date());
+
+        // Reset status to informal(default)
+        informalBtn.setSelected(true);
+        section2Btn.setSelected(false);
+        section3Btn.setSelected(false);
+        dolsBtn.setSelected(false);
+        
+        // Reset and hide detention date
         detentionDateField.setValue(new Date());
+        detentionDateField.setVisible(false);
         originalDetentionDate = null;
+
+        // Clear expiry displays
         clearExpiryDisplays();
+
+        // Reset capacity to "No" (default)
         noCapacityBtn.setSelected(true);
+        yesCapacityBtn.setSelected(false);
         CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
         cardLayout.show(pathwayPanel, "NO_CAPACITY");
+
+        // Clear SOAD pathway fields
+        soadRequestedChk.setSelected(false);
+        soadDateField.setValue(null);
+        soadRefField.setText("");
+
+        // Clear S62 fields
+        s62CompletedChk.setSelected(false);
+        s62DateField.setValue(null);
+        s62Panel.setVisible(false);
+
+        // Clear T3 fields
+        t3CheckBox.setSelected(false);
+        t3DateField.setValue(null);
+        t3ReviewDateField.setValue(null);
+
+        // Clear T2 fields
+        t2CheckBox.setSelected(false);
+        t2DateField.setValue(null);
+        t2ReviewDateField.setValue(null);
+
+        // Show SOAD and hide S62 (default state)
+        soadPanel.setVisible(true);
+
         enableMHAFunctionality(false);
+
+        autoSaveEnabled = true;
     }
 
     // Method to read from Patient and populate GUI components
     private void populateFieldsFromPatient(Patient patient) {
+        autoSaveEnabled = false;
+        System.out.println("=== POPULATING FIELDS ===");
+        System.out.println("Patient SOAD requested: " + patient.isSoadRequested());
+        System.out.println("Patient SOAD reference: " + patient.getSoadReference());
         // Set MH03 checkbox
         mh03CheckBox.setSelected(patient.isMh03Completed());
 
@@ -701,7 +758,8 @@ public class MHAPanel extends JPanel{
         String capacity = patient.getCapacity();
         noCapacityBtn.setSelected(capacity.equals("No"));
         yesCapacityBtn.setSelected(capacity.equals("Yes"));
-        
+
+            
         CardLayout cardLayout = (CardLayout) pathwayPanel.getLayout();
         if (capacity.equals("No")) {
             cardLayout.show(pathwayPanel, "NO_CAPACITY");
@@ -709,11 +767,12 @@ public class MHAPanel extends JPanel{
             // Populate SOAD pathway fields
             soadRequestedChk.setSelected((patient.isSoadRequested()));
             if(patient.getSoadDate() != null) {
-                soadDateField.setValue(patient.getSoadReference());
+                soadDateField.setValue(patient.getSoadDate());
             }
             if(patient.getSoadReference() != null) {
                 soadRefField.setText(patient.getSoadReference());
-            }
+            } 
+            
             
             // Populate S62 fields
             s62CompletedChk.setSelected(patient.isS62Completed());
@@ -729,6 +788,15 @@ public class MHAPanel extends JPanel{
             if (patient.getT3ReviewDate() != null) {
                 t3ReviewDateField.setValue(patient.getT3ReviewDate());
             }
+
+            //  Handle visibility base on T3 checkbox state
+            if (t3CheckBox.isSelected()) {
+                soadPanel.setVisible(false);
+                s62Panel.setVisible(false);
+            } else {
+                soadPanel.setVisible(true);
+            }
+
         } else {
             cardLayout.show(pathwayPanel, "HAS_CAPACITY");
 
@@ -745,6 +813,8 @@ public class MHAPanel extends JPanel{
         // Update displays and calculations
         updateDateCalculations();
         enableMHAFunctionality(patient.isMh03Completed());
+
+        autoSaveEnabled = true;
     }
 
     private void saveCurrentPatientMHA() {
@@ -755,6 +825,8 @@ public class MHAPanel extends JPanel{
     }
 
     private void updatePatientAndSave() {
+        if (!autoSaveEnabled) return;
+            
         // Update the Patient object with current GUI values, then save
         updatePatientFromFields();
         saveCurrentPatientMHA();
@@ -768,48 +840,85 @@ public class MHAPanel extends JPanel{
         currentPatient.setMh03Completed(mh03CheckBox.isSelected());
         currentPatient.setSectionStatus(getCurrentSectionStatus());
 
+        // Handle admission date
         if (admissionDateField.getValue() instanceof Date) {
             currentPatient.setAdmissionDate((Date) admissionDateField.getValue());
+        } else if (admissionDateField.getText().trim().isEmpty()) {
+            currentPatient.setAdmissionDate(null);
         }
 
+        // Handle detention date
         if (detentionDateField.getValue() instanceof Date) {
             currentPatient.setDetentionDate((Date) detentionDateField.getValue());
+        } else if (detentionDateField.getText().trim().isEmpty()) {
+            currentPatient.setDetentionDate(null);
         }
 
         currentPatient.setCapacity(noCapacityBtn.isSelected() ? "No" : "Yes");
 
         // Update pathway-specific fields
         currentPatient.setSoadRequested(soadRequestedChk.isSelected());
+
+        // Handle SOAD date
         if (soadDateField.getValue() instanceof Date) {
             currentPatient.setSoadDate((Date) soadDateField.getValue());
+        } else if (soadDateField.getText().trim().isEmpty()){
+            currentPatient.setSoadDate(null);
         }
+        
         currentPatient.setSoadReference(soadRefField.getText().isEmpty() ? null :soadRefField.getText());
 
         currentPatient.sets62Completed(s62CompletedChk.isSelected());
-        if (s62DateField.getValue() instanceof Date) {
-            currentPatient.setS62Date((Date) s62DateField.getValue());
-        }
 
-        currentPatient.sets62Completed((s62CompletedChk.isSelected()));
+        //Handle S62 date
         if (s62DateField.getValue() instanceof Date) {
             currentPatient.setS62Date((Date) s62DateField.getValue());
+        } else if (s62DateField.getText().trim().isEmpty()) {
+            currentPatient.setS62Date(null);
         }
 
         currentPatient.setT3Provided(t3CheckBox.isSelected());
+        
+        // Handle T3 date - check if field is empty
         if (t3DateField.getValue() instanceof Date) {
             currentPatient.setT3Date((Date) t3DateField.getValue());
+        } else if (t3DateField.getText().trim().isEmpty()) {
+            currentPatient.setT3Date(null);
         }
+
+        //Handle T3 review date
         if (t3ReviewDateField.getValue() instanceof Date) {
             currentPatient.setT3ReviewDate((Date) t3ReviewDateField.getValue());
+        } else if (t3ReviewDateField.getText().trim().isEmpty()) {
+            currentPatient.setT3ReviewDate(null);
         }
 
         currentPatient.setT2Completed(t2CheckBox.isSelected());
+
+        // Handle T2 date
         if (t2DateField.getValue() instanceof Date) {
             currentPatient.setT2Date((Date) t2DateField.getValue());
+        } else if (t2DateField.getText().trim().isEmpty()) {
+            currentPatient.setT2Date(null);
         }
+
+        //Handle T2 review date
         if (t2ReviewDateField.getValue() instanceof Date) {
             currentPatient.setT2ReviewDate((Date) t2ReviewDateField.getValue());
+        } else if (t2ReviewDateField.getText().trim().isEmpty()) {
+            currentPatient.setT2ReviewDate(null);
         }
+    }
+
+    private void addDateFieldClearingListener(JFormattedTextField dateField) {
+        dateField.addFocusListener(new FocusAdapter() {
+            public void focusLost(FocusEvent e) {
+                if (dateField.getText().trim().isEmpty()) {
+                    dateField.setValue(null);
+                    updatePatientAndSave();
+                }
+            }
+        });
     }
 
     private String getCurrentSectionStatus() {

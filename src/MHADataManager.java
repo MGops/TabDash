@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MHADataManager {
-    private static final String MHA_DIR = "data/mha";
+    private static final String MHA_DIR = "data/mha/";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static void savePatientMHA(Patient patient) {
@@ -32,7 +32,7 @@ public class MHADataManager {
             //Handle dates (might be null)
             writer.write("admission_date=" + patient.getAdmissionDate());
             writer.newLine();
-            writer.write("detention_date=" + formatDate(patient.getAdmissionDate()));
+            writer.write("detention_date=" + formatDate(patient.getDetentionDate()));
             writer.newLine();
             writer.write("original_detention_date=" + formatDate(patient.getOriginalDetentionDate()));
             writer.newLine();
@@ -43,7 +43,7 @@ public class MHADataManager {
             writer.newLine();
             writer.write("soad_date=" + formatDate(patient.getSoadDate()));
             writer.newLine();
-            writer.write("soad_reference=" + patient.getSoadReference() != null ? patient.getSoadReference() : "");
+            writer.write("soad_reference=" + (patient.getSoadReference() != null ? patient.getSoadReference() : ""));
             writer.newLine();
             writer.write("s62_completed=" + patient.isS62Completed());
             writer.newLine();
@@ -57,7 +57,7 @@ public class MHADataManager {
             writer.newLine();
             writer.write("t2_completed=" + patient.isT2Completed());
             writer.newLine();
-            writer.write("t2_date=" + formatDate(patient.getS62Date()));
+            writer.write("t2_date=" + formatDate(patient.getT2Date()));
             writer.newLine();
             writer.write("t2_review_date=" + formatDate(patient.getT2ReviewDate()));
             writer.newLine();
@@ -104,7 +104,7 @@ public class MHADataManager {
                             patient.setSoadRequested(Boolean.parseBoolean(value));
                             break;
                         case "soad_date":
-                            patient.setSoadRequested(Boolean.parseBoolean(value));
+                            patient.setSoadDate(parseDate(value));
                             break;
                         case "soad_reference":
                             patient.setSoadReference(value.isEmpty() ? null : value);

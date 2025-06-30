@@ -9,6 +9,7 @@ public class TabDash {
     private Patient currentPatient;
     private MedicationPanel medicationPanel;
     private MHAPanel mhaPanel;
+    private JList<String> patientList;
 
     public TabDash() {
         patients = new ArrayList<>();
@@ -51,6 +52,11 @@ public class TabDash {
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);
+
+        // Initialise first patient's data after components set up
+        SwingUtilities.invokeLater(() -> {
+            initialiseFirstPatient();
+        });
     }
 
     public List<String> getPatientNames() {
@@ -89,4 +95,19 @@ public class TabDash {
             mhaPanel.refreshForNewPatient();
         }
     }
+
+    // Method to set the patient list reference
+    public void setPatientList(JList<String> list) {
+        this.patientList = list;
+    }
+
+    // Method to initialise first patient after GUI is ready
+    private void initialiseFirstPatient() {
+        if (patientList != null && patientList.getModel().getSize() > 0) {
+            patientList.setSelectedIndex(0);
+            patientList.ensureIndexIsVisible(0);
+        }
+        refreshAllPanels();
+    }
+
 }

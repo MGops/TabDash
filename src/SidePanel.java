@@ -52,5 +52,15 @@ public class SidePanel extends JPanel{
                 }
             }
         });
+
+        // Pass JList reference to TabDash
+        tabDash.setPatientList(nameList); 
+
+        // Set initial selection(visual only)
+        // Actual data loading happens in Tabdash
+        if(!nameListModel.isEmpty()) {
+            nameList.setSelectedIndex(0);
+            nameList.ensureIndexIsVisible(0);
+        }
     }
 }

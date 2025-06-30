@@ -23,6 +23,9 @@ public class Patient {
     private boolean t2Completed;
     private Date t2Date;
     private Date t2ReviewDate;
+    private Date tribunalDate;
+    private String tribunalType;
+    private Date reportDueDate;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -116,4 +119,13 @@ public class Patient {
 
     public Date getT2ReviewDate() {return t2ReviewDate;}
     public void setT2ReviewDate(Date t2ReviewDate) {this.t2ReviewDate = t2ReviewDate;}
+
+    public Date getTribunalDate() {return tribunalDate;}
+    public void setTribunalDate(Date tribunalDate) {this.tribunalDate = tribunalDate;}
+
+    public String getTribunalType() {return tribunalType;}
+    public void setTribunalType(String tribunalType) {this.tribunalType= tribunalType;}
+
+    public Date getReportDueDate() {return reportDueDate;}
+    public void setReportDueDate(Date reportDueDate) {this.reportDueDate = reportDueDate;}
 }

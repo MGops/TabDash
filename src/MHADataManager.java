@@ -61,6 +61,12 @@ public class MHADataManager {
             writer.newLine();
             writer.write("t2_review_date=" + formatDate(patient.getT2ReviewDate()));
             writer.newLine();
+            writer.write("tribunal_date=" + formatDate(patient.getTribunalDate()));
+            writer.newLine();
+            writer.write("tribunal_type=" + (patient.getTribunalType() != null ? patient.getTribunalType() : ""));
+            writer.newLine();
+            writer.write("report_due_date=" + formatDate(patient.getReportDueDate()));
+            writer.newLine();
         } catch (IOException e) {
             System.err.println("Error saving MHA data for " + patient.getPatientId() + ": " + e.getMessage());
         }
@@ -132,6 +138,15 @@ public class MHADataManager {
                             break;
                         case "t2_review_date":
                             patient.setT2ReviewDate(parseDate(value));
+                            break;
+                        case "tribunal_date":
+                            patient.setTribunalDate(parseDate(value));
+                            break;
+                        case "tribunal_type":
+                            patient.setTribunalType(value.isEmpty() ? null : value);
+                            break;
+                        case "report_due_date":
+                            patient.setReportDueDate(parseDate(value));
                             break;
                         default:
                             System.out.println("Unknown MHA field: " + key);

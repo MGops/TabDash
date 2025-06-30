@@ -727,9 +727,6 @@ public class MHAPanel extends JPanel{
     // Method to read from Patient and populate GUI components
     private void populateFieldsFromPatient(Patient patient) {
         autoSaveEnabled = false;
-        System.out.println("=== POPULATING FIELDS ===");
-        System.out.println("Patient SOAD requested: " + patient.isSoadRequested());
-        System.out.println("Patient SOAD reference: " + patient.getSoadReference());
         // Set MH03 checkbox
         mh03CheckBox.setSelected(patient.isMh03Completed());
 

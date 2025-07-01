@@ -993,11 +993,47 @@ public class MHAPanel extends JPanel{
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
         dialog.add(buttonPanel, gbc);
 
+        okBtn.addActionListener(e -> {
+            try {
+                Date tribunalDate = (Date) tribunalDateField.getValue();
+                String tribunalType = (String) tribunalTypeComboBox.getSelectedItem();
+                Date reportDueDate = (Date) reportDueDateField.getValue();
+
+                if (tribunalDate == null || tribunalType == null || reportDueDate == null) {
+                    JOptionPane.showMessageDialog(dialog, "Please fill in all fields", "Invalid input", JOptionPane.ERROR_MESSAGE);
+                    return;               
+                }
+                Patient currentPatient = tabDash.getCurrentPatient();
+                currentPatient.setTribunalDate(tribunalDate);
+                currentPatient.setTribunalType(tribunalType);
+                currentPatient.setReportDueDate(reportDueDate);
+                updateTribunalDisplay();
+                updatePatientAndSave();
+                dialog.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Please enter valid dates", "Invalid input", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         cancelBtn.addActionListener(e -> dialog.dispose());
 
         dialog.pack();
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+    }
+
+    private void updateTribunalDisplay() {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        if (currentPatient.getTribunalDate() != null) {
+            tribunalDateLabel.setText("Tribunal Date: " + displayDateFormat.format(currentPatient.getTribunalDate()));
+            tribunalTypeLabel.setText("Type: " + currentPatient.getTribunalType());
+            reportDueLabel.setText("Report due: " + displayDateFormat.format(currentPatient.getTribunalDate()));
+        } else {
+            tribunalDateLabel.setText("");
+            tribunalTypeLabel.setText("");
+            reportDueLabel.setText("");
+        }
     }
 }
 

@@ -497,9 +497,21 @@ public class MHAPanel extends JPanel{
         
         addTribunalBtn.addActionListener(e -> showAddTribunalDialog());
 
+        clearBtn.addActionListener(e -> {
+            Patient currentPatient = tabDash.getCurrentPatient();
+            currentPatient.setTribunalDate(null);
+            currentPatient.setTribunalType(null);
+            currentPatient.setReportDueDate(null);
+            updateTribunalDisplay();
+            updatePatientAndSave();
+        });
+
         tribunalPanel.add(buttonPanel);
         tribunalPanel.add(tribunalDisplayPanel);
         return tribunalPanel;
+
+
+        
     } 
 
     // HELPER METHODS
@@ -834,6 +846,7 @@ public class MHAPanel extends JPanel{
         // Update displays and calculations
         updateDateCalculations();
         enableMHAFunctionality(patient.isMh03Completed());
+        updateTribunalDisplay();
 
         autoSaveEnabled = true;
     }
@@ -1025,6 +1038,9 @@ public class MHAPanel extends JPanel{
         Patient currentPatient = tabDash.getCurrentPatient();
         SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+        System.out.println("Updating tribunal display for: " + currentPatient.getPatientId());
+        System.out.println("Tribunal date: " + currentPatient.getTribunalDate());
+
         if (currentPatient.getTribunalDate() != null) {
             tribunalDateLabel.setText("Tribunal Date: " + displayDateFormat.format(currentPatient.getTribunalDate()));
             tribunalTypeLabel.setText("Type: " + currentPatient.getTribunalType());
@@ -1036,4 +1052,3 @@ public class MHAPanel extends JPanel{
         }
     }
 }
-

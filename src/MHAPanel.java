@@ -46,6 +46,10 @@ public class MHAPanel extends JPanel{
     private JFormattedTextField t2DateField;
     private JFormattedTextField t2ReviewDateField;
     private boolean autoSaveEnabled = true;
+    private JLabel tribunalDateLabel;
+    private JLabel tribunalTypeLabel;
+    private JLabel reportDueLabel;
+    private JPanel tribunalDisplayPanel;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -467,16 +471,34 @@ public class MHAPanel extends JPanel{
         leavePanel.add(placeholder);
         return leavePanel;
     }
-
+    
     private JPanel createTribunalPanel() {
         JPanel tribunalPanel = new JPanel();
         tribunalPanel.setLayout(new BoxLayout(tribunalPanel, BoxLayout.Y_AXIS));
         tribunalPanel.setBorder(BorderFactory.createTitledBorder("Tribunal information"));
         tribunalPanel.setPreferredSize(new Dimension(350, 120));
-        JLabel placeholder = new JLabel("Tribunal information will go here");
-        tribunalPanel.add(placeholder);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton addTribunalBtn = new JButton("Add tribunal");
+        JButton clearBtn = new JButton("Clear");
+        buttonPanel.add(addTribunalBtn);
+        buttonPanel.add(clearBtn);
+
+        tribunalDisplayPanel = new JPanel();
+        tribunalDisplayPanel.setLayout(new BoxLayout(tribunalDisplayPanel, BoxLayout.Y_AXIS));
+
+        tribunalDateLabel = new JLabel("");
+        tribunalTypeLabel = new JLabel("");
+        reportDueLabel = new JLabel("");
+
+        tribunalDisplayPanel.add(tribunalDateLabel);
+        tribunalDisplayPanel.add(tribunalTypeLabel);
+        tribunalDisplayPanel.add(reportDueLabel);
+        
+        tribunalPanel.add(buttonPanel);
+        tribunalPanel.add(tribunalDisplayPanel);
         return tribunalPanel;
-    }
+    } 
 
     // HELPER METHODS
     

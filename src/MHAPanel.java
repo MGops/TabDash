@@ -495,6 +495,8 @@ public class MHAPanel extends JPanel{
         tribunalDisplayPanel.add(tribunalTypeLabel);
         tribunalDisplayPanel.add(reportDueLabel);
         
+        addTribunalBtn.addActionListener(e -> showAddTribunalDialog());
+
         tribunalPanel.add(buttonPanel);
         tribunalPanel.add(tribunalDisplayPanel);
         return tribunalPanel;
@@ -946,6 +948,56 @@ public class MHAPanel extends JPanel{
         if (section3Btn.isSelected()) return "Section3";
         if (dolsBtn.isSelected()) return "DOLS";
         return "Informal";
+    }
+
+    private void showAddTribunalDialog() {
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Add Tribunal", true);
+        dialog.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        // Tribunal date
+        gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
+        dialog.add(new JLabel("Tribunal Date:"), gbc);
+
+        JFormattedTextField tribunalDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        tribunalDateField.setColumns(10);
+        gbc.gridx = 1; gbc.gridy = 0;
+        dialog.add(tribunalDateField, gbc);
+
+        // Tribunal type
+        gbc.gridx = 0; gbc.gridy = 1;
+        dialog.add(new JLabel("Tribunal Type:"), gbc);
+        
+        String[] tribunalTypes = {"S3", "S2", "Hospital Managers hearing"};
+        JComboBox<String> tribunalTypeComboBox = new JComboBox<>(tribunalTypes);
+        gbc.gridx = 1; gbc.gridy = 1;
+        dialog.add(tribunalTypeComboBox, gbc);
+
+        // Report due date 
+        gbc.gridx = 0; gbc.gridy = 2;
+        dialog.add(new JLabel("Report Due date:"), gbc);
+
+        JFormattedTextField reportDueDateField = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+        reportDueDateField.setColumns(10);
+        gbc.gridx = 1; gbc.gridy = 2;
+        dialog.add(reportDueDateField, gbc);
+
+        // Buttons
+        JPanel buttonPanel = new JPanel();
+        JButton okBtn = new JButton("OK");
+        JButton cancelBtn = new JButton("Cancel");
+        buttonPanel.add(okBtn);
+        buttonPanel.add(cancelBtn);
+        
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        dialog.add(buttonPanel, gbc);
+
+        cancelBtn.addActionListener(e -> dialog.dispose());
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 }
 

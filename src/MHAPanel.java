@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Date;
+import java.util.concurrent.Flow;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -50,6 +51,8 @@ public class MHAPanel extends JPanel{
     private JLabel tribunalTypeLabel;
     private JLabel reportDueLabel;
     private JPanel tribunalDisplayPanel;
+    private JCheckBox emergencyLeaveCheckBox;
+    private JTextArea otherLeaveTextArea;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -450,14 +453,25 @@ public class MHAPanel extends JPanel{
     }
 
     private JPanel createBottomSection() {
-        JPanel bottomPanel = new JPanel(new BorderLayout());
+        JPanel bottomPanel = new JPanel(new GridBagLayout());
         TitledBorder bottomBorder = BorderFactory.createTitledBorder("Leave & Tribunal Management");
         bottomBorder.setTitleJustification(TitledBorder.CENTER);
         bottomPanel.setBorder(bottomBorder);
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weighty = 1.0;
+
         JPanel leavePanel = createLeavePanel();
+        gbc.gridx = 0;
+        gbc.weightx = 0.5;
+        bottomPanel.add(leavePanel, gbc);
+
         JPanel tribunalPanel = createTribunalPanel();
-        bottomPanel.add(leavePanel, BorderLayout.WEST);
-        bottomPanel.add(tribunalPanel, BorderLayout.EAST);
+        gbc.gridx = 1;
+        gbc.weightx = 0.5;
+        bottomPanel.add(tribunalPanel, gbc);
+
         return bottomPanel;
     }
 
@@ -465,10 +479,40 @@ public class MHAPanel extends JPanel{
         JPanel leavePanel = new JPanel();
         leavePanel.setLayout(new BoxLayout(leavePanel, BoxLayout.Y_AXIS));
         leavePanel.setBorder(BorderFactory.createTitledBorder("Leave Records"));
-        leavePanel.setPreferredSize(new Dimension(300, 120));
 
-        JLabel placeholder = new JLabel("Leave records will go here");
-        leavePanel.add(placeholder);
+        JPanel emergencyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel emergencyLabel = new JLabel("Emergency medical leave: ");
+        emergencyLeaveCheckBox = new JCheckBox();
+        emergencyPanel.add(emergencyLabel);
+        emergencyPanel.add(emergencyLeaveCheckBox);
+        emergencyPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, emergencyPanel.getPreferredSize().height));
+        emergencyPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        leavePanel.add(emergencyPanel);
+
+        leavePanel.add(Box.createVerticalStrut(5));
+
+        JPanel otherLeavePanel = new JPanel(new BorderLayout());
+        otherLeavePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel otherLeaveLabel = new JLabel("Other leave:");
+        otherLeavePanel.add(otherLeaveLabel, BorderLayout.NORTH);
+        
+        otherLeaveTextArea = new JTextArea();
+        otherLeaveTextArea.setLineWrap(true);
+        otherLeaveTextArea.setWrapStyleWord(true);
+        otherLeaveTextArea.setBorder(BorderFactory.createLoweredBevelBorder());
+        JScrollPane scrollPane = new JScrollPane(otherLeaveTextArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        otherLeavePanel.add(scrollPane, BorderLayout.CENTER);
+        leavePanel.add(otherLeavePanel);
+
+        emergencyLeaveCheckBox.addActionListener(e -> updatePatientAndSave());
+        otherLeaveTextArea.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {updatePatientAndSave();}
+            public void removeUpdate(DocumentEvent e) {updatePatientAndSave();}
+            public void changedUpdate(DocumentEvent e) {updatePatientAndSave();}
+        });
+
         return leavePanel;
     }
     
@@ -755,6 +799,9 @@ public class MHAPanel extends JPanel{
         // Show SOAD and hide S62 (default state)
         soadPanel.setVisible(true);
 
+        emergencyLeaveCheckBox.setSelected(false);
+        otherLeaveTextArea.setText("");
+
         enableMHAFunctionality(false);
 
         autoSaveEnabled = true;
@@ -848,6 +895,10 @@ public class MHAPanel extends JPanel{
         enableMHAFunctionality(patient.isMh03Completed());
         updateTribunalDisplay();
 
+        emergencyLeaveCheckBox.setSelected(patient.isEmergencyMedicalLeave());
+        if (patient.getOtherLeave() != null) {
+            otherLeaveTextArea.setText(patient.getOtherLeave());
+        }
         autoSaveEnabled = true;
     }
 
@@ -942,6 +993,9 @@ public class MHAPanel extends JPanel{
         } else if (t2ReviewDateField.getText().trim().isEmpty()) {
             currentPatient.setT2ReviewDate(null);
         }
+
+        currentPatient.setEmergencyMedicalLeave(emergencyLeaveCheckBox.isSelected());
+        currentPatient.setOtherLeave(otherLeaveTextArea.getText().trim().isEmpty() ? null : otherLeaveTextArea.getText());
     }
 
     private void addDateFieldClearingListener(JFormattedTextField dateField) {

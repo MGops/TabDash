@@ -26,6 +26,8 @@ public class Patient {
     private Date tribunalDate;
     private String tribunalType;
     private Date reportDueDate;
+    private boolean emergencyMedicalLeave;
+    private String otherLeave;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -42,6 +44,8 @@ public class Patient {
         this.s62Completed = false;
         this.t3Provided = false;
         this.t2Completed = false;
+        this.emergencyMedicalLeave = false;
+        this.otherLeave = "";
     }
 
     public String getPatientId() {
@@ -128,4 +132,20 @@ public class Patient {
 
     public Date getReportDueDate() {return reportDueDate;}
     public void setReportDueDate(Date reportDueDate) {this.reportDueDate = reportDueDate;}
+
+    public boolean isEmergencyMedicalLeave() {
+        return emergencyMedicalLeave;
+    }
+
+    public void setEmergencyMedicalLeave(boolean emergencyMedicalLeave) {
+        this.emergencyMedicalLeave = emergencyMedicalLeave;
+    }
+
+    public String getOtherLeave() {
+        return otherLeave;
+    }
+
+    public void setOtherLeave(String otherLeave) {
+        this.otherLeave = otherLeave;
+    }
 }

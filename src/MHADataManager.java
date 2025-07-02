@@ -67,6 +67,10 @@ public class MHADataManager {
             writer.newLine();
             writer.write("report_due_date=" + formatDate(patient.getReportDueDate()));
             writer.newLine();
+            writer.write("emergency_medical_leave=" + patient.isEmergencyMedicalLeave());
+            writer.newLine();
+            writer.write("other_leave=" + (patient.getOtherLeave() != null ? patient.getOtherLeave().replace("\n", "\\n") : ""));
+            writer.newLine();
         } catch (IOException e) {
             System.err.println("Error saving MHA data for " + patient.getPatientId() + ": " + e.getMessage());
         }
@@ -147,6 +151,12 @@ public class MHADataManager {
                             break;
                         case "report_due_date":
                             patient.setReportDueDate(parseDate(value));
+                            break;
+                        case "emergency_medical_leave":
+                            patient.setEmergencyMedicalLeave(Boolean.parseBoolean(value));
+                            break;
+                        case "other_leave":
+                            patient.setOtherLeave(value.replace("\\n", "\n"));
                             break;
                         default:
                             System.out.println("Unknown MHA field: " + key);

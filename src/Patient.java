@@ -32,20 +32,35 @@ public class Patient {
     public Patient(String patientId) {
         this.patientId = patientId;
         this.medications = new HashMap<>();
-
+        initialiseMHAFields();
     }
 
     private void initialiseMHAFields() {
         this.mh03Completed = false;
         this.sectionStatus = "Informal";
         this.admissionDate = new Date();
+        this.detentionDate = null;
         this.capacity = "No";
         this.soadRequested = false;
+        this.soadDate = null;
+        this.soadReference = null;
         this.s62Completed = false;
+        this.s62Date = null;
         this.t3Provided = false;
+        this.t3Date = null;
+        this.t3ReviewDate = null;
         this.t2Completed = false;
+        this.t2Date = null;
+        this.t2ReviewDate = null;
+        this.tribunalDate = null;
+        this.tribunalType = null;
+        this.reportDueDate = null;
         this.emergencyMedicalLeave = false;
         this.otherLeave = "";
+    }
+
+    public void resetMHAdata() {
+        initialiseMHAFields();
     }
 
     public String getPatientId() {

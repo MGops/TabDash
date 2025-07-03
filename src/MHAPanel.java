@@ -1066,6 +1066,11 @@ public class MHAPanel extends JPanel{
                 String tribunalType = (String) tribunalTypeComboBox.getSelectedItem();
                 Date reportDueDate = (Date) reportDueDateField.getValue();
 
+                System.out.println("=== DIALOG VALUES ===");
+                System.out.println("Tribunal date field value: " + tribunalDate);
+                System.out.println("Report due date field value: " + reportDueDate);
+                System.out.println("Are they the same object? " + (tribunalDate == reportDueDate));
+
                 if (tribunalDate == null || tribunalType == null || reportDueDate == null) {
                     JOptionPane.showMessageDialog(dialog, "Please fill in all fields", "Invalid input", JOptionPane.ERROR_MESSAGE);
                     return;               
@@ -1074,6 +1079,8 @@ public class MHAPanel extends JPanel{
                 currentPatient.setTribunalDate(tribunalDate);
                 currentPatient.setTribunalType(tribunalType);
                 currentPatient.setReportDueDate(reportDueDate);
+
+                
                 updateTribunalDisplay();
                 updatePatientAndSave();
                 dialog.dispose();
@@ -1092,13 +1099,10 @@ public class MHAPanel extends JPanel{
         Patient currentPatient = tabDash.getCurrentPatient();
         SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        System.out.println("Updating tribunal display for: " + currentPatient.getPatientId());
-        System.out.println("Tribunal date: " + currentPatient.getTribunalDate());
-
         if (currentPatient.getTribunalDate() != null) {
             tribunalDateLabel.setText("Tribunal Date: " + displayDateFormat.format(currentPatient.getTribunalDate()));
             tribunalTypeLabel.setText("Type: " + currentPatient.getTribunalType());
-            reportDueLabel.setText("Report due: " + displayDateFormat.format(currentPatient.getTribunalDate()));
+            reportDueLabel.setText("Report due: " + displayDateFormat.format(currentPatient.getReportDueDate()));
         } else {
             tribunalDateLabel.setText("");
             tribunalTypeLabel.setText("");

@@ -1,152 +1,50 @@
 package src;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+
+import src.medication.ACBSection;
+import src.medication.CascadeSection;
+import src.medication.CumulToxTool;
+import src.medication.SafetySection;
+import src.medication.StoppStart;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
 
 public class MedicationPanel extends JPanel {
     private MedicationDatabase medDatabase;
-    private JLabel totalAcbScore;
-    private JTable medicationTable;
     private TabDash tabDash;
 
-    public MedicationPanel(MedicationDatabase medDatabase, TabDash tabDash) {
+    public MedicationPanel(MedicationDatabase medicationDatabase, TabDash tabDash) {
         this.medDatabase = medDatabase;
         this.tabDash = tabDash;
-        setLayout(new BorderLayout());
+        setLayout(new GridBagLayout());
         initialiseComponents();
     }
 
     private void initialiseComponents() {
-        String[] columnNames = {"Medication", "ACB Score"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        medicationTable = new JTable(tableModel);
-        medicationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        medicationTable.setRowSelectionAllowed(true);
-        medicationTable.setFillsViewportHeight(true);
-        medicationTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    int row = medicationTable.rowAtPoint(e.getPoint());
-                    if (row >= 0) {
-                        medicationTable.setRowSelectionInterval(row, row);
-                        JPopupMenu popup = new JPopupMenu();
-                        JMenuItem removeItem = new JMenuItem("Remove");
-                        removeItem.addActionListener(ae -> {
-                            DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
-                            String medName = (String) model.getValueAt(row, 0);
-                            model.removeRow(row);
-                            updateTotalACB();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
 
-                            Patient currentPatient = tabDash.getCurrentPatient();
-                            currentPatient.removeMedication(medName);
-                            tabDash.onPatientDataChanged();
-                        });
-                        popup.add(removeItem);
-                        popup.show(medicationTable, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
-        JScrollPane medScrollPane = new JScrollPane(medicationTable);
-        medScrollPane.setPreferredSize((new Dimension(300,300)));
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
+        add(new ACBSection(medDatabase, tabDash), gbc);
+        
+        gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
+        add(new CumulToxTool(medDatabase, tabDash), gbc);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        totalAcbScore = new JLabel();
-        updateTotalACB();
+        gbc.gridx = 2; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
+        add(new StoppStart(medDatabase, tabDash), gbc);
 
-        JButton addMedBtn = new JButton("Add medication");
-        addMedBtn.addActionListener(e -> {
-            String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
-            java.util.Arrays.sort(medicationNames);
-            JComboBox<String> medComboBox = new JComboBox<>(medicationNames);
-            medComboBox.setEditable(true);
-            int result = JOptionPane.showConfirmDialog(
-                medicationTable,
-                medComboBox,
-                "Select or enter medication",
-                JOptionPane.OK_CANCEL_OPTION
-            );
-            if (result == JOptionPane.OK_OPTION) {
-                String selectedMed = (String) medComboBox.getSelectedItem();
-                if (selectedMed != null && !selectedMed.trim().isEmpty()) {
-                    DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
-                    boolean alreadyExists = false;
-                    for (int row = 0; row < model.getRowCount(); row++) {
-                        String existingMed = (String) model.getValueAt(row, 0);
-                        if (existingMed.equalsIgnoreCase(selectedMed)) {
-                            alreadyExists = true;
-                            break;
-                        }
-                    }
-                    if (alreadyExists) {
-                        JOptionPane.showMessageDialog(this, 
-                        "'" + selectedMed + "'" + "is already in the medication list.",
-                        "Duplicate Medication",
-                        JOptionPane.WARNING_MESSAGE);
-                    return;
-                    }
-
-                    Integer acbScore = medDatabase.getACBScore(selectedMed);
-                    if (acbScore == null) {
-                        acbScore = 0;
-                    }
-                    
-                    model.addRow(new Object[] {selectedMed, acbScore});
-                    updateTotalACB();
-
-                    Patient currentPatient = tabDash.getCurrentPatient();
-                    currentPatient.addMedication(selectedMed, acbScore);
-                    tabDash.onPatientDataChanged();
-                }
-            }
-        });
-        buttonPanel.add(addMedBtn);
-
-        buttonPanel.add(Box.createHorizontalStrut(20));
-        buttonPanel.add(totalAcbScore);
-
-        add(medScrollPane, BorderLayout.WEST);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        loadPatientMedications();
-    }
-
-    private void updateTotalACB() {
-            DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
-            int total = 0;
-            for (int row = 0; row < model.getRowCount(); row++) {
-                Integer acbScore = (Integer) model.getValueAt(row, 1);
-                total += acbScore;
-            }
-            totalAcbScore.setText("Total ACB Score: " + total);
-        }
-    
-    private void loadPatientMedications() {
-        Patient currentPatient = tabDash.getCurrentPatient();
-        HashMap<String, Integer> patientMeds = currentPatient.getMedications();
-
-        DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
-        model.setRowCount(0);
-
-        for (String medName : patientMeds.keySet()) {
-            Integer acbScore = patientMeds.get(medName);
-            model.addRow(new Object[]{ medName, acbScore});
-        }
-        updateTotalACB();
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2; gbc.gridheight = 1;
+        add(new SafetySection(medDatabase, tabDash), gbc);
+        
+        gbc.gridx = 2; gbc.gridy = 1; gbc.gridwidth = 1; gbc.gridheight = 1;
+        add(new CascadeSection(medDatabase, tabDash), gbc);
     }
 
     public void refreshForNewPatient() {
-        loadPatientMedications();
+        System.out.println("Refreshing medication panel for new patient");
     }
 }

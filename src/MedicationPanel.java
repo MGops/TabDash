@@ -1,18 +1,18 @@
 package src;
 
+import src.medication.*;
 import javax.swing.*;
-
-import src.medication.ACBSection;
-import src.medication.CascadeSection;
-import src.medication.CumulToxTool;
-import src.medication.SafetySection;
-import src.medication.StoppStart;
-
 import java.awt.*;
 
 public class MedicationPanel extends JPanel {
     private MedicationDatabase medDatabase;
     private TabDash tabDash;
+
+    private ACBSection acbSection;
+    private CumulToxTool cumulToxSection;
+    private StoppStart stoppStartSection;
+    private SafetySection safetySection;
+    private CascadeSection cascadeSection;
 
     public MedicationPanel(MedicationDatabase medicationDatabase, TabDash tabDash) {
         this.medDatabase = medDatabase;
@@ -28,23 +28,29 @@ public class MedicationPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
+        acbSection = new ACBSection(medDatabase, tabDash);
+        cumulToxSection = new CumulToxTool(medDatabase, tabDash);
+        stoppStartSection = new StoppStart(medDatabase, tabDash);
+        safetySection = new SafetySection(medDatabase, tabDash);
+        cascadeSection = new CascadeSection(medDatabase, tabDash);
+
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
-        add(new ACBSection(medDatabase, tabDash), gbc);
+        add(acbSection, gbc);
         
         gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
-        add(new CumulToxTool(medDatabase, tabDash), gbc);
+        add(cumulToxSection, gbc);
 
         gbc.gridx = 2; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
-        add(new StoppStart(medDatabase, tabDash), gbc);
+        add(stoppStartSection, gbc);
 
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2; gbc.gridheight = 1;
-        add(new SafetySection(medDatabase, tabDash), gbc);
+        add(safetySection, gbc);
         
         gbc.gridx = 2; gbc.gridy = 1; gbc.gridwidth = 1; gbc.gridheight = 1;
-        add(new CascadeSection(medDatabase, tabDash), gbc);
+        add(cascadeSection, gbc);
     }
 
     public void refreshForNewPatient() {
-        System.out.println("Refreshing medication panel for new patient");
+        acbSection.refreshForNewPatient();
     }
 }

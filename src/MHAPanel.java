@@ -28,8 +28,6 @@ public class MHAPanel extends JPanel{
     private JFormattedTextField detentionDateField;
     private JLabel sectionExpiryLabel;
     private JLabel threeMonthLabel;
-    private JLabel sectionTrafficLight;
-    private JLabel threeMthTrafficLight;
     private JRadioButton section2Btn;
     private JRadioButton section3Btn;
     private Date originalDetentionDate;
@@ -245,16 +243,17 @@ public class MHAPanel extends JPanel{
         expiryPanel.setBorder(BorderFactory.createTitledBorder("Section Status"));
         // Section Expiry
         expiryPanel.add(new JLabel("Section Expires: "));
-        sectionTrafficLight = new JLabel("");
-        expiryPanel.add(sectionTrafficLight);
         sectionExpiryLabel = new JLabel("");
+        sectionExpiryLabel.setOpaque(true);
+        sectionExpiryLabel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
         expiryPanel.add(sectionExpiryLabel);
+        
         expiryPanel.add(Box.createHorizontalStrut(30));
         // 3 month rule with traffic light
         expiryPanel.add(new JLabel("Consent to treatment (3 month rule)"));
-        threeMthTrafficLight = new JLabel("");
-        expiryPanel.add(threeMthTrafficLight);
         threeMonthLabel = new JLabel("");
+        threeMonthLabel.setOpaque(true);
+        threeMonthLabel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
         expiryPanel.add(threeMonthLabel);
         return expiryPanel;
     }
@@ -680,12 +679,12 @@ public class MHAPanel extends JPanel{
         long threeMthDaysRemaining = (threeMthExpiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
 
         //Update section expiry display
-        sectionExpiryLabel.setText(displayFormat.format(sectionExpiry) + " (in " + sectionDaysRemaining + " days)");
-        sectionTrafficLight.setText(getSectionExpiryTrafficLightIcon((int)sectionDaysRemaining));
+        sectionExpiryLabel.setText(" " + displayFormat.format(sectionExpiry) + " (in " + sectionDaysRemaining + " days)");
+        setSectionExpiryTrafficLight((int)sectionDaysRemaining);
 
         // Update 3-mth rule display 
-        threeMonthLabel.setText(displayFormat.format(threeMthExpiry) + " --> " + threeMthDaysRemaining + " days remaining");
-        threeMthTrafficLight.setText(getThreeMthTrafficLightIcon((int)threeMthDaysRemaining));
+        threeMonthLabel.setText(" " + displayFormat.format(threeMthExpiry) + " (in " + threeMthDaysRemaining + " days)");
+        setThreeMthTrafficLight((int)threeMthDaysRemaining);
     
         // Show/hide S62 panel based on 3 mth rule
         if (threeMthDaysRemaining <= 0 && s62Panel != null) {
@@ -693,23 +692,29 @@ public class MHAPanel extends JPanel{
         }
     }
 
-    private String getThreeMthTrafficLightIcon(int daysRemaining) {
+    private void setThreeMthTrafficLight(int daysRemaining) {
         if (daysRemaining > 42) {
-            return "🟢";
+            threeMonthLabel.setBackground(new Color(144, 238, 144));
+            threeMonthLabel.setForeground(Color.BLACK);
         } else if (daysRemaining >= 30) {
-            return "🟡";
+            threeMonthLabel.setBackground(Color.YELLOW);
+            threeMonthLabel.setForeground(Color.BLACK);
         } else {
-            return "🔴";
+            threeMonthLabel.setBackground(Color.RED);
+            threeMonthLabel.setForeground(Color.WHITE);
         }
     }
     
-    private String getSectionExpiryTrafficLightIcon(int daysRemaining) {
+    private void setSectionExpiryTrafficLight(int daysRemaining) {
         if (daysRemaining > 14) {
-            return "🟢";
+            sectionExpiryLabel.setBackground(new Color(144, 238, 144));
+            sectionExpiryLabel.setForeground(Color.BLACK);
         } else if (daysRemaining >= 7) {
-            return "🟡";
+            sectionExpiryLabel.setBackground(Color.YELLOW);
+            sectionExpiryLabel.setForeground(Color.BLACK);
         } else {
-            return "🔴";
+            sectionExpiryLabel.setBackground(Color.RED);
+            sectionExpiryLabel.setForeground(Color.WHITE);
         }
     }
 
@@ -730,9 +735,9 @@ public class MHAPanel extends JPanel{
 
     private void clearExpiryDisplays() {
         sectionExpiryLabel.setText("");
-        sectionTrafficLight.setText("");
+        sectionExpiryLabel.setBackground(null);
         threeMonthLabel.setText("");
-        threeMthTrafficLight.setText("");
+        threeMonthLabel.setBackground(null);
 
         if (s62Panel != null) {
             s62Panel.setVisible(false);

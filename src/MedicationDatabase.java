@@ -23,7 +23,6 @@ public class MedicationDatabase {
                 acbScore.put(parts[0], score);
             }
             System.out.println("Loaded " + acbScore.size() + " medications");
-            System.out.println("Test lookup - aripiprazole: " + acbScore.get("aripiprazole"));
         } catch (IOException e) {
             e.printStackTrace();
         }

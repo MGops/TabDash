@@ -14,9 +14,10 @@ public class MedicationPanel extends JPanel {
     private SafetySection safetySection;
     private CascadeSection cascadeSection;
 
-    public MedicationPanel(MedicationDatabase medicationDatabase, TabDash tabDash) {
+    public MedicationPanel(MedicationDatabase medDatabase, TabDash tabDash) {
         this.medDatabase = medDatabase;
         this.tabDash = tabDash;
+
         setLayout(new GridBagLayout());
         initialiseComponents();
     }

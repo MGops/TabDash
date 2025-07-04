@@ -23,7 +23,6 @@ public class ACBSection extends JPanel{
     }
 
     private void initialiseComponents() {
-        setLayout(new BorderLayout());
         
         String[] columnNames = {"Medication", "ACB Score"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
@@ -54,6 +53,7 @@ public class ACBSection extends JPanel{
     
 
         addMedBtn.addActionListener(e -> {
+            System.out.println("Add medication button clicked");
             // Dialog code for selecting medications
             String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
             java.util.Arrays.sort(medicationNames);
@@ -99,6 +99,22 @@ public class ACBSection extends JPanel{
                 }
             } 
         });
+
+        removeMedBtn.addActionListener(e -> {
+            int selectedRow = medicationTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
+                String medName = (String) model.getValueAt(selectedRow, 0);
+                model.removeRow(selectedRow);
+                updateTotalACB();
+
+                Patient currentPatient = tabDash.getCurrentPatient();
+                currentPatient.removeMedication(medName);
+                tabDash.onPatientDataChanged();
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a medication to remove.");
+            }
+        });
     }
 
     private void updateTotalACB() {
@@ -128,4 +144,8 @@ public class ACBSection extends JPanel{
         }
         updateTotalACB();
     }    
+
+    public void refreshForNewPatient() {
+        loadPatientMedications();
+    }
 }

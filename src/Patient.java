@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Patient {
     private String patientId;
-    private HashMap<String, Integer> medications;
+    private HashMap<String, Medication> medications;
     private boolean mh03Completed;
     private String sectionStatus;
     private Date admissionDate;
@@ -31,7 +31,7 @@ public class Patient {
    
     public Patient(String patientId) {
         this.patientId = patientId;
-        this.medications = new HashMap<>();
+        this.medications = new HashMap<String, Medication>();
         initialiseMHAFields();
     }
 
@@ -67,8 +67,10 @@ public class Patient {
         return patientId;
     }
 
-    public void addMedication(String medication, Integer acbScore) {
-        medications.put(medication, acbScore);
+    public void addMedication(String medicationName, Integer acbScore) {
+        Medication med = new Medication(medicationName);
+        med.setAcbScore(acbScore);
+        medications.put(medicationName, med);
     }
 
     public void removeMedication(String medication) {
@@ -77,14 +79,15 @@ public class Patient {
 
     public int getTotalACBScore() {
         Integer totalACBScore = 0;
-
-        for (Integer acbScore : medications.values()) {
-            totalACBScore += acbScore;
+        for (Medication med : medications.values()) {
+            if (med.getAcbScore() != null) {
+                totalACBScore += med.getAcbScore();
+            }
         }
         return totalACBScore;
     }
 
-    public HashMap<String, Integer> getMedications() {
+    public HashMap<String, Medication> getMedications() {
         return medications;
     }
 

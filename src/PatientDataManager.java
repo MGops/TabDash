@@ -1,5 +1,6 @@
 package src;
 
+import src.Medication;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ public class PatientDataManager {
     
     // Save one patient's medications to their own file
     public static void savePatient(Patient patient) {
-        // Create directory if it doesn't exist
+        // Create directory if it does not exist
         File dir = new File(PATIENTS_DIR);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -20,7 +21,9 @@ public class PatientDataManager {
         
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (String medName : patient.getMedications().keySet()) {
-                Integer acbScore = patient.getMedications().get(medName);
+                Medication med = patient.getMedications().get(medName);
+                Integer acbScore = med.getAcbScore();
+                String acbString = (acbScore != null) ? acbScore.toString() : null;
                 writer.write(medName + "," + acbScore);
                 writer.newLine();
             }
@@ -39,7 +42,13 @@ public class PatientDataManager {
                 String[] parts = line.split(",");
                 if (parts.length == 2) {
                     String medName = parts[0].trim();
-                    Integer acbScore = Integer.parseInt(parts[1].trim());
+                    String acbString = parts[1].trim();
+                    Integer acbScore;
+                    if (acbString.equals("null") || acbString.equals("-")) {
+                        acbScore = null;
+                    } else {
+                        acbScore = Integer.parseInt(acbString);
+                    }
                     patient.addMedication(medName, acbScore);
                 }
             }

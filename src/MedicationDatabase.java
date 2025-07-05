@@ -19,7 +19,13 @@ public class MedicationDatabase {
             csvReader.readLine();
             while ((line = csvReader.readLine()) != null) {
                 String[] parts = line.split(",");
-                Integer score = Integer.parseInt(parts[1]);
+                String scoreString = parts[1].trim();
+                Integer score;
+                if (scoreString.equals("null") || scoreString.equals("-") || scoreString.isEmpty()) {
+                    score = null;
+                } else {
+                    score = Integer.parseInt(scoreString);
+                }
                 acbScore.put(parts[0], score);
             }
             System.out.println("Loaded " + acbScore.size() + " medications");

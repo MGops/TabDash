@@ -1,5 +1,6 @@
 package src.medication;
 
+import src.Medication;
 import src.MedicationDatabase;
 import src.TabDash;
 import src.Patient;
@@ -53,7 +54,6 @@ public class ACBSection extends JPanel{
     
 
         addMedBtn.addActionListener(e -> {
-            System.out.println("Add medication button clicked");
             // Dialog code for selecting medications
             String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
             java.util.Arrays.sort(medicationNames);
@@ -132,15 +132,14 @@ public class ACBSection extends JPanel{
     
     private void loadPatientMedications() {
         Patient currentPatient = tabDash.getCurrentPatient();
-        HashMap<String, Integer> patientMeds = currentPatient.getMedications();
-
+        HashMap<String, Medication> patientMeds = currentPatient.getMedications();
         DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
         model.setRowCount(0);
-
         for (String medName : patientMeds.keySet()) {
-            Integer acbScore = patientMeds.get(medName);
+            Medication med = patientMeds.get(medName);
+            Integer acbScore = med.getAcbScore();
             Object displayScore = (acbScore != null) ? acbScore : "-";
-            model.addRow(new Object[]{ medName, displayScore});
+            model.addRow(new Object[]{medName, displayScore});
         }
         updateTotalACB();
     }    

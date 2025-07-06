@@ -83,7 +83,7 @@ public class TabDash {
 
     public void refreshMedicationPanel() {
         if (medicationPanel != null) {
-            medicationPanel.refreshForNewPatient();
+            medicationPanel.refreshMedicationData();
         }
     }
 

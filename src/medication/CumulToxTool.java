@@ -1,17 +1,27 @@
 package src.medication;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.List;
+
 import javax.swing.*;
 import java.awt.*;
 
+import src.ADRService;
+import src.Medication;
 import src.MedicationDatabase;
+import src.Patient;
 import src.TabDash;
 
-public class CumulToxTool extends JPanel{
+public class CumulToxTool extends JPanel {
     private MedicationDatabase medDatabase;
     private TabDash tabDash;
+    private ADRService adrService;
+    private JPanel adrDisplayPanel;
 
     private static final Map<String, Color> ADR_COLORS;
     static {
@@ -37,7 +47,107 @@ public class CumulToxTool extends JPanel{
     public CumulToxTool(MedicationDatabase medDatabase, TabDash tabDash) {
         this.medDatabase = medDatabase;
         this.tabDash = tabDash;
+        this.adrService = new ADRService();
+
         setBorder(BorderFactory.createTitledBorder("Cumulative Toxicity Tool"));
-        add(new JLabel("Toxicity tool"));
+        setLayout(new BorderLayout());
+
+        // Scrollable panel for ADR labels
+        adrDisplayPanel = new JPanel();
+        adrDisplayPanel.setLayout(new BoxLayout(adrDisplayPanel, BoxLayout.Y_AXIS));
+
+        JScrollPane scrollPane = new JScrollPane(adrDisplayPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, BorderLayout.CENTER);
+        analyseCurrentPatientADRs();
+    }
+
+
+    private void analyseCurrentPatientADRs() {
+        adrDisplayPanel.removeAll(); // Clear prev results
+        Patient currentPatient = tabDash.getCurrentPatient();
+        Map<String, Medication> medications = currentPatient.getMedications();
+        System.out.println("=== ANALYZING ADRs ===");
+        System.out.println("Current patient has " + medications.size() + " medications");
+
+        //Count meds causing each ADR
+        Map<String, Set<String>> adrToMed = new HashMap<>();
+        for (Medication med : medications.values()) {
+            System.out.println("\nChecking medication: " + med.getName());
+            System.out.println("  Drug class: " + med.getDrugClass());
+            System.out.println("  Drug subclass: " + med.getDrugSubclass());
+            List<String> adrs = getADRsForMed(med);
+            for (String adr : adrs) {
+                adrToMed.computeIfAbsent(adr, k -> new HashSet<>()).add(med.getName());
+            }
+        }
+            
+        // Sort ADRs by count in descending order, then alphabetically
+        List<Map.Entry<String, Set<String>>> sortedADRs = new ArrayList<>(adrToMed.entrySet());
+        sortedADRs.sort((a, b) -> {
+            int countCompare = Integer.compare(b.getValue().size(), a.getValue().size());
+            if (countCompare != 0) return countCompare;
+            return a.getKey().compareTo(b.getKey());
+        });
+
+        // Create coloured labels for each ADR
+        for (Map.Entry<String, Set<String>> entry : sortedADRs) {
+            String adr = entry.getKey();
+            Set<String> causativeMeds = entry.getValue();
+
+            JLabel adrLabel = createADRLabel(adr, causativeMeds);
+            adrDisplayPanel.add(adrLabel);
+            adrDisplayPanel.add(Box.createVerticalStrut(2));
+        }
+        
+        if (sortedADRs.isEmpty()) {
+            JLabel noADRLabel = new JLabel("No ADRs detected for current medications");
+            noADRLabel.setForeground(Color.GRAY);
+            adrDisplayPanel.add(noADRLabel);
+        }
+
+        adrDisplayPanel.revalidate();
+        adrDisplayPanel.repaint();
+    }
+
+
+    private List<String> getADRsForMed(Medication med) {
+        List<String> adrs = adrService.getADRsForMed(med.getName());
+
+        if (adrs.isEmpty() && med.getDrugSubclass() != null) {
+            adrs = adrService.getADRsForMed(med.getDrugSubclass());
+        }
+        
+        if (adrs.isEmpty() && med.getDrugClass() != null) {
+            adrs = adrService.getADRsForMed(med.getDrugClass());
+        }
+
+        return adrs;
+    }
+
+
+    private JLabel createADRLabel(String adr, Set<String> causativeMeds) {
+        // Convert ADR name to display format
+        String displayName = adr.replace("_", " ");
+        displayName = displayName.substring(0, 1).toUpperCase() + displayName.substring(1);
+
+        JLabel label = new JLabel(displayName + " (" + causativeMeds.size() + " medications)");
+        label.setOpaque(true);
+        label.setBackground(ADR_COLORS.getOrDefault(adr, Color.LIGHT_GRAY));
+        label.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
+
+        // Create tooltip with causative medications
+        StringBuilder tooltip = new StringBuilder("<html>Caused by:<br>");
+        for (String med : causativeMeds) {
+            tooltip.append("• ").append(med).append("<br>");
+        }
+        tooltip.append("</html>");
+        label.setToolTipText(tooltip.toString());
+
+        return label;
+    }
+
+    public void refreshForNewPatient() {
+        analyseCurrentPatientADRs();
     }
 }

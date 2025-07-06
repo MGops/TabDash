@@ -53,5 +53,11 @@ public class MedicationPanel extends JPanel {
 
     public void refreshForNewPatient() {
         acbSection.refreshForNewPatient();
+        cumulToxSection.refreshForNewPatient();
+    }
+
+    public void refreshMedicationData() {
+        acbSection.refreshForNewPatient();
+        cumulToxSection.refreshForNewPatient();
     }
 }

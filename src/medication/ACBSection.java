@@ -112,6 +112,7 @@ public class ACBSection extends JPanel{
                     }
                     currentPatient.getMedications().put(selectedMed, medication);
                     tabDash.onPatientDataChanged();
+                    tabDash.refreshMedicationPanel();
                 }
             } 
         });
@@ -127,6 +128,7 @@ public class ACBSection extends JPanel{
                 Patient currentPatient = tabDash.getCurrentPatient();
                 currentPatient.removeMedication(medName);
                 tabDash.onPatientDataChanged();
+                tabDash.refreshMedicationPanel();
             } else {
                 JOptionPane.showMessageDialog(this, "Please select a medication to remove.");
             }
@@ -153,6 +155,14 @@ public class ACBSection extends JPanel{
         model.setRowCount(0);
         for (String medName : patientMeds.keySet()) {
             Medication med = patientMeds.get(medName);
+            if (med.getDrugClass() == null) {
+                MedicationLookupService.MedicationClassInfo classInfo = medicationLookupService.getClassInfo(medName);
+                if (classInfo != null) {
+                    med.setDrugClass(classInfo.drugClass);
+                    med.setDrugSubclass(classInfo.drugSubclass);
+                    System.out.println("Populated class info for existing med: " + medName + " -> " + classInfo.drugClass);
+                }
+            }
             Integer acbScore = med.getAcbScore();
             Object displayScore = (acbScore != null) ? acbScore : "-";
             model.addRow(new Object[]{medName, displayScore});

@@ -67,15 +67,10 @@ public class CumulToxTool extends JPanel {
         adrDisplayPanel.removeAll(); // Clear prev results
         Patient currentPatient = tabDash.getCurrentPatient();
         Map<String, Medication> medications = currentPatient.getMedications();
-        System.out.println("=== ANALYZING ADRs ===");
-        System.out.println("Current patient has " + medications.size() + " medications");
 
         //Count meds causing each ADR
         Map<String, Set<String>> adrToMed = new HashMap<>();
         for (Medication med : medications.values()) {
-            System.out.println("\nChecking medication: " + med.getName());
-            System.out.println("  Drug class: " + med.getDrugClass());
-            System.out.println("  Drug subclass: " + med.getDrugSubclass());
             List<String> adrs = getADRsForMed(med);
             for (String adr : adrs) {
                 adrToMed.computeIfAbsent(adr, k -> new HashSet<>()).add(med.getName());
@@ -97,7 +92,7 @@ public class CumulToxTool extends JPanel {
 
             JLabel adrLabel = createADRLabel(adr, causativeMeds);
             adrDisplayPanel.add(adrLabel);
-            adrDisplayPanel.add(Box.createVerticalStrut(2));
+            adrDisplayPanel.add(Box.createVerticalStrut(1));
         }
         
         if (sortedADRs.isEmpty()) {
@@ -131,10 +126,10 @@ public class CumulToxTool extends JPanel {
         String displayName = adr.replace("_", " ");
         displayName = displayName.substring(0, 1).toUpperCase() + displayName.substring(1);
 
-        JLabel label = new JLabel(displayName + " (" + causativeMeds.size() + " medications)");
+        JLabel label = new JLabel(displayName + " (" + causativeMeds.size() + ")");
         label.setOpaque(true);
         label.setBackground(ADR_COLORS.getOrDefault(adr, Color.LIGHT_GRAY));
-        label.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
+        label.setBorder(BorderFactory.createEmptyBorder(2,4,2,4));
 
         // Create tooltip with causative medications
         StringBuilder tooltip = new StringBuilder("<html>Caused by:<br>");

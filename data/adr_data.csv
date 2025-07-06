@@ -17,6 +17,7 @@ nitrate,drug_subclass,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 digoxin,specific,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0
 theophylline,specific,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0
 oral_steroid,drug_class,1,0,0,1,1,1,0,0,0,0,0,1,0,0,1
+opiate,drug_class,1,1,1,1,0,0,0,0,1,0,0,0,0,1,0
 benzodiazepine,drug_class,1,0,1,1,0,0,0,0,1,0,0,0,0,0,0
 h1_antagonist,drug_subclass,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0
 antipsychotic,drug_class,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0
@@ -30,4 +31,3 @@ urinary_antispasmodic,drug_class,1,1,1,1,0,0,0,1,0,1,0,0,0,0,1
 dosulepin,specific,1,1,1,1,0,0,0,1,0,1,0,0,0,0,1
 alpha_blocker,drug_subclass,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0
 nsaid,drug_subclass,0,0,0,0,1,0,0,1,1,0,1,0,0,0,0
-

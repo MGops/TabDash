@@ -106,7 +106,6 @@ public class ACBSection extends JPanel{
                     if (classInfo != null) {
                         medication.setDrugClass(classInfo.drugClass);
                         medication.setDrugSubclass(classInfo.drugSubclass);
-                        System.out.println("Set medication class info for " + selectedMed + ": " + classInfo.drugClass + " / " + classInfo.drugSubclass);
                     } else {
                         System.out.println("No medication class information found for: " + selectedMed);
                     }
@@ -160,7 +159,6 @@ public class ACBSection extends JPanel{
                 if (classInfo != null) {
                     med.setDrugClass(classInfo.drugClass);
                     med.setDrugSubclass(classInfo.drugSubclass);
-                    System.out.println("Populated class info for existing med: " + medName + " -> " + classInfo.drugClass);
                 }
             }
             Integer acbScore = med.getAcbScore();

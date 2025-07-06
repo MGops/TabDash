@@ -41,17 +41,7 @@ public class ADRService {
                         }
                     }
                     medicationADRs.put(medicationID, adrs);
-                    if (!adrs.isEmpty()) {
-                        System.out.println("  Loaded ADRs for '" + medicationID + "': " + adrs);
-                    }
                 }
-            }
-            System.out.println("Loaded ADR data for " + medicationADRs.size() + " medications");
-            System.out.println("Sample entries: ");
-            int count = 0;
-            for (Map.Entry<String, List<String>> entry : medicationADRs.entrySet()) {
-                System.out.println("  " + entry.getKey() + " -> " + entry.getValue());
-                if (++count >= 5) break;  // Just show first 5
             }
         } catch (IOException e) {
             System.out.println("Error loading ADR data: " + e.getMessage());
@@ -59,9 +49,7 @@ public class ADRService {
     }
 
     public List<String> getADRsForMed(String medicationID) {
-        System.out.println("    ADRService: Looking up '" + medicationID + "'");
         List<String> result = medicationADRs.getOrDefault(medicationID.toLowerCase(), new ArrayList<>());
-        System.out.println("    ADRService: Found " + result.size() + " ADRs");
         return medicationADRs.getOrDefault(medicationID.toLowerCase(), new ArrayList<>());
     }
 }

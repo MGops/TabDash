@@ -46,36 +46,14 @@ public class MedicationLookupService {
                     medicationClasses.put(medName, new MedicationClassInfo(drugClass, drugSubclass));
                 }
             }
-            System.out.println("Loaded " + medicationClasses.size() + " medication class mappings");
-            if (medicationClasses.containsKey("clozapine")) {
-                MedicationClassInfo info = medicationClasses.get("clozapine");
-                System.out.println("Clozapine found in database: " + info.drugClass + " / " + info.drugSubclass);
-            } else {
-                System.out.println("WARNING: Clozapine NOT found in medication classes!");
-            }
         } catch (IOException e) {
             System.err.println("Error loading medication classes: " + e.getMessage());
         }
     }
 
     // In MedicationLookupService.java, update the getClassInfo method:
-
     public MedicationClassInfo getClassInfo(String medicationName) {
-        System.out.println("MedicationLookupService: Looking up class for '" + medicationName + "'");
         MedicationClassInfo info = medicationClasses.get(medicationName.toLowerCase());
-        if (info != null) {
-            System.out.println("  Found: " + info.drugClass + " / " + info.drugSubclass);
-        } else {
-            System.out.println("  Not found in medication classes");
-            // Let's see what we do have
-            System.out.println("  Available medications starting with '" + 
-                medicationName.substring(0, Math.min(3, medicationName.length())) + "':");
-            for (String key : medicationClasses.keySet()) {
-                if (key.startsWith(medicationName.substring(0, Math.min(3, medicationName.length())).toLowerCase())) {
-                    System.out.println("    - " + key);
-                }
-            }
-        }
         return info;
     }
 }

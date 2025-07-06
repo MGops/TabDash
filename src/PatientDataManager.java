@@ -23,7 +23,7 @@ public class PatientDataManager {
             for (String medName : patient.getMedications().keySet()) {
                 Medication med = patient.getMedications().get(medName);
                 Integer acbScore = med.getAcbScore();
-                String acbString = (acbScore != null) ? acbScore.toString() : null;
+                String acbString = (acbScore != null) ? acbScore.toString() : "null";
                 writer.write(medName + "," + acbString);
                 writer.newLine();
             }

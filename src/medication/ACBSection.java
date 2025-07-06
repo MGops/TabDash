@@ -2,6 +2,7 @@ package src.medication;
 
 import src.Medication;
 import src.MedicationDatabase;
+import src.MedicationLookupService;
 import src.TabDash;
 import src.Patient;
 import javax.swing.*;
@@ -14,10 +15,12 @@ public class ACBSection extends JPanel{
     private TabDash tabDash;
     private JTable medicationTable;
     private JLabel totalAcbScore;
+    private MedicationLookupService medicationLookupService;
 
     public ACBSection(MedicationDatabase medDatabase, TabDash tabDash) {
         this.medDatabase = medDatabase;
         this.tabDash = tabDash;
+        this.medicationLookupService = new MedicationLookupService();
         setBorder(BorderFactory.createTitledBorder("ACB Score"));
         setLayout(new BorderLayout());
         initialiseComponents();
@@ -94,7 +97,20 @@ public class ACBSection extends JPanel{
                     updateTotalACB();
 
                     Patient currentPatient = tabDash.getCurrentPatient();
-                    currentPatient.addMedication(selectedMed, acbScore); // Store null if no ACB
+                    //Create medication object with class information
+                    Medication medication = new Medication(selectedMed);
+                    medication.setAcbScore(acbScore);
+
+                    //Look up and set class/subclass information
+                    MedicationLookupService.MedicationClassInfo classInfo = medicationLookupService.getClassInfo(selectedMed);
+                    if (classInfo != null) {
+                        medication.setDrugClass(classInfo.drugClass);
+                        medication.setDrugSubclass(classInfo.drugSubclass);
+                        System.out.println("Set medication class info for " + selectedMed + ": " + classInfo.drugClass + " / " + classInfo.drugSubclass);
+                    } else {
+                        System.out.println("No medication class information found for: " + selectedMed);
+                    }
+                    currentPatient.getMedications().put(selectedMed, medication);
                     tabDash.onPatientDataChanged();
                 }
             } 

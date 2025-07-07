@@ -11,7 +11,7 @@ public class MedicationPanel extends JPanel {
     private ACBSection acbSection;
     private CumulToxTool cumulToxSection;
     private StoppStart stoppStartSection;
-    private SafetySection safetySection;
+    private DeprescribingSection deprescribingSection;
     private CascadeSection cascadeSection;
 
     public MedicationPanel(MedicationDatabase medDatabase, TabDash tabDash) {
@@ -32,7 +32,7 @@ public class MedicationPanel extends JPanel {
         acbSection = new ACBSection(medDatabase, tabDash);
         cumulToxSection = new CumulToxTool(medDatabase, tabDash);
         stoppStartSection = new StoppStart(medDatabase, tabDash);
-        safetySection = new SafetySection(medDatabase, tabDash);
+        deprescribingSection = new DeprescribingSection(medDatabase, tabDash);
         cascadeSection = new CascadeSection(medDatabase, tabDash);
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
@@ -45,7 +45,7 @@ public class MedicationPanel extends JPanel {
         add(stoppStartSection, gbc);
 
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2; gbc.gridheight = 1;
-        add(safetySection, gbc);
+        add(deprescribingSection, gbc);
         
         gbc.gridx = 2; gbc.gridy = 1; gbc.gridwidth = 1; gbc.gridheight = 1;
         add(cascadeSection, gbc);
@@ -55,11 +55,13 @@ public class MedicationPanel extends JPanel {
         acbSection.refreshForNewPatient();
         cumulToxSection.refreshForNewPatient();
         cascadeSection.refreshForNewPatient();
+        deprescribingSection.refreshForNewPatient();
     }
 
     public void refreshMedicationData() {
         acbSection.refreshForNewPatient();
         cumulToxSection.refreshForNewPatient();
         cascadeSection.refreshForNewPatient();
+        deprescribingSection.refreshForNewPatient();
     }
 }

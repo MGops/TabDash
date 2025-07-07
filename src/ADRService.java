@@ -28,7 +28,6 @@ public class ADRService {
     private void loadADRData() {
         try (BufferedReader reader = new BufferedReader(new FileReader(ADR_FILE))){
             String line = reader.readLine();
-            System.out.println("ADR file header: " + line);
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 17) { // medication_identifier + type + 15 ADRs

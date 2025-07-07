@@ -23,6 +23,7 @@ indapamide,antihypertensive,thiazide_diuretic
 metolazone,antihypertensive,thiazide_diuretic
 bumetanide,antihypertensive,loop_diuretic
 furosemide,antihypertensive,loop_diuretic
+spironolactone,antihypertensive,potassium_sparing_diuretic
 atenolol,antihypertensive,beta_blocker
 bisoprolol,antihypertensive,beta_blocker
 metoprolol,antihypertensive,beta_blocker

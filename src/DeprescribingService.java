@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class DeprescribingService {
     public enum DeprescribingCategory {
-        DISCUSS_BEFORE_STOPPING("Discuss before stopping", "#000000", "#FFFFFF"),
+        DISCUSS_BEFORE_STOPPING("Discuss before stopping", "#000000", "#FF4438"),
         DISCUSS_BEFORE_ALTERING("Discuss before altering", "#FF0000", "#FFFFFF"),
         CHECK_EXPIRED_INDICATION("Check expired indication", "#FFA500", "#000000"),
         CHECK_VALID_INDICATION("Check valid indication", "#FFFF00", "#000000"),
@@ -246,7 +246,7 @@ public class DeprescribingService {
     }
 
 
-    public List<DeprescribingCategory> getCategoriesForMedication(String medicationName, String drugClass, String drugSubclass) {
+    public List<DeprescribingCategory> getCategoriesForMedication(String medicationName) {
         List<DeprescribingCategory> categories = medicationCategories.get(medicationName.toLowerCase()); 
         return categories != null ? categories : new ArrayList<>();
     }

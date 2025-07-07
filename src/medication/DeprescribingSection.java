@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.*;
 import java.util.List;
 import src.DeprescribingService;
@@ -38,7 +37,7 @@ public class DeprescribingSection extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(columnsPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
 
         analyseCurrentPatientDeprescribing();
@@ -55,8 +54,7 @@ public class DeprescribingSection extends JPanel {
         Map<DeprescribingCategory, List<String>> categoryMedications = new EnumMap<>(DeprescribingCategory.class);
 
         for (Medication med : medications.values()) {
-            List<DeprescribingCategory> categories = deprescribingService.getCategoriesForMedication(
-                med.getName(), med.getDrugClass(), med.getDrugSubclass());
+            List<DeprescribingCategory> categories = deprescribingService.getCategoriesForMedication(med.getName());
 
                 for (DeprescribingCategory category : categories) {
                     categoryMedications.computeIfAbsent(category, k -> new ArrayList<>()).add(med.getName());
@@ -96,7 +94,7 @@ public class DeprescribingSection extends JPanel {
         headerLabel.setBackground(Color.decode(category.backgroundColour));
         headerLabel.setForeground(Color.decode(category.textColour));
         headerLabel.setFont(headerLabel.getFont().deriveFont(Font.BOLD));
-        headerLabel.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        headerLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Create content panel with light gray background
@@ -115,9 +113,26 @@ public class DeprescribingSection extends JPanel {
         }
 
         // Set consistent columnwidth based on content but with reasonable limits
-        int preferredWidth = Math.max(120, Math.min(200, headerLabel.getPreferredSize().width + 20));
-        columnPanel.setPreferredSize(new Dimension(preferredWidth,
-            headerLabel.getPreferredSize().height + contentPanel.getPreferredSize().height + 20));
+        // Calculate minimum width needed but set a reasonable minimum
+        int headerWidth = headerLabel.getPreferredSize().width;
+        int contentWidth = contentPanel.getPreferredSize().width;
+        int maxWidth = Math.max(headerWidth, contentWidth);
+        int preferredWidth = Math.max(150, Math.min(250, maxWidth + 20));
+
+        // Set column panel size first
+        int headerHeight = headerLabel.getPreferredSize().height;
+        int contentPanelHeight = contentPanel.getPreferredSize().height;
+        columnPanel.setPreferredSize(new Dimension(preferredWidth, headerHeight + contentPanelHeight));
+
+        // Force both header and content to match the column panel width exactly
+        headerLabel.setPreferredSize(new Dimension(preferredWidth, headerHeight));
+        headerLabel.setMinimumSize(new Dimension(preferredWidth, headerHeight));
+        headerLabel.setMaximumSize(new Dimension(preferredWidth, headerHeight));
+
+        contentPanel.setPreferredSize(new Dimension(preferredWidth, contentPanelHeight));
+        contentPanel.setMinimumSize(new Dimension(preferredWidth, contentPanelHeight));
+        contentPanel.setMaximumSize(new Dimension(preferredWidth, contentPanelHeight));
+
         columnPanel.add(headerLabel);
         columnPanel.add(contentPanel);
         return columnPanel;

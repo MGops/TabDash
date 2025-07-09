@@ -1,7 +1,9 @@
 package src;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Patient {
     private String patientId;
@@ -28,10 +30,12 @@ public class Patient {
     private Date reportDueDate;
     private boolean emergencyMedicalLeave;
     private String otherLeave;
+    private List<String> physicalHealthConditions;
    
     public Patient(String patientId) {
         this.patientId = patientId;
         this.medications = new HashMap<String, Medication>();
+        this.physicalHealthConditions = new ArrayList<>();
         initialiseMHAFields();
     }
 
@@ -165,5 +169,21 @@ public class Patient {
 
     public void setOtherLeave(String otherLeave) {
         this.otherLeave = otherLeave;
+    }
+
+    public List<String> getPhysicalHealthConditions() {
+        return physicalHealthConditions;
+    }
+
+    public void setPhysicalHealthConditions(List<String> conditions) {
+        this.physicalHealthConditions = conditions;
+    }
+
+    public void addPhysicalHealthConditions(String condition) {
+        this.physicalHealthConditions.add(condition);
+    }
+
+    public void removePhysicalHealthCondition(String condition) {
+        this.physicalHealthConditions.remove(condition);
     }
 }

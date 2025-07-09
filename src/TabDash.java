@@ -19,6 +19,7 @@ public class TabDash {
 
         for (Patient patient : patients) {
             PatientDataManager.loadPatient(patient);
+            PhysicalHealthDataManager.savePatientPhysicalHealth(patient);
         }
         
         currentPatient = patients.get(0);
@@ -79,6 +80,7 @@ public class TabDash {
 
     public void onPatientDataChanged() {
         PatientDataManager.savePatient(currentPatient);
+        PhysicalHealthDataManager.savePatientPhysicalHealth(currentPatient);
     }
 
     public void refreshMedicationPanel() {

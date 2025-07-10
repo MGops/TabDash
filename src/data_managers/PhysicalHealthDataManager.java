@@ -1,8 +1,10 @@
-package src;
+package src.data_managers;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.model.Patient;
 
 public class PhysicalHealthDataManager {
     private static final String PHYSICAL_HEALTH_DIR = "data/physical_health";

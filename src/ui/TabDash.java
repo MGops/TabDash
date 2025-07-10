@@ -1,5 +1,16 @@
-package src;
+package src.ui;
 import javax.swing.*;
+
+import src.data_managers.MedicationDatabase;
+import src.data_managers.PatientDataManager;
+import src.data_managers.PhysicalHealthDataManager;
+import src.model.Patient;
+import src.ui.panels.ContentPanel;
+import src.ui.panels.HeaderPanel;
+import src.ui.panels.MHAPanel;
+import src.ui.panels.MedicationPanel;
+import src.ui.panels.SidePanel;
+
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;

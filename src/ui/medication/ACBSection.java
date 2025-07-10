@@ -1,10 +1,11 @@
-package src.medication;
+package src.ui.medication;
 
-import src.Medication;
-import src.MedicationDatabase;
-import src.MedicationLookupService;
-import src.TabDash;
-import src.Patient;
+import src.data_managers.MedicationDatabase;
+import src.data_managers.MedicationLookupService;
+import src.model.Medication;
+import src.model.Patient;
+import src.ui.TabDash;
+
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;

@@ -1,9 +1,11 @@
-package src;
+package src.data_managers;
 
-import src.Medication;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.model.Medication;
+import src.model.Patient;
 
 public class PatientDataManager {
     private static final String PATIENTS_DIR = "data/patients/";

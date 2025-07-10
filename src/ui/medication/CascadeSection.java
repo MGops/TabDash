@@ -1,4 +1,4 @@
-package src.medication;
+package src.ui.medication;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -11,11 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.util.*;
 import java.util.List;
-import src.CascadeService;
-import src.Medication;
-import src.MedicationDatabase;
-import src.Patient;
-import src.TabDash;
+
+import src.data_managers.MedicationDatabase;
+import src.model.Medication;
+import src.model.Patient;
+import src.service.CascadeService;
+import src.ui.TabDash;
 
 public class CascadeSection extends JPanel {
     private MedicationDatabase medDatabase;

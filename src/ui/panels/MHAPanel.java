@@ -1,9 +1,14 @@
-package src;
+package src.ui.panels;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import src.data_managers.MHADataManager;
+import src.model.Patient;
+import src.ui.TabDash;
+
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;

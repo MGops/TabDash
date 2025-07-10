@@ -1,4 +1,4 @@
-package src.medication;
+package src.ui.medication;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -10,12 +10,13 @@ import javax.swing.SwingConstants;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import src.DeprescribingService;
-import src.DeprescribingService.DeprescribingCategory;
-import src.Medication;
-import src.MedicationDatabase;
-import src.Patient;
-import src.TabDash;
+
+import src.data_managers.MedicationDatabase;
+import src.model.Medication;
+import src.model.Patient;
+import src.service.DeprescribingService;
+import src.service.DeprescribingService.DeprescribingCategory;
+import src.ui.TabDash;
 
 public class DeprescribingSection extends JPanel {
     private MedicationDatabase medDatabase;

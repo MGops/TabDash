@@ -1,11 +1,11 @@
-package src.medication;
+package src.ui.medication;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import src.MedicationDatabase;
-import src.TabDash;
+import src.data_managers.MedicationDatabase;
+import src.ui.TabDash;
 
 public class StoppStart extends JPanel{
     private MedicationDatabase medDatabase;

@@ -1,4 +1,4 @@
-package src;
+package src.data_managers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import src.model.Patient;
 
 public class MHADataManager {
     private static final String MHA_DIR = "data/mha/";

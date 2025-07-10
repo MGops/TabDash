@@ -1,6 +1,9 @@
-package src;
+package src.ui.panels;
 
-import src.medication.*;
+import src.data_managers.MedicationDatabase;
+import src.ui.TabDash;
+import src.ui.medication.*;
+
 import javax.swing.*;
 import java.awt.*;
 

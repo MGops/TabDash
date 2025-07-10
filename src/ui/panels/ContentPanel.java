@@ -1,7 +1,10 @@
-package src;
+package src.ui.panels;
 
 import java.awt.*;
 import javax.swing.*;
+
+import src.data_managers.MedicationDatabase;
+import src.ui.TabDash;
 
 public class ContentPanel extends JPanel{
     private MHAPanel mhaPanel;

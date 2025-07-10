@@ -1,8 +1,11 @@
-package src;
+package src.ui.panels;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import src.ui.TabDash;
+
 import java.awt.*;
 import java.util.List;
 

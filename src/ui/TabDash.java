@@ -9,7 +9,9 @@ import src.ui.panels.ContentPanel;
 import src.ui.panels.HeaderPanel;
 import src.ui.panels.MHAPanel;
 import src.ui.panels.MedicationPanel;
+import src.ui.panels.PhysicalHealthPanel;
 import src.ui.panels.SidePanel;
+
 
 import java.awt.*;
 import java.util.List;

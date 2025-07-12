@@ -53,9 +53,14 @@ public class IllnessListSection extends JPanel{
         addComorbidityBtn.addActionListener(e -> showAddConditionDialog());
         buttonPanel.add(addComorbidityBtn);
 
+        JButton removeComorbidityBtn = new JButton("Remove");
+        removeComorbidityBtn.addActionListener(e -> removeSelectedCondition());
+        buttonPanel.add(removeComorbidityBtn);
+
         add(buttonPanel, BorderLayout.NORTH);
         add(comorbidityScrollPane, BorderLayout.CENTER);
 
+        loadPatientConditions();
     }
 
 
@@ -113,5 +118,30 @@ public class IllnessListSection extends JPanel{
         });
         cancelBtn.addActionListener(e -> dialog.dispose());
         dialog.setVisible(true);
+    }
+
+    private void removeSelectedCondition() {
+        int selectedRow = comorbidityTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            String condition = (String) comorbidityTable.getValueAt(selectedRow, 0);
+
+            int confirm = JOptionPane.showConfirmDialog(this,
+                "Remove "+ condition + " ?",
+                "Confirm Removal",
+                JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                tabDash.getCurrentPatient().removePhysicalHealthCondition(condition);
+                tabDash.onPatientDataChanged();
+                loadPatientConditions();
+                tabDash.refreshMedicationPanel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a condition to remove.");
+        }
+    }
+
+    public void refreshForNewPatient() {
+        loadPatientConditions();
     }
 }

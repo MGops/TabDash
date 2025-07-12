@@ -3,12 +3,13 @@ package src.ui.physical;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.concurrent.locks.Condition;
-
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,6 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 
+import src.model.Patient;
 import src.ui.TabDash;
 
 public class IllnessListSection extends JPanel{
@@ -54,15 +56,18 @@ public class IllnessListSection extends JPanel{
         add(buttonPanel, BorderLayout.NORTH);
         add(comorbidityScrollPane, BorderLayout.CENTER);
 
-        loadMockData();
     }
 
 
-    private void loadMockData() {
+    private void loadPatientConditions() {
+        if (tabDash.getCurrentPatient() == null) return; 
         DefaultTableModel model = (DefaultTableModel) comorbidityTable.getModel();
-        model.addRow(new Object[]{"Diabetes mellitus"});
-        model.addRow(new Object[]{"Hypertension"});
-        model.addRow(new Object[]{"Heart failure"});
+        model.setRowCount(0);
+
+        List<String> conditions = tabDash.getCurrentPatient().getPhysicalHealthConditions();
+        for (String condition : conditions) {
+            model.addRow(new Object[]{condition});
+        }
     }
 
 
@@ -90,8 +95,19 @@ public class IllnessListSection extends JPanel{
         addBtn.addActionListener(e -> {
             String condition = conditionField.getText().trim();
             if (!condition.isEmpty()) {
-                DefaultTableModel model = (DefaultTableModel) comorbidityTable.getModel();
-                model.addRow(new Object[]{condition});
+                Patient currentPatient = tabDash.getCurrentPatient();
+                if (!currentPatient.getPhysicalHealthConditions().contains(condition)) {
+                    currentPatient.addPhysicalHealthConditions(condition);
+                    tabDash.onPatientDataChanged();
+                    loadPatientConditions();
+                    tabDash.refreshMedicationPanel();
+                } else {
+                    JOptionPane.showMessageDialog(dialog,
+                        "This condition is already in the list.",
+                        "Duplicate Condition",
+                        JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
             }
             dialog.dispose();
         });

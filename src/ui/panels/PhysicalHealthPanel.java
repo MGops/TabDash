@@ -2,6 +2,7 @@ package src.ui.panels;
 
 import javax.swing.*;
 
+import src.ui.TabDash;
 import src.ui.physical.AppointmentsSection;
 import src.ui.physical.IllnessListSection;
 import src.ui.physical.InvestigationsSection;
@@ -11,6 +12,7 @@ import src.ui.physical.PlaceholderSection;
 import java.awt.*;
 
 public class PhysicalHealthPanel extends JPanel {
+    private TabDash tabDash;
 
     private IllnessListSection illnessListSection;
     private InvestigationsSection investigationsSection;
@@ -18,8 +20,8 @@ public class PhysicalHealthPanel extends JPanel {
     private AppointmentsSection appointmentsSection;
     private PlaceholderSection placeholderSection;
 
-    public PhysicalHealthPanel() {
-
+    public PhysicalHealthPanel(TabDash tabDash) {
+        this.tabDash = tabDash;
 
         setLayout(new GridBagLayout());
         initialiseComponents();
@@ -32,10 +34,10 @@ public class PhysicalHealthPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        illnessListSection = new IllnessListSection();
-        investigationsSection = new InvestigationsSection();
-        optimisationSection = new OptimisationSection();
-        appointmentsSection = new AppointmentsSection();
+        illnessListSection = new IllnessListSection(tabDash);
+        investigationsSection = new InvestigationsSection(tabDash);
+        optimisationSection = new OptimisationSection(tabDash);
+        appointmentsSection = new AppointmentsSection(tabDash);
         placeholderSection = new PlaceholderSection();
 
 

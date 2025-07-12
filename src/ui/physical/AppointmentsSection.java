@@ -1,7 +1,6 @@
 package src.ui.physical;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import src.ui.TabDash;
 
@@ -10,7 +9,7 @@ public class AppointmentsSection extends JPanel {
 
     public AppointmentsSection(TabDash tabDash) {
         this.tabDash = tabDash;
-        add(new JLabel("Appointments"));
+        setBorder(BorderFactory.createTitledBorder("Appointments"));
     }
     
 }

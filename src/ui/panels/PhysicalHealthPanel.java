@@ -57,5 +57,8 @@ public class PhysicalHealthPanel extends JPanel {
         add(placeholderSection, gbc);
         
     }
-    
+
+    public void refreshForNewPatient() {
+
+    }
 } 

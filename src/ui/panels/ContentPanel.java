@@ -8,6 +8,7 @@ import src.ui.TabDash;
 
 public class ContentPanel extends JPanel{
     private MHAPanel mhaPanel;
+    private PhysicalHealthPanel physicalHealthPanel;
 
     public ContentPanel(
         MedicationDatabase medDatabase, 
@@ -21,8 +22,9 @@ public class ContentPanel extends JPanel{
         JTabbedPane tabbedPane = new JTabbedPane();
         
         mhaPanel = new MHAPanel(tabDash);
+        physicalHealthPanel = new PhysicalHealthPanel(tabDash);
         tabbedPane.add("MHA", mhaPanel);
-        tabbedPane.add("Physical health", new PhysicalHealthPanel());
+        tabbedPane.add("Physical health", physicalHealthPanel);
         tabbedPane.add("Medication", medicationPanel);
         tabbedPane.add("Dementia", new DementiaTab());
         tabbedPane.add("Notes", new NotesPanel());
@@ -33,4 +35,9 @@ public class ContentPanel extends JPanel{
     public MHAPanel getMHAPanel() {
         return mhaPanel;
     }
+
+    public PhysicalHealthPanel getPhysicalHealthPanel() {
+        return physicalHealthPanel;
+    }
+
 }

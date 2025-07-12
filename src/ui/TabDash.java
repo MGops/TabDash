@@ -23,6 +23,7 @@ public class TabDash {
     private MedicationPanel medicationPanel;
     private MHAPanel mhaPanel;
     private JList<String> patientList;
+    private PhysicalHealthPanel physicalHealthPanel;
 
     public TabDash() {
         patients = new ArrayList<>();
@@ -63,6 +64,7 @@ public class TabDash {
         medicationPanel = new MedicationPanel(medDatabase, this);
         ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel);
         mhaPanel = panelCenter.getMHAPanel();
+        physicalHealthPanel = panelCenter.getPhysicalHealthPanel();
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);
@@ -108,6 +110,9 @@ public class TabDash {
         }
         if (mhaPanel != null) {
             mhaPanel.refreshForNewPatient();
+        }
+        if (physicalHealthPanel != null) {
+            physicalHealthPanel.refreshForNewPatient();
         }
     }
 

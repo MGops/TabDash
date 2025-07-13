@@ -1,16 +1,16 @@
 condition_name,category,synonyms
-Atrial fibrillation,Cardiovascular,AF
-Hypertension,Cardiovascular,HTN,Htn,High BP,High Blood Pressure
-CVA,Cardiovascular,Stroke
-COPD,Repiratory,Chronic obstructive pulmonary disease
+Atrial fibrillation,Cardiovascular,"AF"
+Hypertension,Cardiovascular,"HTN,Htn,High BP,High Blood Pressure"
+CVA,Cardiovascular,"Stroke"
+COPD,Repiratory,"Chronic obstructive pulmonary disease"
 Asthma,Respiratory
-Type 2 diabetes,Endocrine,T2DM,DM
-Type 1 diabetes,Endocrine,T1DM
-CHF,Cardiovascular,Heart failure,Congestive heart failure
-MI,Cardiovascular,Heart attack,Myocardial infarction
+Type 2 diabetes,Endocrine,"T2DM,DM"
+Type 1 diabetes,Endocrine,"T1DM"
+CHF,Cardiovascular,"Heart failure,Congestive heart failure"
+MI,Cardiovascular,"Heart attack,Myocardial infarction"
 Osteoporosis,Musculoskeletal
-DVT,Cardiovascular,Deep vein thrombosis
-PE,Cardiovascular,Pulmonary embolism
+DVT,Cardiovascular,"Deep vein thrombosis"
+PE,Cardiovascular,"Pulmonary embolism"
 Hyperthyroidism,Endocrine
 Hypothyroidism,Endocrine
 Hyperparathyroidism,Endocrine
@@ -26,8 +26,8 @@ Hyperphosphataemia,Electrolyte abnormalities
 Hypophosphataemia,Electrolyte abnormalities
 Iron deficiency anaemia,Electrolyte abnormalities
 SIADH,Electrolyte abnormalities
-Gastric ulcer,Gastrointestinal,GORD,Gastrooesophageal reflux disease
+Gastric ulcer,Gastrointestinal,"GORD,Gastrooesophageal reflux disease"
 Hiatus hernia,Gastrointestinal
-CKD,Renal,Chronic kidney disease
+CKD,Renal,"Chronic kidney disease"
 Breast cancer,Oncology
 Hyperlipidaemia,Cardiovascular

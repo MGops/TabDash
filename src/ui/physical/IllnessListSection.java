@@ -167,7 +167,7 @@ public class IllnessListSection extends JPanel{
         topPanel.add(inputPanel, BorderLayout.NORTH);
         topPanel.add(suggestionScroll, BorderLayout.CENTER);
 
-        dialog.add(inputPanel, BorderLayout.CENTER);
+        dialog.add(topPanel, BorderLayout.CENTER);
         dialog.add(buttonPanel, BorderLayout.SOUTH);
 
         addBtn.addActionListener(e -> {

@@ -33,7 +33,7 @@ public class TabDash {
 
         for (Patient patient : patients) {
             PatientDataManager.loadPatient(patient);
-            PhysicalHealthDataManager.savePatientPhysicalHealth(patient);
+            PhysicalHealthDataManager.loadPatientPhysicalHealth(patient);
         }
         
         currentPatient = patients.get(0);

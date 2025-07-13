@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PhysicalConditionService {
-    private static final String CONDITIONS_FILE = "data/physical_health/physical_health_conditions.csv";
+    private static final String CONDITIONS_FILE = "data/physical_health_conditions.csv";
     private Set<String> allConditions;
     private Map<String, ConditionInfo> conditionDetails;
     private Map<String, String> synonymToCondition;

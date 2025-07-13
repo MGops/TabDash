@@ -7,7 +7,7 @@ import java.util.List;
 import src.model.Patient;
 
 public class PhysicalHealthDataManager {
-    private static final String PHYSICAL_HEALTH_DIR = "data/physical_health";
+    private static final String PHYSICAL_HEALTH_DIR = "data/physical_health/";
 
     public static void savePatientPhysicalHealth(Patient patient) {
         File dir = new File(PHYSICAL_HEALTH_DIR);

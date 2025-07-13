@@ -16,18 +16,19 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-
 import src.model.Patient;
+import src.service.PhysicalConditionService;
 import src.ui.TabDash;
 
 public class IllnessListSection extends JPanel{
     private TabDash tabDash;
     private JTable comorbidityTable;
+    private PhysicalConditionService conditionService;
 
     public IllnessListSection(TabDash tabDash) {
         this.tabDash = tabDash;
+        this.conditionService = new PhysicalConditionService();
         setBorder(BorderFactory.createTitledBorder("Illness List"));
         initialiseComponents();
     }

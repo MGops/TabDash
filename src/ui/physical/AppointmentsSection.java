@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-
 import src.model.Appointment;
 import src.ui.TabDash;
 
 public class AppointmentsSection extends JPanel {
+    private TabDash tabDash;
     private JPanel toReferPanel;
     private JPanel referredPanel;
     private JPanel scheduledPanel;
@@ -38,9 +38,13 @@ public class AppointmentsSection extends JPanel {
     private JPanel missedPanel;
     private List<Appointment> appointments;
 
-    public AppointmentsSection() {
+    public AppointmentsSection(TabDash tabDash) {
+        this.tabDash = tabDash;
         setBorder(BorderFactory.createTitledBorder("Appointments"));
         setLayout(new GridBagLayout());
+        setMinimumSize(new Dimension(600,250));
+        setPreferredSize(new Dimension(700, 300));
+        
         appointments = new ArrayList<>();
         initialiseComponents();
         addSampleAppointments();
@@ -121,7 +125,7 @@ public class AppointmentsSection extends JPanel {
         // Store appointment reference in label
         label.putClientProperty("appointment", appointment);
         
-        label.setForeground(getVenueColour(appointment.getLocation()));
+        setVenueColours(label, appointment.getLocation());
 
         //Make label draggable
         label.setTransferHandler(new AppointmentTransferHandler());
@@ -135,14 +139,32 @@ public class AppointmentsSection extends JPanel {
         return label;
     }
 
-    private Color getVenueColour(String venue) {
-        switch (venue.toLowerCase()) {
-            case "NMGH": return Color.RED;
-            case "MRI": return Color.ORANGE;
-            case "Wythenshawe": return Color.GREEN;
-            case "SRH": return Color.BLACK;
-            case "Other": return Color.BLUE;
-            default: return Color.BLACK;
+    private void setVenueColours(JLabel label, String location) {
+        switch (location) {
+            case "NMGH": 
+                label.setBackground(Color.RED);
+                label.setForeground(Color.WHITE);
+                break;
+            case "MRI":
+                label.setBackground(Color.ORANGE);
+                label.setForeground(Color.BLACK);
+                break;
+            case "Wythenshawe":
+                label.setBackground(Color.GREEN);
+                label.setForeground(Color.BLACK);
+                break;
+            case "SRH":
+                label.setBackground(Color.DARK_GRAY);
+                label.setForeground(Color.WHITE);
+                break;
+            case "Other":
+                label.setBackground(Color.BLUE);
+                label.setForeground(Color.WHITE);
+                break;
+            default:
+                label.setBackground(Color.BLACK);
+                label.setForeground(Color.WHITE);
+                break;
         }
     }
 
@@ -152,7 +174,8 @@ public class AppointmentsSection extends JPanel {
         @Override
         protected Transferable createTransferable(JComponent c) {
             if (c instanceof JLabel) {
-                return new StringSelection(((JLabel) c).getText());
+                Appointment appointment = (Appointment) ((JLabel) c).getClientProperty("appointment");
+                return new AppointmentTransferable(appointment);
             }
             return null;
         }

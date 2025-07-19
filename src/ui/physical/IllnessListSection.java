@@ -37,6 +37,8 @@ public class IllnessListSection extends JPanel{
         this.tabDash = tabDash;
         this.conditionService = new PhysicalConditionService();
         setBorder(BorderFactory.createTitledBorder("Illness List"));
+        setPreferredSize(new Dimension(200, 250));  
+        setMaximumSize(new Dimension(200, 300));
         initialiseComponents();
     }
 

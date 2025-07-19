@@ -1,6 +1,5 @@
 package src.ui.physical;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -8,7 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -19,10 +17,8 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
 import java.time.LocalDateTime;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -44,7 +40,7 @@ public class AppointmentsSection extends JPanel {
         setLayout(new GridBagLayout());
         setMinimumSize(new Dimension(600,250));
         setPreferredSize(new Dimension(700, 300));
-        
+
         appointments = new ArrayList<>();
         initialiseComponents();
         addSampleAppointments();

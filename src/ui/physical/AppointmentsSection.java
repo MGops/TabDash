@@ -121,6 +121,8 @@ public class AppointmentsSection extends JPanel {
         // Store appointment reference in label
         label.putClientProperty("appointment", appointment);
         
+        label.setForeground(getVenueColour(appointment.getLocation()));
+
         //Make label draggable
         label.setTransferHandler(new AppointmentTransferHandler());
         label.addMouseListener(new MouseAdapter() {
@@ -131,6 +133,17 @@ public class AppointmentsSection extends JPanel {
             }
         });
         return label;
+    }
+
+    private Color getVenueColour(String venue) {
+        switch (venue.toLowerCase()) {
+            case "NMGH": return Color.RED;
+            case "MRI": return Color.ORANGE;
+            case "Wythenshawe": return Color.GREEN;
+            case "SRH": return Color.BLACK;
+            case "Other": return Color.BLUE;
+            default: return Color.BLACK;
+        }
     }
 
 

@@ -18,24 +18,28 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+import src.model.Appointment;
 import src.ui.TabDash;
 
 public class AppointmentsSection extends JPanel {
-    private TabDash tabDash;
     private JPanel toReferPanel;
     private JPanel referredPanel;
     private JPanel scheduledPanel;
     private JPanel attendedPanel;
     private JPanel missedPanel;
+    private List<Appointment> appointments;
 
-    public AppointmentsSection(TabDash tabDash) {
-        this.tabDash = tabDash;
+    public AppointmentsSection() {
         setBorder(BorderFactory.createTitledBorder("Appointments"));
         setLayout(new GridBagLayout());
+        appointments = new ArrayList<>();
         initialiseComponents();
         addSampleAppointments();
     }
@@ -87,19 +91,34 @@ public class AppointmentsSection extends JPanel {
 
     private void addSampleAppointments() {
         // Add some sample draggable appointments
-        toReferPanel.add(createDraggableLabel("Cardiology"));
-        toReferPanel.add(createDraggableLabel("Neurology"));
-        referredPanel.add(createDraggableLabel("Orthopedics"));
+        Appointment cardio = new Appointment("Cardiology", 
+            LocalDateTime.now().plusDays(7), "NMGH");
+        Appointment neuro = new Appointment("Neurology", 
+            LocalDateTime.now().plusDays(14), "SRH");
+        Appointment ortho = new Appointment("Orthopaedics", 
+            LocalDateTime.now().plusDays(7), "Wythenshawe");
+
+        appointments.add(cardio);
+        appointments.add(neuro);
+        appointments.add(ortho);
+
+        toReferPanel.add(createAppointmentLabel(cardio));
+        toReferPanel.add(createAppointmentLabel(neuro));
+        toReferPanel.add(createAppointmentLabel(ortho));
     }
 
-    private JLabel createDraggableLabel(String text) {
-        JLabel label = new JLabel(text);
+    private JLabel createAppointmentLabel(Appointment appointment) {
+        JLabel label = new JLabel(appointment.getDisplayText());
         label.setOpaque(true);
         label.setBackground(Color.WHITE);
         label.setBorder(BorderFactory.createRaisedBevelBorder());
-        label.setPreferredSize(new Dimension(120,30));
-        label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        label.setPreferredSize(new Dimension(140,70));
+        label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
+        label.setVerticalAlignment(SwingConstants.TOP);
 
+        // Store appointment reference in label
+        label.putClientProperty("appointment", appointment);
+        
         //Make label draggable
         label.setTransferHandler(new AppointmentTransferHandler());
         label.addMouseListener(new MouseAdapter() {
@@ -152,17 +171,30 @@ public class AppointmentsSection extends JPanel {
         public void drop(DropTargetDropEvent dtde) {
             try {
                 dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-                String appointmentText = (String) dtde.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                Appointment appointment = (Appointment) dtde.getTransferable()
+                    .getTransferData(AppointmentTransferable.APPOINTMENT_FLAVOR);
                 
+                // Update appointment status based on target panel
+                updateAppointmentStatus(appointment, targetPanel);
+
                 // Create new label and add to target panel
-                JLabel newLabel = createDraggableLabel(appointmentText);
+                JLabel newLabel = createAppointmentLabel(appointment);
                 targetPanel.add(newLabel);
                 targetPanel.revalidate();
                 targetPanel.repaint();
                 dtde.dropComplete(true);
             } catch (Exception e) {
+                e.printStackTrace();
                 dtde.dropComplete(false);
             }
+        }
+
+        private void updateAppointmentStatus(Appointment appointment, JPanel targetPanel) {
+            if (targetPanel == toReferPanel) appointment.setStatus(Appointment.Status.TO_REFER);
+            else if (targetPanel == referredPanel) appointment.setStatus(Appointment.Status.REFERRED);
+            else if (targetPanel == scheduledPanel) appointment.setStatus(Appointment.Status.SCHEDULED);
+            else if (targetPanel == attendedPanel) appointment.setStatus(Appointment.Status.ATTENDED);
+            else if (targetPanel == missedPanel) appointment.setStatus(Appointment.Status.MISSED);
         }
 
         @Override

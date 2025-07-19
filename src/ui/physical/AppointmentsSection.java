@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
@@ -18,6 +19,7 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
@@ -159,6 +161,36 @@ public class AppointmentsSection extends JPanel {
             }
         }
     }
+
+
+    // Custom Transferable for Appointment objects
+    private class AppointmentTransferable implements Transferable {
+        private Appointment appointment;
+        public static final DataFlavor APPOINTMENT_FLAVOR = new DataFlavor(Appointment.class, "Appointment");
+
+        public AppointmentTransferable(Appointment appointment) {
+            this.appointment = appointment;
+        }
+
+        @Override
+        public DataFlavor[] getTransferDataFlavors() {
+            return new DataFlavor[]{APPOINTMENT_FLAVOR};
+        }
+
+        @Override
+        public boolean isDataFlavorSupported(DataFlavor flavor) {
+            return APPOINTMENT_FLAVOR.equals(flavor);
+        }
+
+        @Override
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+            if (isDataFlavorSupported(flavor)) {
+                return appointment;
+            }
+            throw new UnsupportedFlavorException(flavor);
+        }
+    }
+
 
     // Drop target listener for columns
     private class AppointmentDropTargetListener implements DropTargetListener {

@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import src.model.Appointment;
+import src.model.Patient;
 import src.ui.TabDash;
 
 public class AppointmentsSection extends JPanel {
@@ -32,7 +33,6 @@ public class AppointmentsSection extends JPanel {
     private JPanel scheduledPanel;
     private JPanel attendedPanel;
     private JPanel missedPanel;
-    private List<Appointment> appointments;
 
     public AppointmentsSection(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -40,10 +40,8 @@ public class AppointmentsSection extends JPanel {
         setLayout(new GridBagLayout());
         setMinimumSize(new Dimension(600,250));
         setPreferredSize(new Dimension(700, 300));
-
-        appointments = new ArrayList<>();
         initialiseComponents();
-        addSampleAppointments();
+        loadPatientAppointments();
     }
 
     private void initialiseComponents() {
@@ -91,8 +89,70 @@ public class AppointmentsSection extends JPanel {
         return column;
     }
 
+
+    private void loadPatientAppointments() {
+        if (tabDash.getCurrentPatient() == null) return;
+            
+        //Clear all columns first
+        clearAllColumns();
+
+        //Load appointments from current patient
+        List<Appointment> appointments = tabDash.getCurrentPatient().getAppointments();
+
+        // If no appointments exist, add sample data (for testing)
+        if (appointments.isEmpty()) {
+            addSampleAppointments();
+            return;
+        }
+
+        // Distribute appointments to appropriate columns based on status
+        for (Appointment appointment : appointments) {
+            JLabel appointmentLabel = createAppointmentLabel(appointment);
+
+            switch (appointment.getStatus()) {
+                case TO_REFER:
+                    toReferPanel.add(appointmentLabel);
+                    break;
+                case REFERRED:
+                    referredPanel.add(appointmentLabel);
+                    break;
+                case SCHEDULED:
+                    scheduledPanel.add(appointmentLabel);
+                    break;
+                case ATTENDED:
+                    attendedPanel.add(appointmentLabel);
+                    break;
+                case MISSED:
+                    missedPanel.add(appointmentLabel);
+                    break;
+            }
+        }
+        revalidateAllColumns();
+    }
+
+    private void clearAllColumns() {
+        toReferPanel.removeAll();
+        referredPanel.removeAll();
+        scheduledPanel.removeAll();
+        attendedPanel.removeAll();
+        missedPanel.removeAll();
+    }
+
+    private void revalidateAllColumns() {
+        toReferPanel.revalidate();
+        toReferPanel.repaint();
+        referredPanel.revalidate();
+        referredPanel.repaint();
+        scheduledPanel.revalidate();
+        scheduledPanel.repaint();
+        attendedPanel.revalidate();
+        attendedPanel.repaint();
+        missedPanel.revalidate();
+        missedPanel.repaint();
+    }
+
     private void addSampleAppointments() {
-        // Add some sample draggable appointments
+        // Add some sample draggable appointments to add to pt date
         Appointment cardio = new Appointment("Cardiology", 
             LocalDateTime.now().plusDays(7), "NMGH");
         Appointment neuro = new Appointment("Neurology", 
@@ -100,14 +160,18 @@ public class AppointmentsSection extends JPanel {
         Appointment ortho = new Appointment("Orthopaedics", 
             LocalDateTime.now().plusDays(7), "Wythenshawe");
 
-        appointments.add(cardio);
-        appointments.add(neuro);
-        appointments.add(ortho);
-
-        toReferPanel.add(createAppointmentLabel(cardio));
-        toReferPanel.add(createAppointmentLabel(neuro));
-        toReferPanel.add(createAppointmentLabel(ortho));
+        // Add to pt data
+        Patient currentPatient = tabDash.getCurrentPatient();
+        currentPatient.addAppointment(cardio);
+        currentPatient.addAppointment(neuro);
+        currentPatient.addAppointment(ortho);
+        
+        // Save data
+        tabDash.onPatientDataChanged();
+        
+        loadPatientAppointments();
     }
+
 
     private JLabel createAppointmentLabel(Appointment appointment) {
         JLabel label = new JLabel(appointment.getDisplayText());
@@ -135,6 +199,7 @@ public class AppointmentsSection extends JPanel {
         return label;
     }
 
+    
     private void setVenueColours(JLabel label, String location) {
         switch (location) {
             case "NMGH": 
@@ -246,6 +311,7 @@ public class AppointmentsSection extends JPanel {
                 targetPanel.add(newLabel);
                 targetPanel.revalidate();
                 targetPanel.repaint();
+                tabDash.onPatientDataChanged();
                 dtde.dropComplete(true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -279,5 +345,9 @@ public class AppointmentsSection extends JPanel {
 
         @Override
         public void dropActionChanged(DropTargetDragEvent dtde) {}
+    }
+
+    public void refreshForNewPatient() {
+        loadPatientAppointments();
     }
 }

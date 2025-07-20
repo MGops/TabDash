@@ -1,6 +1,7 @@
 package src.ui;
 import javax.swing.*;
 
+import src.data_managers.AppointmentDataManager;
 import src.data_managers.MedicationDatabase;
 import src.data_managers.PatientDataManager;
 import src.data_managers.PhysicalHealthDataManager;
@@ -11,7 +12,6 @@ import src.ui.panels.MHAPanel;
 import src.ui.panels.MedicationPanel;
 import src.ui.panels.PhysicalHealthPanel;
 import src.ui.panels.SidePanel;
-
 
 import java.awt.*;
 import java.util.List;
@@ -34,6 +34,7 @@ public class TabDash {
         for (Patient patient : patients) {
             PatientDataManager.loadPatient(patient);
             PhysicalHealthDataManager.loadPatientPhysicalHealth(patient);
+            AppointmentDataManager.loadPatientAppointments(patient);
         }
         
         currentPatient = patients.get(0);
@@ -96,6 +97,7 @@ public class TabDash {
     public void onPatientDataChanged() {
         PatientDataManager.savePatient(currentPatient);
         PhysicalHealthDataManager.savePatientPhysicalHealth(currentPatient);
+        AppointmentDataManager.savePatientAppointments(currentPatient);
     }
 
     public void refreshMedicationPanel() {

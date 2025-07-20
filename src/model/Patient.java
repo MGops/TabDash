@@ -31,11 +31,13 @@ public class Patient {
     private boolean emergencyMedicalLeave;
     private String otherLeave;
     private List<String> physicalHealthConditions;
+    private List<Appointment> appointments;
    
     public Patient(String patientId) {
         this.patientId = patientId;
         this.medications = new HashMap<String, Medication>();
         this.physicalHealthConditions = new ArrayList<>();
+        this.appointments = new ArrayList<>();
         initialiseMHAFields();
     }
 
@@ -185,5 +187,21 @@ public class Patient {
 
     public void removePhysicalHealthCondition(String condition) {
         this.physicalHealthConditions.remove(condition);
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public void addAppointment(Appointment appointment) {
+        this.appointments.add(appointment);
+    }
+
+    public void removeAppointment(Appointment appointment) {
+        this.appointments.remove(appointment);
     }
 }

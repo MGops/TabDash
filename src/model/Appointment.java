@@ -43,12 +43,22 @@ public class Appointment {
         return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 
-    public String getDisplayText() {
-        return "<html><b>" + specialty + "</b><br>" + getFormattedDateTime() + "<br>" + location + "</html>";
-    }
-
     @Override
     public String toString() {
         return specialty + " - " + getFormattedDateTime();
+    }
+
+    public String getDisplayText() {
+        StringBuilder text = new StringBuilder("<html><b>" + specialty + "</b><br>");
+
+        // Only show date/time if appointment is scheduled (has a real venue)
+        if (location != null && !location.isEmpty()) {
+            text.append(getFormattedDateTime()).append("<br>");
+            text.append(location);
+        } else {
+            text.append("<i>Not scheduled</i>");
+        }
+        text.append("</html>");
+        return text.toString();
     }
 }

@@ -1,8 +1,10 @@
 package src.ui.physical;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -50,10 +52,23 @@ public class AppointmentsSection extends JPanel {
         gbc.weighty = 1.0;
         gbc.insets = new Insets(5, 5, 5, 5);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton createAppointmentBtn = new JButton("Create Appointment");
+        createAppointmentBtn.addActionListener(e -> showCreateAppointmentDialog());
+        buttonPanel.add(createAppointmentBtn);
+
+        // Add button panel to layout
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 4; gbc.weighty = 0.0;
+        add(buttonPanel, gbc);
+
+        // Reset constraints for columns (shift down by 1 row)
+        gbc.gridy = 1; gbc.weighty = 1.0; gbc.gridwidth = 1;
+
         // Create columns
         toReferPanel = createColumn("To Refer");
         referredPanel = createColumn("Referred");
         scheduledPanel = createColumn("Scheduled");
+
         // Create split panels for attended & missed
         JPanel rightPanel = new JPanel(new GridBagLayout());
         GridBagConstraints rightGbc = new GridBagConstraints();
@@ -154,11 +169,11 @@ public class AppointmentsSection extends JPanel {
     private void addSampleAppointments() {
         // Add some sample draggable appointments to add to pt date
         Appointment cardio = new Appointment("Cardiology", 
-            LocalDateTime.now().plusDays(7), "NMGH");
+            LocalDateTime.now().plusDays(30), null);
         Appointment neuro = new Appointment("Neurology", 
-            LocalDateTime.now().plusDays(14), "SRH");
+            LocalDateTime.now().plusDays(30), null);
         Appointment ortho = new Appointment("Orthopaedics", 
-            LocalDateTime.now().plusDays(7), "Wythenshawe");
+            LocalDateTime.now().plusDays(30), null);
 
         // Add to pt data
         Patient currentPatient = tabDash.getCurrentPatient();
@@ -191,9 +206,13 @@ public class AppointmentsSection extends JPanel {
         label.setTransferHandler(new AppointmentTransferHandler());
         label.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                JComponent component = (JComponent) e.getSource();
-                TransferHandler handler = component.getTransferHandler();
-                handler.exportAsDrag(component, e, TransferHandler.MOVE);
+                if (e.getButton() == MouseEvent.BUTTON3) { // right-click
+                    showAppointmentContextMenu(e,appointment, label);
+                } else { // left-click (drag)
+                    JComponent component = (JComponent) e.getSource();
+                    TransferHandler handler = component.getTransferHandler();
+                    handler.exportAsDrag(component, e, TransferHandler.MOVE);
+                }
             }
         });
         return label;
@@ -201,6 +220,13 @@ public class AppointmentsSection extends JPanel {
 
     
     private void setVenueColours(JLabel label, String location) {
+        // If no location (unscheduled), use default styling
+        if (location == null || location.isEmpty()) {
+            label.setBackground(Color.WHITE);
+            label.setForeground(Color.BLACK);
+            return;
+        }
+
         switch (location) {
             case "NMGH": 
                 label.setBackground(Color.RED);
@@ -345,6 +371,130 @@ public class AppointmentsSection extends JPanel {
 
         @Override
         public void dropActionChanged(DropTargetDragEvent dtde) {}
+    }
+
+    private void showCreateAppointmentDialog() {
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Create New Appointment", true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setSize(450,150);
+        dialog.setLocationRelativeTo(this);
+
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Specialty text field
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("Appointment:"), gbc);
+        JTextField specialtyField = new JTextField(255555);
+        specialtyField.setPreferredSize(new Dimension(250, 25));
+        gbc.gridx = 1; gbc.gridy = 0; gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        formPanel.add(specialtyField, gbc);
+
+        // Info label
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; gbc.weighty = 0.0;
+        gbc.weightx = 0.0;
+        JLabel infoLabel = new JLabel("<html><i>Venue and time to be assigned when confirmed and moved to Scheduled</i></html>");
+        infoLabel.setForeground(Color.GRAY);
+        formPanel.add(infoLabel, gbc);
+
+        // Button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JButton createBtn = new JButton("Create");
+        JButton cancelBtn = new JButton("Cancel");
+        buttonPanel.add(createBtn);
+        buttonPanel.add(cancelBtn);
+
+        dialog.add(formPanel, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        specialtyField.requestFocusInWindow();
+
+        createBtn.addActionListener(e -> {
+            String specialty = specialtyField.getText().trim();
+
+            if (!specialty.isEmpty()) {
+                createNewAppointment(specialty);
+                dialog.dispose();
+            } else {
+                JOptionPane.showMessageDialog(dialog, "Please enter a specialty.", "Missing information", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        cancelBtn.addActionListener(e -> dialog.dispose());
+
+        specialtyField.addActionListener(e -> createBtn.doClick());
+
+        dialog.setVisible(true);
+    }
+
+
+    private void createNewAppointment(String specialty) {
+        // Create appointment with placeholder date (will be set when scheduled)
+        LocalDateTime placeholderDate = LocalDateTime.now().plusDays(30);
+        Appointment newAppointment = new Appointment(specialty, placeholderDate, null);
+
+        newAppointment.setPatientId(tabDash.getCurrentPatient().getPatientId());
+        newAppointment.setStatus(Appointment.Status.TO_REFER);
+        tabDash.getCurrentPatient().addAppointment(newAppointment);
+        tabDash.onPatientDataChanged();
+
+        JLabel appointmentLabel = createAppointmentLabel(newAppointment);
+        toReferPanel.add(appointmentLabel);
+        toReferPanel.revalidate();
+        toReferPanel.repaint();
+    }
+
+
+    private void showAppointmentContextMenu(MouseEvent e, Appointment appointment, JLabel label) {
+        JPopupMenu contextMenu = new JPopupMenu();
+
+        JMenuItem deleteItem = new JMenuItem("Delete Appointment");
+        deleteItem.addActionListener(event -> confirmDeleteAppointment(appointment, label));
+        contextMenu.add(deleteItem);
+
+        JMenuItem editItem = new JMenuItem("Edit Appointment");
+        editItem.addActionListener(event -> editAppointment(appointment, label));
+        contextMenu.add(editItem);
+
+        contextMenu.show(label, e.getX(), e.getY());
+    }
+
+
+    private void confirmDeleteAppointment(Appointment appointment, JLabel label) {
+        int result = JOptionPane.showConfirmDialog(
+            this, 
+            "Delete appointment: " + appointment.getSpecialty() + "?", 
+            "Confirm Delete",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        if (result == JOptionPane.YES_OPTION) {
+            // Remove from patient data
+            tabDash.getCurrentPatient().removeAppointment(appointment);
+
+            // Remove from UI
+            Container parent = label.getParent();
+            if (parent != null) {
+                parent.remove(label);
+                parent.revalidate();
+                parent.repaint();
+            }
+
+            tabDash.onPatientDataChanged();
+        }
+    }
+
+
+    private void editAppointment(Appointment appointment, JLabel label) {
+        JOptionPane.showMessageDialog(
+            this, 
+            "Edit functionality later",
+            "Edit Appointment",
+            JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void refreshForNewPatient() {

@@ -11,7 +11,6 @@ public class Appointment {
     private String specialty;
     private LocalDateTime dateTime;
     private String location;
-    private String notes;
     private Status status;
     private String patientId;
 
@@ -20,7 +19,6 @@ public class Appointment {
         this.dateTime = dateTime;
         this.location = location;
         this.status = Status.TO_REFER;
-        this.notes = "";       
     }
 
     // Getters & Setters

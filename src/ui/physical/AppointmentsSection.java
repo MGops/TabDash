@@ -19,17 +19,16 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import src.model.Appointment;
 import src.model.Patient;
 import src.ui.TabDash;
+import src.service.AppointmentValidationService;
 
 public class AppointmentsSection extends JPanel {
     private TabDash tabDash;
@@ -332,12 +331,56 @@ public class AppointmentsSection extends JPanel {
                 Appointment appointment = (Appointment) dtde.getTransferable()
                     .getTransferData(AppointmentTransferable.APPOINTMENT_FLAVOR);
                 
+                // Determine target status
+                Appointment.Status targetStatus = getStatusForPanel(targetPanel);
+                Appointment.Status currentStatus = appointment.getStatus();
+
+                /*
+                 * Integrate validation in to drag & drop logic
+                 * Validate the transition before proceeding
+                 */
+                AppointmentValidationService.ValidationResult validation = 
+                    AppointmentValidationService.validateStatusTransition(appointment, currentStatus, targetStatus);
+
+                if (!validation.isValid) {
+                    // Show error message and reject drop
+                    JOptionPane.showMessageDialog(AppointmentsSection.this,
+                        validation.message,
+                        "Invalid Move",
+                        JOptionPane.WARNING_MESSAGE);
+                    dtde.dropComplete(false);
+                    return;
+                }
+                
+                // Check if moving to Scheduled column and appointment needs scheduling
                 boolean movingToScheduled = (targetPanel == scheduledPanel);
                 boolean needsScheduling = (appointment.getLocation() == null || appointment.getLocation().isEmpty());
 
                 if (movingToScheduled && needsScheduling) {
                     // Show venue/time assignment dialog
                     if (showScheduleAppointmentDialog(appointment)) {
+                        // Validate for time conflicts after scheduling 
+                        AppointmentValidationService.ValidationResult conflictCheck = 
+                            AppointmentValidationService.validateTimeConflict(appointment, 
+                                tabDash.getCurrentPatient().getAppointments());
+                        
+                        if (!conflictCheck.isValid) {
+                            // Show conflict warning but allow user to proceed
+                            int choice = JOptionPane.showConfirmDialog(AppointmentsSection.this, 
+                            conflictCheck.message + "\n\nProceed anyway?",
+                            "Time Conflict Warning",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE);
+
+                            if (choice != JOptionPane.YES_OPTION) {
+                                // User chose not to proceed - reset appointment
+                                appointment.setLocation(null);
+                                appointment.setDateTime(LocalDateTime.now().plusDays(30));
+                                dtde.dropComplete(false);
+                                return;
+                            }
+                        }
+
                         // User assigned venue/time successfully
                         updateAppointmentStatus(appointment, targetPanel);
                         JLabel newLabel = createAppointmentLabel(appointment);
@@ -347,7 +390,7 @@ public class AppointmentsSection extends JPanel {
                         tabDash.onPatientDataChanged();
                         dtde.dropComplete(true);
                     } else {
-                        // User cancelled - don't move appointment
+                        // User cancelled - do not move appointment
                         dtde.dropComplete(false);
                         return;
                     }
@@ -376,9 +419,34 @@ public class AppointmentsSection extends JPanel {
 
         @Override
         public void dragEnter(DropTargetDragEvent dtde) {
-            targetPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.BLUE,2),
-                ((TitledBorder) targetPanel.getBorder()).getTitle()));
+            try {
+                // Get the appointment being dragged
+                Appointment appointment = (Appointment) dtde.getTransferable().getTransferData(AppointmentTransferable.APPOINTMENT_FLAVOR);
+
+                // Determine if this is a valid drop target
+                Appointment.Status targetStatus = getStatusForPanel(targetPanel);
+                Appointment.Status currentStatus = appointment.getStatus();
+
+                AppointmentValidationService.ValidationResult validation = 
+                    AppointmentValidationService.validateStatusTransition(appointment, currentStatus, targetStatus);
+
+                if (validation.isValid) {
+                    // Valid drop - green border
+                    targetPanel.setBorder(BorderFactory.createTitledBorder(
+                        BorderFactory.createLineBorder(Color.GREEN, 3),
+                        ((TitledBorder) targetPanel.getBorder()).getTitle()));
+                } else {
+                    // Invalid drop - red border
+                    targetPanel.setBorder(BorderFactory.createTitledBorder(
+                        BorderFactory.createLineBorder(Color.RED, 3),
+                        ((TitledBorder) targetPanel.getBorder()).getTitle()));
+                }
+            } catch (Exception e) {
+
+                targetPanel.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createLineBorder(Color.BLUE,2),
+                    ((TitledBorder) targetPanel.getBorder()).getTitle()));
+            }
         }
 
         @Override
@@ -408,7 +476,7 @@ public class AppointmentsSection extends JPanel {
         // Specialty text field
         gbc.gridx = 0; gbc.gridy = 0;
         formPanel.add(new JLabel("Appointment:"), gbc);
-        JTextField specialtyField = new JTextField(255555);
+        JTextField specialtyField = new JTextField(25);
         specialtyField.setPreferredSize(new Dimension(250, 25));
         gbc.gridx = 1; gbc.gridy = 0; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
@@ -581,7 +649,7 @@ public class AppointmentsSection extends JPanel {
         formPanel.add(timeField, gbc);
 
         // Info labels
-        gbc. gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.weighty = 0.0;
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.weighty = 0.0;
         gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
         JLabel formatLabel = new JLabel("<html><i>Date: YYYY-MM-DD (e.g, 2025-01-30)<br>Time: HH:MM (e.g., 14:30)</i></html>");
         formatLabel.setForeground(Color.GRAY);
@@ -643,6 +711,16 @@ public class AppointmentsSection extends JPanel {
 
         dialog.setVisible(true);
         return result[0];
+    }
+
+    // Add this method to AppointmentsSection.java
+    private Appointment.Status getStatusForPanel(JPanel panel) {
+        if (panel == toReferPanel) return Appointment.Status.TO_REFER;
+        else if (panel == referredPanel) return Appointment.Status.REFERRED;
+        else if (panel == scheduledPanel) return Appointment.Status.SCHEDULED;
+        else if (panel == attendedPanel) return Appointment.Status.ATTENDED;
+        else if (panel == missedPanel) return Appointment.Status.MISSED;
+        return Appointment.Status.TO_REFER; // Default
     }
 
     public void refreshForNewPatient() {

@@ -51,10 +51,10 @@ public class Appointment {
     public String getDisplayText() {
         StringBuilder text = new StringBuilder("<html><b>" + specialty + "</b><br>");
 
-        // Only show date/time if appointment is scheduled (has a real venue)
+        // Show date/time and location if scheduled
         if (location != null && !location.isEmpty()) {
             text.append(getFormattedDateTime()).append("<br>");
-            text.append(location);
+            text.append("<i>").append(location).append("</i>");
         } else {
             text.append("<i>Not scheduled</i>");
         }

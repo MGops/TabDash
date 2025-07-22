@@ -21,7 +21,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import src.model.Appointment;
@@ -227,7 +230,7 @@ public class AppointmentsSection extends JPanel {
             return;
         }
 
-        switch (location) {
+        switch (location.trim()) {
             case "NMGH": 
                 label.setBackground(Color.RED);
                 label.setForeground(Color.WHITE);
@@ -329,16 +332,34 @@ public class AppointmentsSection extends JPanel {
                 Appointment appointment = (Appointment) dtde.getTransferable()
                     .getTransferData(AppointmentTransferable.APPOINTMENT_FLAVOR);
                 
-                // Update appointment status based on target panel
-                updateAppointmentStatus(appointment, targetPanel);
+                boolean movingToScheduled = (targetPanel == scheduledPanel);
+                boolean needsScheduling = (appointment.getLocation() == null || appointment.getLocation().isEmpty());
 
-                // Create new label and add to target panel
-                JLabel newLabel = createAppointmentLabel(appointment);
-                targetPanel.add(newLabel);
-                targetPanel.revalidate();
-                targetPanel.repaint();
-                tabDash.onPatientDataChanged();
-                dtde.dropComplete(true);
+                if (movingToScheduled && needsScheduling) {
+                    // Show venue/time assignment dialog
+                    if (showScheduleAppointmentDialog(appointment)) {
+                        // User assigned venue/time successfully
+                        updateAppointmentStatus(appointment, targetPanel);
+                        JLabel newLabel = createAppointmentLabel(appointment);
+                        targetPanel.add(newLabel);
+                        targetPanel.revalidate();
+                        targetPanel.repaint();
+                        tabDash.onPatientDataChanged();
+                        dtde.dropComplete(true);
+                    } else {
+                        // User cancelled - don't move appointment
+                        dtde.dropComplete(false);
+                        return;
+                    }
+                } else {
+                    updateAppointmentStatus(appointment, targetPanel);
+                    JLabel newLabel = createAppointmentLabel(appointment);
+                    targetPanel.add(newLabel);
+                    targetPanel.revalidate();
+                    targetPanel.repaint();
+                    tabDash.onPatientDataChanged();
+                    dtde.dropComplete(true);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 dtde.dropComplete(false);
@@ -490,11 +511,138 @@ public class AppointmentsSection extends JPanel {
 
 
     private void editAppointment(Appointment appointment, JLabel label) {
-        JOptionPane.showMessageDialog(
-            this, 
-            "Edit functionality later",
-            "Edit Appointment",
-            JOptionPane.INFORMATION_MESSAGE);
+        if (appointment.getLocation() == null || appointment.getLocation().isEmpty()) {
+            // Unscheduled appointment - show schedule dialog
+            if (showScheduleAppointmentDialog(appointment)) {
+                // Update label display
+                label.setText(appointment.getDisplayText());
+                setVenueColours(label, appointment.getLocation());
+                label.revalidate();
+                label.repaint();
+                tabDash.onPatientDataChanged();
+            }
+        } else {
+            // Scheduled appointment - show schedule dialog to edit
+            if (showScheduleAppointmentDialog(appointment)) {
+                // Update label display
+                label.setText(appointment.getDisplayText());
+                setVenueColours(label, appointment.getLocation());
+                label.revalidate();
+                label.repaint();
+                tabDash.onPatientDataChanged();
+            }
+        }
+    }
+
+
+    private boolean showScheduleAppointmentDialog(Appointment appointment) {
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this),
+            "Schedule Appointment: " + appointment.getSpecialty(), true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setSize(450, 250);
+        dialog.setLocationRelativeTo(this);
+
+        final boolean[] result = {false};
+
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Venue selection
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("Venue:"), gbc);
+
+        String[] venues = {"NMGH", "MRI", "Wythenshawe", "SRH", "Other"};
+        JComboBox<String> venueCombo = new JComboBox<>(venues);
+        venueCombo.setEditable(true);
+        gbc.gridx = 1; gbc.gridy = 0; gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        formPanel.add(venueCombo, gbc);
+
+        // Date selection 
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0.0; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Date:"), gbc);
+        
+        JTextField dateField = new JTextField(15);
+        dateField.setText(LocalDate.now().plusDays(7).toString());
+        gbc.gridx = 1; gbc.gridy = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        formPanel.add(dateField, gbc);
+
+        // Time selection
+        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0.0; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Time:"), gbc);
+
+        JTextField timeField = new JTextField(8);
+        timeField.setText("09:00");
+        gbc.gridx = 1; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
+        formPanel.add(timeField, gbc);
+
+        // Info labels
+        gbc. gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.weighty = 0.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JLabel formatLabel = new JLabel("<html><i>Date: YYYY-MM-DD (e.g, 2025-01-30)<br>Time: HH:MM (e.g., 14:30)</i></html>");
+        formatLabel.setForeground(Color.GRAY);
+        formPanel.add(formatLabel, gbc);
+
+        // Button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JButton scheduleBtn = new JButton("Schedule");
+        JButton cancelBtn = new JButton("Cancel");
+        buttonPanel.add(scheduleBtn);
+        buttonPanel.add(cancelBtn);
+        
+        dialog.add(formPanel, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Focus on venue field
+        venueCombo.requestFocusInWindow();
+
+        scheduleBtn.addActionListener(e -> {
+            String venue = (String) venueCombo.getSelectedItem();
+            String dateStr = dateField.getText().trim();
+            String timeStr = timeField.getText().trim();
+
+            if (venue != null && !venue.trim().isEmpty() &&
+                !dateStr.isEmpty() && !timeStr.isEmpty()) { // Check if time field is empty
+                
+                try {
+                    LocalDate date = LocalDate.parse(dateStr);
+                    LocalTime time = LocalTime.parse(timeStr);
+                    LocalDateTime dateTime = LocalDateTime.of(date, time);
+
+                    // Update appointment
+                    appointment.setLocation(venue.trim());
+                    appointment.setDateTime(dateTime);
+
+                    result[0] = true;
+                    dialog.dispose();
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog,
+                    "Invalid date or time format.\nDate: YYYY-MM-DD\nTime: HH:MM (24-hour format)",
+                    "Invalid Format", 
+                    JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(dialog,
+                "Please fill in all fields", 
+                "Missing Information",
+                JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        cancelBtn.addActionListener(e -> {
+            result[0] = false;
+            dialog.dispose();
+        });
+
+        timeField.addActionListener(e -> scheduleBtn.doClick());
+
+        dialog.setVisible(true);
+        return result[0];
     }
 
     public void refreshForNewPatient() {

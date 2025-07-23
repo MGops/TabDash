@@ -101,9 +101,7 @@ public class MHADataManager {
                             patient.setSectionStatus(value);
                             break;
                         case "admission_date":
-                            Date admissionDate = parseDate(value);
-                            patient.setAdmissionDate(admissionDate); 
-                            System.out.println("Loaded admission date: " + admissionDate + " from value: " + value);
+                            patient.setAdmissionDate(parseDate(value)); 
                             break;
                         case "detention_date":
                             patient.setDetentionDate(parseDate(value));

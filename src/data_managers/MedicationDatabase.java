@@ -28,7 +28,6 @@ public class MedicationDatabase {
                 }
                 acbScore.put(parts[0], score);
             }
-            System.out.println("Loaded " + acbScore.size() + " medications");
         } catch (IOException e) {
             e.printStackTrace();
         }

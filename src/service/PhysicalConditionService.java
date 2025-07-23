@@ -64,7 +64,6 @@ public class PhysicalConditionService {
                         new ConditionInfo(conditionName, category, synonyms));
                 }
             }
-            System.out.println("Loaded " + allConditions.size() + " physical health conditions");
         } catch (IOException e) {
             System.err.println("Error loading physical health conditions: " + e.getMessage());
             loadFallbackConditions();

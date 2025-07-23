@@ -23,7 +23,6 @@ public class PhysicalHealthDataManager {
                 writer.write(condition);
                 writer.newLine();
             }
-            System.out.println("Saved physical health conditions for " + patient.getPatientId());
         } catch (IOException e) {
             System.err.println("Error saving physical health data for " + patient.getPatientId());
         }
@@ -40,7 +39,6 @@ public class PhysicalHealthDataManager {
                     patient.addPhysicalHealthConditions(condition);
                 }
             }
-            System.out.println("Loaded " + patient.getPhysicalHealthConditions().size() + " physical health conditions for " + patient.getPatientId());
         } catch (FileNotFoundException e) {
             System.out.println("No physical health data found for " + patient.getPatientId());
         } catch (IOException e) {

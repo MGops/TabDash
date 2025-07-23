@@ -11,6 +11,7 @@ import src.ui.panels.ContentPanel;
 import src.ui.panels.HeaderPanel;
 import src.ui.panels.MHAPanel;
 import src.ui.panels.MedicationPanel;
+import src.ui.panels.NotesPanel;
 import src.ui.panels.PhysicalHealthPanel;
 import src.ui.panels.SidePanel;
 
@@ -25,6 +26,7 @@ public class TabDash {
     private MHAPanel mhaPanel;
     private JList<String> patientList;
     private PhysicalHealthPanel physicalHealthPanel;
+    private NotesPanel notesPanel;
 
     public TabDash() {
         patients = new ArrayList<>();
@@ -68,6 +70,7 @@ public class TabDash {
         ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel);
         mhaPanel = panelCenter.getMHAPanel();
         physicalHealthPanel = panelCenter.getPhysicalHealthPanel();
+        notesPanel = panelCenter.getNotesPanel();
         mainPanel.add(panelCenter, BorderLayout.CENTER);
 
         frame.setVisible(true);
@@ -117,6 +120,9 @@ public class TabDash {
         }
         if (physicalHealthPanel != null) {
             physicalHealthPanel.refreshForNewPatient();
+        }
+        if (notesPanel != null) {
+            notesPanel.refreshForNewPatient();
         }
     }
 

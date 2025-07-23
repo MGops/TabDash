@@ -2,6 +2,7 @@ package src.ui;
 import javax.swing.*;
 
 import src.data_managers.AppointmentDataManager;
+import src.data_managers.MHADataManager;
 import src.data_managers.MedicationDatabase;
 import src.data_managers.PatientDataManager;
 import src.data_managers.PhysicalHealthDataManager;
@@ -34,6 +35,7 @@ public class TabDash {
         for (Patient patient : patients) {
             PatientDataManager.loadPatient(patient);
             PhysicalHealthDataManager.loadPatientPhysicalHealth(patient);
+            MHADataManager.loadPatientMHAdata(patient);
             AppointmentDataManager.loadPatientAppointments(patient);
         }
         

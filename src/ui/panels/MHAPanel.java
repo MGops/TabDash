@@ -761,7 +761,6 @@ public class MHAPanel extends JPanel{
         autoSaveEnabled = false;
         // Reset top section
         mh03CheckBox.setSelected(false);
-        admissionDateField.setValue(new Date());
 
         // Reset status to informal(default)
         informalBtn.setSelected(true);
@@ -816,6 +815,7 @@ public class MHAPanel extends JPanel{
 
     // Method to read from Patient and populate GUI components
     private void populateFieldsFromPatient(Patient patient) {
+        System.out.println("Loading admission date for " + patient.getPatientId() + ": " + patient.getAdmissionDate());
         autoSaveEnabled = false;
         // Set MH03 checkbox
         mh03CheckBox.setSelected(patient.isMh03Completed());
@@ -823,6 +823,8 @@ public class MHAPanel extends JPanel{
         // Set admission date
         if (patient.getAdmissionDate() != null) {
             admissionDateField.setValue(patient.getAdmissionDate());
+        } else {
+            admissionDateField.setValue(new Date());
         }
                 
         // Set section status radio buttons

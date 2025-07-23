@@ -32,7 +32,7 @@ public class MHADataManager {
             writer.write("section_status=" + patient.getSectionStatus()); 
             writer.newLine();
             //Handle dates (might be null)
-            writer.write("admission_date=" + patient.getAdmissionDate());
+            writer.write("admission_date=" + formatDate(patient.getAdmissionDate()));
             writer.newLine();
             writer.write("detention_date=" + formatDate(patient.getDetentionDate()));
             writer.newLine();
@@ -101,7 +101,9 @@ public class MHADataManager {
                             patient.setSectionStatus(value);
                             break;
                         case "admission_date":
-                            patient.setAdmissionDate(parseDate(value)); 
+                            Date admissionDate = parseDate(value);
+                            patient.setAdmissionDate(admissionDate); 
+                            System.out.println("Loaded admission date: " + admissionDate + " from value: " + value);
                             break;
                         case "detention_date":
                             patient.setDetentionDate(parseDate(value));

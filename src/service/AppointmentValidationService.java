@@ -41,16 +41,10 @@ public class AppointmentValidationService {
                 return ValidationResult.invalid("Appointment must be scheduled before marking as " + 
                 toStatus.toString().toLowerCase() + ".");
             }
-        
 
-        // Rule 3: Cannot move to Scheduled without venue/time
-        if (toStatus == Appointment.Status.SCHEDULED &&
-            (appointment.getLocation() == null || appointment.getLocation().isEmpty())) {
-                return ValidationResult.invalid("Appointment needs venue and time to be scheduled.");
-            }
-
-        // Rule 4: Check for past appointment dates
-        if (toStatus == Appointment.Status.SCHEDULED && appointment.getDateTime() != null) {
+        // Rule 3: Check for past appointment dates (only if already scheduled)
+        if (toStatus == Appointment.Status.SCHEDULED && appointment.getDateTime() != null &&
+            appointment.getLocation() != null && !appointment.getLocation().isEmpty()) {
             if (appointment.getDateTime().isBefore(LocalDateTime.now())) {
                 return ValidationResult.invalid("Cannot schedule appointment in the past.");
             }

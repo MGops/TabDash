@@ -337,64 +337,68 @@ public class AppointmentsSection extends JPanel {
 
                 /*
                  * Integrate validation in to drag & drop logic
-                 * Validate the transition before proceeding
+                 * When appointment moved to Scheduled, opens Schedule dialog
                  */
                 AppointmentValidationService.ValidationResult validation = 
                     AppointmentValidationService.validateStatusTransition(appointment, currentStatus, targetStatus);
 
-                if (!validation.isValid) {
-                    // Show error message and reject drop
-                    JOptionPane.showMessageDialog(AppointmentsSection.this,
-                        validation.message,
-                        "Invalid Move",
-                        JOptionPane.WARNING_MESSAGE);
-                    dtde.dropComplete(false);
-                    return;
-                }
                 
-                // Check if moving to Scheduled column and appointment needs scheduling
-                boolean movingToScheduled = (targetPanel == scheduledPanel);
-                boolean needsScheduling = (appointment.getLocation() == null || appointment.getLocation().isEmpty());
+                // Special handling for moving to Scheduled column
+                if (targetPanel == scheduledPanel) {
+                    // Check if appointment needs scheduling (no venue or empty venue)
+                    boolean needsScheduling = (appointment.getLocation() == null || appointment.getLocation().isEmpty());
 
-                if (movingToScheduled && needsScheduling) {
-                    // Show venue/time assignment dialog
-                    if (showScheduleAppointmentDialog(appointment)) {
-                        // Validate for time conflicts after scheduling 
-                        AppointmentValidationService.ValidationResult conflictCheck = 
-                            AppointmentValidationService.validateTimeConflict(appointment, 
-                                tabDash.getCurrentPatient().getAppointments());
-                        
-                        if (!conflictCheck.isValid) {
-                            // Show conflict warning but allow user to proceed
-                            int choice = JOptionPane.showConfirmDialog(AppointmentsSection.this, 
-                            conflictCheck.message + "\n\nProceed anyway?",
-                            "Time Conflict Warning",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.WARNING_MESSAGE);
+                    if (needsScheduling) {
+                        // Show scheduling dialog for unscheduled appointments 
+                        if (showScheduleAppointmentDialog(appointment)) {
+                            // Validate for time conflicts after scheduling 
+                            AppointmentValidationService.ValidationResult conflictCheck = 
+                                AppointmentValidationService.validateTimeConflict(appointment, 
+                                    tabDash.getCurrentPatient().getAppointments());
+                            
+                            if (!conflictCheck.isValid) {
+                                // Show conflict warning but allow user to proceed
+                                int choice = JOptionPane.showConfirmDialog(AppointmentsSection.this, 
+                                conflictCheck.message + "\n\nProceed anyway?",
+                                "Time Conflict Warning",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE);
 
-                            if (choice != JOptionPane.YES_OPTION) {
-                                // User chose not to proceed - reset appointment
-                                appointment.setLocation(null);
-                                appointment.setDateTime(LocalDateTime.now().plusDays(30));
-                                dtde.dropComplete(false);
-                                return;
+                                if (choice != JOptionPane.YES_OPTION) {
+                                    // User chose not to proceed - reset appointment
+                                    appointment.setLocation(null);
+                                    appointment.setDateTime(LocalDateTime.now().plusDays(30));
+                                    dtde.dropComplete(false);
+                                    return;
+                                }
                             }
-                        }
 
-                        // User assigned venue/time successfully
-                        updateAppointmentStatus(appointment, targetPanel);
+                            // Successfully scheduled - update status and add to column 
+                            appointment.setStatus(Appointment.Status.SCHEDULED);
+                            JLabel newLabel = createAppointmentLabel(appointment);
+                            targetPanel.add(newLabel);
+                            targetPanel.revalidate();
+                            targetPanel.repaint();
+                            tabDash.onPatientDataChanged();
+                            dtde.dropComplete(true);
+                        } else {
+                            // User cancelled scheduling dialog- do not move appointment
+                            dtde.dropComplete(false);
+                            return;
+                        }
+                    } else {
+                        // Already Scheduled appointment being moved to Scheduled column
+                        // Update status and add to column
+                        appointment.setStatus(Appointment.Status.SCHEDULED);
                         JLabel newLabel = createAppointmentLabel(appointment);
                         targetPanel.add(newLabel);
                         targetPanel.revalidate();
                         targetPanel.repaint();
                         tabDash.onPatientDataChanged();
                         dtde.dropComplete(true);
-                    } else {
-                        // User cancelled - do not move appointment
-                        dtde.dropComplete(false);
-                        return;
                     }
                 } else {
+                    // Normal case - moving to any column other than Scheduled
                     updateAppointmentStatus(appointment, targetPanel);
                     JLabel newLabel = createAppointmentLabel(appointment);
                     targetPanel.add(newLabel);

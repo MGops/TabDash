@@ -52,11 +52,11 @@ public class NotesPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
         
         // Status panel at bottom
-        JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel statusLabel = new JLabel("Notes are automatically linked to the selected patient");
-        statusLabel.setFont(statusLabel.getFont().deriveFont(Font.ITALIC));
-        statusLabel.setForeground(Color.GRAY);
-        statusPanel.add(statusLabel);
+        // JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // JLabel statusLabel = new JLabel("Notes are automatically linked to the selected patient");
+        // statusLabel.setFont(statusLabel.getFont().deriveFont(Font.ITALIC));
+        // statusLabel.setForeground(Color.GRAY);
+        // statusPanel.add(statusLabel);
         
         // add(statusPanel, BorderLayout.SOUTH);
         

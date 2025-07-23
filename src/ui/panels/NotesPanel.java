@@ -29,7 +29,7 @@ public class NotesPanel extends JPanel {
         JPanel headerPanel = new JPanel(new BorderLayout());
         
         JLabel titleLabel = new JLabel("Patient Notes");
-        // titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 16f));
+        titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
         headerPanel.add(titleLabel, BorderLayout.WEST);
         
         saveBtn = new JButton("Save Notes");

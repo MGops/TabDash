@@ -815,7 +815,6 @@ public class MHAPanel extends JPanel{
 
     // Method to read from Patient and populate GUI components
     private void populateFieldsFromPatient(Patient patient) {
-        System.out.println("Loading admission date for " + patient.getPatientId() + ": " + patient.getAdmissionDate());
         autoSaveEnabled = false;
         // Set MH03 checkbox
         mh03CheckBox.setSelected(patient.isMh03Completed());

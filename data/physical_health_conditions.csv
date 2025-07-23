@@ -9,6 +9,8 @@ Type 1 diabetes,Endocrine,"T1DM"
 CHF,Cardiovascular,"Heart failure,Congestive heart failure"
 MI,Cardiovascular,"Heart attack,Myocardial infarction"
 Osteoporosis,Musculoskeletal
+Osteoarthritis,Musculoskeletal,"OA,Arthritis"
+Rheumatoid Arthritis,Musculoskeletal,"RA,Arthritis"
 DVT,Cardiovascular,"Deep vein thrombosis"
 PE,Cardiovascular,"Pulmonary embolism"
 Hyperthyroidism,Endocrine

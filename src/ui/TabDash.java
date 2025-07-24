@@ -27,6 +27,7 @@ public class TabDash {
     private JList<String> patientList;
     private PhysicalHealthPanel physicalHealthPanel;
     private NotesPanel notesPanel;
+    private SidePanel sidePanel;
 
     public TabDash() {
         patients = new ArrayList<>();
@@ -58,7 +59,7 @@ public class TabDash {
             AppointmentDataManager.loadPatientAppointments(patient);
         }
         
-        currentPatient = patients.get(0);
+        currentPatient = patients.isEmpty() ? null : patients.get(0);
 
         JFrame frame = new JFrame("Dashboard");
         // frame.setBounds(0, 0, 1000, 700);
@@ -79,10 +80,9 @@ public class TabDash {
         HeaderPanel panelNorth = new HeaderPanel();
         mainPanel.add(panelNorth, BorderLayout.NORTH);
 
-        SidePanel panelWest = new SidePanel(this);
-        mainPanel.add(panelWest, BorderLayout.WEST);
+        sidePanel = new SidePanel(this);
+        mainPanel.add(sidePanel, BorderLayout.WEST);
 
-        
         medicationPanel = new MedicationPanel(medDatabase, this);
         ContentPanel panelCenter = new ContentPanel(medDatabase, this, medicationPanel);
         mhaPanel = panelCenter.getMHAPanel();
@@ -115,6 +115,57 @@ public class TabDash {
             currentPatient = patients.get(index);
         }
     }
+
+
+    // New method to add a patient
+    public void addPatient(Patient newPatient) {
+        if (newPatient != null) {
+            patients.add(newPatient);
+            // Initialise data for new patient
+            PatientDataManager.loadPatient(newPatient);
+            PhysicalHealthDataManager.loadPatientPhysicalHealth(newPatient);
+            MHADataManager.loadPatientMHAdata(newPatient);
+            AppointmentDataManager.loadPatientAppointments(newPatient);
+
+            // Set as current patient
+            currentPatient = newPatient;
+        }
+    }
+
+    // New method to remove a patient
+    public void removePatient(int index) {
+        if (index >= 0 && index < patients.size()) {
+            Patient patientToRemove = patients.get(index);
+
+            // If removing current patient, handle current patient reference
+            if (currentPatient == patientToRemove) {
+                if (patients.size() == 1) {
+                    // This was the last patient
+                    currentPatient = null;
+                } else if (index == patients.size() - 1) {
+                    // Remove last patient, select previous one
+                    currentPatient = patients.get(index - 1);
+                } else {
+                    // Select next patient (which will shift to current index)
+                    currentPatient = patients.get(index + 1);
+                }
+            }
+            // Remove from list
+            patients.remove(index);
+
+            // If selected a patient that shifted positions, update current patient
+            if (currentPatient != null && !patients.contains(currentPatient)) {
+                currentPatient = patients.isEmpty() ? null : patients.get(Math.min(index, patients.size() - 1));
+            }
+        }
+    }
+
+
+    // New method to clear current patient reference
+    public void clearCurrentPatient() {
+        currentPatient = null;
+    }
+
 
     public void onPatientDataChanged() {
         PatientDataManager.savePatient(currentPatient);

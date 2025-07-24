@@ -79,22 +79,7 @@ public class DeprescribingService {
         addMedicationRule("lamotrigine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
         
         // Mood stabilisers
-        addMedicationRule("lithium", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
         addMedicationRule("sodium_valproate", DeprescribingCategory.DISCUSS_BEFORE_ALTERING); // Also mood stabilizer
-        
-        // Antidepressants  
-        addMedicationRule("sertraline", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("escitalopram", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("fluoxetine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("fluvoxamine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("paroxetine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("citalopram", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("amitriptyline", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("clomipramine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("dosulepin", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("imipramine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("lofepramine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("nortriptyline", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
         
         // DMARDs
         addMedicationRule("methotrexate", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);

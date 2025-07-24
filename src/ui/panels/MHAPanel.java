@@ -53,6 +53,8 @@ public class MHAPanel extends JPanel{
     private JPanel tribunalDisplayPanel;
     private JCheckBox emergencyLeaveCheckBox;
     private JTextArea otherLeaveTextArea;
+    private JLabel detentionDateLbl;
+    private JPanel topPanel;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -88,26 +90,12 @@ public class MHAPanel extends JPanel{
     // TOP SECTION
 
     private JPanel createTopSection() {
-        JPanel topPanel = new JPanel();
+        topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         TitledBorder topBorder = BorderFactory.createTitledBorder("Patient Status");
         topBorder.setTitleJustification(TitledBorder.CENTER);
         topPanel.setBorder(topBorder);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-        topPanel.add(new JLabel("Admission date: "));
-        admissionDateField = new JFormattedTextField(dateFormat);
-        admissionDateField.setColumns(8);
-        addDateFieldClearingListener(admissionDateField);
-        admissionDateField.setValue(new java.util.Date());
-        topPanel.add(admissionDateField);
-
-        topPanel.add(Box.createHorizontalStrut(20));
-
-        mh03CheckBox = new JCheckBox("MH03 completed");
-        topPanel.add(mh03CheckBox);
-
-        topPanel.add(Box.createHorizontalStrut(20));
 
         topPanel.add(new JLabel("Status:"));
 
@@ -129,7 +117,7 @@ public class MHAPanel extends JPanel{
 
         topPanel.add(Box.createHorizontalStrut(20));
 
-        JLabel detentionDateLbl = new JLabel("Date detained");
+        detentionDateLbl = new JLabel("Date detained");
         topPanel.add(detentionDateLbl);
         detentionDateLbl.setVisible(false);
         detentionDateField = new JFormattedTextField(dateFormat);
@@ -139,6 +127,20 @@ public class MHAPanel extends JPanel{
         detentionDateField.setVisible(false);
         topPanel.add(detentionDateField);
 
+        topPanel.add(Box.createHorizontalStrut(20));
+
+        topPanel.add(new JLabel("Admission date: "));
+        admissionDateField = new JFormattedTextField(dateFormat);
+        admissionDateField.setColumns(8);
+        addDateFieldClearingListener(admissionDateField);
+        admissionDateField.setValue(new java.util.Date());
+        topPanel.add(admissionDateField);
+    
+        topPanel.add(Box.createHorizontalStrut(20));
+
+        mh03CheckBox = new JCheckBox("MH03 completed");
+        topPanel.add(mh03CheckBox);
+
         //Listener for automatic saving
         mh03CheckBox.addActionListener(e -> updatePatientAndSave());
         
@@ -146,35 +148,19 @@ public class MHAPanel extends JPanel{
         admissionDateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
 
         section2Btn.addActionListener(e -> {
-            detentionDateLbl.setVisible(true);
-            detentionDateField.setVisible(true);
-            topPanel.revalidate();
-            topPanel.repaint();
+            updateDetentionFieldVisibility();
             updatePatientAndSave();
         });
         section3Btn.addActionListener(e -> {
-            detentionDateLbl.setVisible(true);
-            detentionDateField.setVisible(true);
-            topPanel.revalidate();
-            topPanel.repaint();
+            updateDetentionFieldVisibility();
             updatePatientAndSave();
         });
         informalBtn.addActionListener(e -> {
-            detentionDateLbl.setVisible(false);
-            detentionDateField.setVisible(false);
-            clearExpiryDisplays();
-            originalDetentionDate = null;
-            topPanel.revalidate();
-            topPanel.repaint();
+            updateDetentionFieldVisibility();
             updatePatientAndSave();
         });
         dolsBtn.addActionListener(e -> { 
-            detentionDateLbl.setVisible(false);
-            detentionDateField.setVisible(false);
-            clearExpiryDisplays();
-            originalDetentionDate = null;
-            topPanel.revalidate();
-            topPanel.repaint();
+            updateDetentionFieldVisibility();
             updatePatientAndSave();
         });
 
@@ -554,9 +540,6 @@ public class MHAPanel extends JPanel{
         tribunalPanel.add(buttonPanel);
         tribunalPanel.add(tribunalDisplayPanel);
         return tribunalPanel;
-
-
-        
     } 
 
     // HELPER METHODS
@@ -665,12 +648,13 @@ public class MHAPanel extends JPanel{
             return;
         }
 
-        cal.setTime(detentionDate); // Calculate 3 month-rule expiries
+        cal.setTime(originalDetentionDate != null ? originalDetentionDate : detentionDate); // Calculate 3 month-rule expiries
         cal.add(Calendar.MONTH, 3);
         Date threeMthExpiry = cal.getTime();
 
         updateExpiryDisplays(sectionExpiry, threeMthExpiry);
     }
+
 
     private void updateExpiryDisplays(Date sectionExpiry, Date threeMthExpiry) {
         SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -735,6 +719,7 @@ public class MHAPanel extends JPanel{
         });
     }
 
+    
     private void clearExpiryDisplays() {
         sectionExpiryLabel.setText("");
         sectionExpiryLabel.setBackground(null);
@@ -746,6 +731,7 @@ public class MHAPanel extends JPanel{
         }
     }
 
+
     public void refreshForNewPatient() {
         clearAllFields();
 
@@ -756,6 +742,7 @@ public class MHAPanel extends JPanel{
         // Populate GUI fields with loaded data
         populateFieldsFromPatient(currentPatient);
     }
+
 
     private void clearAllFields() {
         autoSaveEnabled = false;
@@ -813,6 +800,7 @@ public class MHAPanel extends JPanel{
         autoSaveEnabled = true;
     }
 
+
     // Method to read from Patient and populate GUI components
     private void populateFieldsFromPatient(Patient patient) {
         autoSaveEnabled = false;
@@ -841,6 +829,7 @@ public class MHAPanel extends JPanel{
                 detentionDateField.setVisible(true);
             }
         }
+        originalDetentionDate = patient.getOriginalDetentionDate();
         
         // Set capacity radio buttons
         String capacity = patient.getCapacity();
@@ -901,6 +890,7 @@ public class MHAPanel extends JPanel{
         // Update displays and calculations
         updateDateCalculations();
         enableMHAFunctionality(patient.isMh03Completed());
+        updateDetentionFieldVisibility();
         updateTribunalDisplay();
 
         emergencyLeaveCheckBox.setSelected(patient.isEmergencyMedicalLeave());
@@ -910,12 +900,14 @@ public class MHAPanel extends JPanel{
         autoSaveEnabled = true;
     }
 
+
     private void saveCurrentPatientMHA() {
         Patient currentPatient = tabDash.getCurrentPatient();
         if (currentPatient != null) {
             MHADataManager.savePatientMHA(currentPatient);
         }
     }
+
 
     private void updatePatientAndSave() {
         if (!autoSaveEnabled) return;
@@ -924,6 +916,7 @@ public class MHAPanel extends JPanel{
         updatePatientFromFields();
         saveCurrentPatientMHA();
     }
+
 
     private void updatePatientFromFields() {
         Patient currentPatient = tabDash.getCurrentPatient();
@@ -1006,6 +999,7 @@ public class MHAPanel extends JPanel{
         currentPatient.setOtherLeave(otherLeaveTextArea.getText().trim().isEmpty() ? null : otherLeaveTextArea.getText());
     }
 
+    
     private void addDateFieldClearingListener(JFormattedTextField dateField) {
         dateField.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent e) {
@@ -1017,6 +1011,7 @@ public class MHAPanel extends JPanel{
         });
     }
 
+
     private String getCurrentSectionStatus() {
         if (informalBtn.isSelected()) return "Informal";
         if (section2Btn.isSelected()) return "Section2";
@@ -1024,6 +1019,7 @@ public class MHAPanel extends JPanel{
         if (dolsBtn.isSelected()) return "DOLS";
         return "Informal";
     }
+
 
     private void showAddTribunalDialog() {
         JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Add Tribunal", true);
@@ -1103,6 +1099,7 @@ public class MHAPanel extends JPanel{
         dialog.setVisible(true);
     }
 
+
     private void updateTribunalDisplay() {
         Patient currentPatient = tabDash.getCurrentPatient();
         SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -1116,5 +1113,21 @@ public class MHAPanel extends JPanel{
             tribunalTypeLabel.setText("");
             reportDueLabel.setText("");
         }
+    }
+
+
+    private void updateDetentionFieldVisibility() {
+        boolean shouldShowDetentionFields = section2Btn.isSelected() || section3Btn.isSelected();
+
+        detentionDateLbl.setVisible(shouldShowDetentionFields);
+        detentionDateField.setVisible(shouldShowDetentionFields);
+
+        if (!shouldShowDetentionFields) {
+            clearExpiryDisplays();
+            originalDetentionDate = null;
+        }
+
+        topPanel.revalidate();
+        topPanel.repaint();
     }
 }

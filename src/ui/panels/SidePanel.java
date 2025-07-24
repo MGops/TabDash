@@ -47,8 +47,10 @@ public class SidePanel extends JPanel{
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 5, 0));
         buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        buttonPanel.add(new JButton("Add"));
-        buttonPanel.add(new JButton("Remove"));
+        addBtn = new JButton("Add");
+        removeBtn = new JButton("Remove");
+        buttonPanel.add(addBtn);
+        buttonPanel.add(removeBtn);
         add(buttonPanel);
 
         setupButtonListeners();

@@ -494,6 +494,9 @@ public class MHAPanel extends JPanel{
         leavePanel.add(otherLeavePanel);
 
         emergencyLeaveCheckBox.addActionListener(e -> updatePatientAndSave());
+        if (!emergencyLeaveCheckBox.isSelected()) {
+            emergencyLabel.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+        }
         otherLeaveTextArea.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {updatePatientAndSave();}
             public void removeUpdate(DocumentEvent e) {updatePatientAndSave();}

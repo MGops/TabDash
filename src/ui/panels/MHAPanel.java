@@ -1,6 +1,7 @@
 package src.ui.panels;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -55,6 +56,8 @@ public class MHAPanel extends JPanel{
     private JTextArea otherLeaveTextArea;
     private JLabel detentionDateLbl;
     private JPanel topPanel;
+    private JPanel emergencyPanel;
+    private JLabel emergencyLabel;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -467,14 +470,21 @@ public class MHAPanel extends JPanel{
         leavePanel.setLayout(new BoxLayout(leavePanel, BoxLayout.Y_AXIS));
         leavePanel.setBorder(BorderFactory.createTitledBorder("Leave Records"));
 
-        JPanel emergencyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel emergencyLabel = new JLabel("Emergency medical leave: ");
+        emergencyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        emergencyLabel = new JLabel("Emergency medical leave: ");
         emergencyLeaveCheckBox = new JCheckBox();
         emergencyPanel.add(emergencyLabel);
         emergencyPanel.add(emergencyLeaveCheckBox);
         emergencyPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, emergencyPanel.getPreferredSize().height));
         emergencyPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         leavePanel.add(emergencyPanel);
+
+        emergencyLeaveCheckBox.addActionListener(e -> {
+            updateEmergencyLeaveBorder();
+            updatePatientAndSave();
+        });
+
+        updateEmergencyLeaveBorder();
 
         leavePanel.add(Box.createVerticalStrut(5));
 
@@ -493,10 +503,6 @@ public class MHAPanel extends JPanel{
         otherLeavePanel.add(scrollPane, BorderLayout.CENTER);
         leavePanel.add(otherLeavePanel);
 
-        emergencyLeaveCheckBox.addActionListener(e -> updatePatientAndSave());
-        if (!emergencyLeaveCheckBox.isSelected()) {
-            emergencyLabel.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-        }
         otherLeaveTextArea.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {updatePatientAndSave();}
             public void removeUpdate(DocumentEvent e) {updatePatientAndSave();}
@@ -504,6 +510,22 @@ public class MHAPanel extends JPanel{
         });
 
         return leavePanel;
+    }
+
+    private void updateEmergencyLeaveBorder() {
+        if (emergencyLeaveCheckBox.isSelected()) {
+            // Remove border when checked
+            emergencyLabel.setBorder(null);
+        } else {
+            // Add red border when not checked
+            emergencyLabel.setBorder(
+                BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.RED, 2),
+                    BorderFactory.createEmptyBorder(1, 1, 1, 1)
+                ));
+        }
+        emergencyPanel.revalidate();
+        emergencyPanel.repaint();
     }
     
     private JPanel createTribunalPanel() {
@@ -800,6 +822,7 @@ public class MHAPanel extends JPanel{
         soadPanel.setVisible(true);
 
         emergencyLeaveCheckBox.setSelected(false);
+        updateEmergencyLeaveBorder();
         otherLeaveTextArea.setText("");
 
         enableMHAFunctionality(false);
@@ -901,6 +924,9 @@ public class MHAPanel extends JPanel{
         updateTribunalDisplay();
 
         emergencyLeaveCheckBox.setSelected(patient.isEmergencyMedicalLeave());
+        SwingUtilities.invokeLater(() -> {
+            updateEmergencyLeaveBorder();
+        });
         if (patient.getOtherLeave() != null) {
             otherLeaveTextArea.setText(patient.getOtherLeave());
         }

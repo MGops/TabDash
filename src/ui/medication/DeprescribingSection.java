@@ -49,6 +49,13 @@ public class DeprescribingSection extends JPanel {
         columnsPanel.removeAll();
 
         Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            JLabel noPatientLabel = new JLabel("No patient selected");
+            noPatientLabel.setForeground(Color.GRAY);
+            columnsPanel.add(noPatientLabel);
+            columnsPanel.revalidate();
+            columnsPanel.repaint();
+        }
         Map<String, Medication> medications = currentPatient.getMedications();
 
         // Group medications by category

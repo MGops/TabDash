@@ -58,6 +58,14 @@ public class ACBSection extends JPanel{
     
 
         addMedBtn.addActionListener(e -> {
+            Patient currentPatient = tabDash.getCurrentPatient();
+            if (currentPatient == null) {
+                JOptionPane.showMessageDialog(this,
+                "No patient selected. Please select a patient first.",
+                "No Patient Selected",
+                JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             // Dialog code for selecting medications
             String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
             java.util.Arrays.sort(medicationNames);
@@ -97,7 +105,6 @@ public class ACBSection extends JPanel{
                     model.addRow(new Object[] {selectedMed, displayScore});
                     updateTotalACB();
 
-                    Patient currentPatient = tabDash.getCurrentPatient();
                     //Create medication object with class information
                     Medication medication = new Medication(selectedMed);
                     medication.setAcbScore(acbScore);
@@ -118,6 +125,14 @@ public class ACBSection extends JPanel{
         });
 
         removeMedBtn.addActionListener(e -> {
+            Patient currentPatient = tabDash.getCurrentPatient();
+            if (currentPatient == null) {
+                JOptionPane.showMessageDialog(this, 
+                    "No patient selected.",
+                    "No Patient Selected", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             int selectedRow = medicationTable.getSelectedRow();
             if (selectedRow >= 0) {
                 DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
@@ -125,7 +140,6 @@ public class ACBSection extends JPanel{
                 model.removeRow(selectedRow);
                 updateTotalACB();
 
-                Patient currentPatient = tabDash.getCurrentPatient();
                 currentPatient.removeMedication(medName);
                 tabDash.onPatientDataChanged();
                 tabDash.refreshMedicationPanel();
@@ -150,6 +164,9 @@ public class ACBSection extends JPanel{
     
     private void loadPatientMedications() {
         Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            return;
+        }
         HashMap<String, Medication> patientMeds = currentPatient.getMedications();
         DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
         model.setRowCount(0);
@@ -170,6 +187,12 @@ public class ACBSection extends JPanel{
     }    
 
     public void refreshForNewPatient() {
+        if (tabDash.getCurrentPatient() == null) {
+            DefaultTableModel model =  (DefaultTableModel) medicationTable.getModel();
+            model.setRowCount(0);
+            updateTotalACB();
+            return;
+        }
         loadPatientMedications();
     }
 }

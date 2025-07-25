@@ -108,13 +108,23 @@ public class AppointmentsSection extends JPanel {
 
 
     private void loadPatientAppointments() {
-        if (tabDash.getCurrentPatient() == null) return;
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            clearAllColumns();
+            
+            // Show "no patient selected" message
+            JLabel noPatientLabel = new JLabel("No patient selected");
+            noPatientLabel.setForeground(Color.GRAY);
+            toReferPanel.add(noPatientLabel);
+            revalidateAllColumns();
+            return;
+        }
             
         //Clear all columns first
         clearAllColumns();
-
+       
         //Load appointments from current patient
-        List<Appointment> appointments = tabDash.getCurrentPatient().getAppointments();
+        List<Appointment> appointments = currentPatient.getAppointments();
 
         // If no appointments exist, add sample data (for testing)
         if (appointments.isEmpty()) {
@@ -525,6 +535,14 @@ public class AppointmentsSection extends JPanel {
 
 
     private void createNewAppointment(String specialty) {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            JOptionPane.showMessageDialog(this,
+                "No patient selected.",
+                "No Patient Selected",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         // Create appointment with placeholder date (will be set when scheduled)
         LocalDateTime placeholderDate = LocalDateTime.now().plusDays(30);
         Appointment newAppointment = new Appointment(specialty, placeholderDate, null);
@@ -557,6 +575,15 @@ public class AppointmentsSection extends JPanel {
 
 
     private void confirmDeleteAppointment(Appointment appointment, JLabel label) {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            JOptionPane.showMessageDialog(this,
+                "No patient selected.",
+                "No Patient Selected",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         int result = JOptionPane.showConfirmDialog(
             this, 
             "Delete appointment: " + appointment.getSpecialty() + "?", 

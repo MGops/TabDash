@@ -737,6 +737,10 @@ public class MHAPanel extends JPanel{
 
         // Load the new patient's MHA data from file
         Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            enableMHAFunctionality(false);
+            return;
+        }
         MHADataManager.loadPatientMHAdata(currentPatient);
         
         // Populate GUI fields with loaded data
@@ -911,6 +915,9 @@ public class MHAPanel extends JPanel{
 
     private void updatePatientAndSave() {
         if (!autoSaveEnabled) return;
+            
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) return;
             
         // Update the Patient object with current GUI values, then save
         updatePatientFromFields();

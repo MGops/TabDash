@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-
+import src.model.Patient;
 import src.ui.TabDash;
 
 public class NotesPanel extends JPanel {
@@ -197,6 +197,16 @@ public class NotesPanel extends JPanel {
         notesTextArea.setText(content);
         originalText = content;
         saveBtn.setEnabled(false);
+
+        // Enable/disable text area based on whether patient is selected
+        Patient currentPatient = tabDash.getCurrentPatient();
+        notesTextArea.setEditable(currentPatient != null);
+        if (currentPatient == null) {
+            notesTextArea.setText("No patient selected");
+            notesTextArea.setForeground(Color.GRAY);
+        } else {
+            notesTextArea.setForeground(Color.BLACK);
+        }
     }
     
     public void refreshForNewPatient() {

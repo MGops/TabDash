@@ -78,6 +78,9 @@ public class IllnessListSection extends JPanel{
         DefaultTableModel model = (DefaultTableModel) comorbidityTable.getModel();
         model.setRowCount(0);
 
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) return;
+        
         List<String> conditions = tabDash.getCurrentPatient().getPhysicalHealthConditions();
         for (String condition : conditions) {
             model.addRow(new Object[]{condition});
@@ -86,6 +89,15 @@ public class IllnessListSection extends JPanel{
 
 
     private void showAddConditionDialog() {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            JOptionPane.showMessageDialog(this,
+            "No patient selected. Please select a patient first.", 
+            "No Patient Selected", 
+            JOptionPane.WARNING_MESSAGE);
+        return;
+        }
+
         JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Add Medical Condition", true);
         dialog.setLayout(new BorderLayout());
         dialog.setSize(400, 250);
@@ -174,7 +186,6 @@ public class IllnessListSection extends JPanel{
         addBtn.addActionListener(e -> {
             String condition = conditionField.getText().trim();
             if (!condition.isEmpty()) {
-                Patient currentPatient = tabDash.getCurrentPatient();
                 if (!currentPatient.getPhysicalHealthConditions().contains(condition)) {
                     currentPatient.addPhysicalHealthConditions(condition);
                     tabDash.onPatientDataChanged();
@@ -195,6 +206,15 @@ public class IllnessListSection extends JPanel{
     }
 
     private void removeSelectedCondition() {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            JOptionPane.showMessageDialog(this,
+                "No patient selected",
+                "No Patient Selected", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         int selectedRow = comorbidityTable.getSelectedRow();
         if (selectedRow >= 0) {
             String condition = (String) comorbidityTable.getValueAt(selectedRow, 0);

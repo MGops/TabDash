@@ -168,6 +168,10 @@ public class TabDash {
 
 
     public void onPatientDataChanged() {
+        if (currentPatient == null) {
+            return;
+        }
+        
         PatientDataManager.savePatient(currentPatient);
         PhysicalHealthDataManager.savePatientPhysicalHealth(currentPatient);
         AppointmentDataManager.savePatientAppointments(currentPatient);

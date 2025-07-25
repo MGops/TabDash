@@ -66,6 +66,14 @@ public class CumulToxTool extends JPanel {
     private void analyseCurrentPatientADRs() {
         adrDisplayPanel.removeAll(); // Clear prev results
         Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            JLabel noPatientLabel = new JLabel("No patient selected");
+            noPatientLabel.setForeground(Color.GRAY);
+            adrDisplayPanel.add(noPatientLabel);
+            adrDisplayPanel.revalidate();
+            adrDisplayPanel.repaint();
+            return;
+        }
         Map<String, Medication> medications = currentPatient.getMedications();
 
         //Count meds causing each ADR

@@ -47,6 +47,14 @@ public class CascadeSection extends JPanel {
         cascadeDisplayPanel.removeAll();
 
         Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            JLabel noPatientLabel = new JLabel("No patient selected");
+            noPatientLabel.setForeground(Color.GRAY);
+            cascadeDisplayPanel.add(noPatientLabel);
+            cascadeDisplayPanel.revalidate();
+            cascadeDisplayPanel.repaint();
+            return;
+        }
         Map<String, Medication> medications = currentPatient.getMedications();
 
         // Get list of medications for checking

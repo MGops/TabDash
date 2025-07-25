@@ -55,6 +55,7 @@ public class DeprescribingSection extends JPanel {
             columnsPanel.add(noPatientLabel);
             columnsPanel.revalidate();
             columnsPanel.repaint();
+            return;
         }
         Map<String, Medication> medications = currentPatient.getMedications();
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import src.model.MonitoringIssue;
 
 public class Patient {
     private String patientId;
@@ -32,12 +33,14 @@ public class Patient {
     private String otherLeave;
     private List<String> physicalHealthConditions;
     private List<Appointment> appointments;
+    private List<MonitoringIssue> monitoringIssues;
    
     public Patient(String patientId) {
         this.patientId = patientId;
         this.medications = new HashMap<String, Medication>();
         this.physicalHealthConditions = new ArrayList<>();
         this.appointments = new ArrayList<>();
+        this.monitoringIssues = new ArrayList<>();
         initialiseMHAFields();
     }
 
@@ -204,4 +207,21 @@ public class Patient {
     public void removeAppointment(Appointment appointment) {
         this.appointments.remove(appointment);
     }
+
+    public List<MonitoringIssue> getMonitoringIssues() {
+        return monitoringIssues;
+    }
+
+    public void setMonitoringIssues(List<MonitoringIssue> monitoringIssues) {
+        this.monitoringIssues = monitoringIssues;
+    }
+
+    public void addMonitoringIssue(MonitoringIssue issue) {
+        this.monitoringIssues.add(issue);
+    }
+    
+    public void removeMonitoringIssue(MonitoringIssue issue) {
+        this.monitoringIssues.remove(issue);
+    }
+
 }

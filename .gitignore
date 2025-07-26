@@ -400,3 +400,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 *.txt
+.DS_Store
+.DS_Store
+.DS_Store

@@ -342,19 +342,6 @@ public class MHAPanel extends JPanel{
         t3Panel.add(t3ReviewDateField);
         panel.add(t3Panel);
 
-        t3CheckBox.addActionListener(e -> {
-            boolean t3Selected = t3CheckBox.isSelected();
-
-            if (t3Selected) {
-                soadPanel.setVisible(false);
-                s62Panel.setVisible(false);
-            } else {
-                soadPanel.setVisible(true);
-                s62Panel.setVisible(false);
-            }
-            panel.revalidate();
-            panel.repaint();
-        });
 
         soadRequestedChk.addActionListener(e -> updatePatientAndSave());
         soadDateField.addPropertyChangeListener("value", e -> updatePatientAndSave());

@@ -1102,11 +1102,11 @@ public class MHAPanel extends JPanel{
         String drugSubclass = classInfo.drugSubclass;
 
         // Check for controlled medication classes
-        if ("antipsychotic".equalsIgnoreCase(drugSubclass)) {
+        if ("antipsychotic".equalsIgnoreCase(drugClass)) {
             return true;
         }
 
-        if ("antidepressant".equalsIgnoreCase(drugSubclass)) {
+        if ("antidepressant".equalsIgnoreCase(drugClass)) {
             return true;
         }
 
@@ -1122,11 +1122,10 @@ public class MHAPanel extends JPanel{
             return true;
         }
 
-        // Check specific medication that might be hypnotics
         String medNameLower = medicationName.toLowerCase();
         if (medNameLower.contains("zopiclone") || 
-            medNameLower.contains("zopiclone") ||
-            medNameLower.contains("zopiclone")) {
+            medNameLower.contains("zolpidem") ||
+            medNameLower.contains("zaleplon")) {
             return true;
         }
         return false;

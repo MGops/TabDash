@@ -42,18 +42,28 @@ public class PhysicalHealthPanel extends JPanel {
 
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
         add(illnessListSection, gbc);
 
         gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 2; gbc.gridheight = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
         add(optimisationSection, gbc);
         
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1; gbc.gridheight = 1;
+        gbc.weightx = 0.0; // No horizontal growth or resize
+        gbc.weighty = 1.0;
         add(investigationsSection, gbc);
 
         gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2; gbc.gridheight = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
         add(appointmentsSection, gbc);
 
         gbc.gridx = 3; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
         add(placeholderSection, gbc);
         
     }

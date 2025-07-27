@@ -30,6 +30,11 @@ public class InvestigationsSection extends JPanel {
         setBorder(BorderFactory.createTitledBorder("Monitoring"));
         setLayout(new BorderLayout());
 
+        // Set fixed size constraints to prevent resizing
+        setPreferredSize(new Dimension(200,250));
+        setMinimumSize(new Dimension(200,200));
+        setMaximumSize(new Dimension(200,300));
+
         // Panel to show currently monitored issues
         activeIssuesPanel = new JPanel();
         activeIssuesPanel.setLayout(new BoxLayout(activeIssuesPanel, BoxLayout.Y_AXIS));

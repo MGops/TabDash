@@ -15,10 +15,11 @@ import src.ui.panels.MedicationPanel;
 import src.ui.panels.NotesPanel;
 import src.ui.panels.PhysicalHealthPanel;
 import src.ui.panels.SidePanel;
-
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
+
+
 
 public class TabDash {
     private List<Patient> patients;
@@ -180,6 +181,18 @@ public class TabDash {
         AppointmentDataManager.savePatientAppointments(currentPatient);
         MonitoringDataManager.savePatientMonitoring(currentPatient);
     }
+
+    public MHAPanel getMHAPanel() {
+        return mhaPanel;
+    }
+    
+    // Method to trigger medication alert
+    public void checkMedicationAlert(String medicationName) {
+        if (mhaPanel != null) {
+            mhaPanel.checkMedicationChangeAlert(medicationName);
+        }
+    }
+
 
     public void refreshMedicationPanel() {
         if (medicationPanel != null) {

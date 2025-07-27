@@ -123,6 +123,8 @@ public class ACBSection extends JPanel{
                     currentPatient.getMedications().put(selectedMed, medication);
                     tabDash.onPatientDataChanged();
                     tabDash.refreshMedicationPanel();
+                    // Check for medication alert when adding medication
+                    tabDash.checkMedicationAlert(selectedMed);
                 }
             } 
         });

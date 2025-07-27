@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import java.awt.Font;
 import src.model.Appointment;
 import src.model.Patient;
 import src.ui.TabDash;
@@ -41,6 +42,8 @@ public class AppointmentsSection extends JPanel {
     public AppointmentsSection(TabDash tabDash) {
         this.tabDash = tabDash;
         setBorder(BorderFactory.createTitledBorder("Appointments"));
+        TitledBorder border = (TitledBorder) getBorder();
+        border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setLayout(new GridBagLayout());
         setMinimumSize(new Dimension(600,250));
         setPreferredSize(new Dimension(700, 300));

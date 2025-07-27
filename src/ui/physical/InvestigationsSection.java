@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.*;
+import java.awt.Font;
+import javax.swing.border.TitledBorder;
 import src.data_managers.MonitoringDataManager;
 import src.model.MonitoringIssue;
 import src.model.Patient;
@@ -28,6 +30,8 @@ public class InvestigationsSection extends JPanel {
     public InvestigationsSection(TabDash tabDash) {
         this.tabDash = tabDash;
         setBorder(BorderFactory.createTitledBorder("Monitoring"));
+        TitledBorder border = (TitledBorder) getBorder();
+        border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setLayout(new BorderLayout());
 
         // Set fixed size constraints to prevent resizing

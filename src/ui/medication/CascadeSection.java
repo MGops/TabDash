@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -30,6 +31,8 @@ public class CascadeSection extends JPanel {
         this.cascadeService = new CascadeService();
 
         setBorder(BorderFactory.createTitledBorder("Prescribing Cascades"));
+        TitledBorder border = (TitledBorder) getBorder();
+        border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setLayout(new BorderLayout());
     
         // Create scrollable panel for cascade display

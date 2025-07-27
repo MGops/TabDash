@@ -7,7 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
-
+import java.awt.Font;
+import javax.swing.border.TitledBorder;
 import javax.swing.*;
 import java.awt.*;
 
@@ -50,6 +51,8 @@ public class CumulToxTool extends JPanel {
         this.adrService = new ADRService();
 
         setBorder(BorderFactory.createTitledBorder("Cumulative Toxicity Tool"));
+        TitledBorder border = (TitledBorder) getBorder();
+        border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setLayout(new BorderLayout());
 
         // Scrollable panel for ADR labels

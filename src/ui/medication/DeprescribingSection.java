@@ -1,6 +1,8 @@
 package src.ui.medication;
 
 import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -10,7 +12,6 @@ import javax.swing.SwingConstants;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-
 import src.data_managers.MedicationDatabase;
 import src.model.Medication;
 import src.model.Patient;
@@ -30,6 +31,8 @@ public class DeprescribingSection extends JPanel {
         this.deprescribingService = new DeprescribingService();
 
         setBorder(BorderFactory.createTitledBorder("Safe Deprescribing"));
+        TitledBorder border = (TitledBorder) getBorder();
+        border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setLayout(new BorderLayout());
 
         // Create main panel for columns

@@ -1,15 +1,13 @@
 package src.ui.panels;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import java.awt.Font;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import src.data_managers.MHADataManager;
 import src.model.Patient;
 import src.ui.TabDash;
-
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -96,6 +94,7 @@ public class MHAPanel extends JPanel{
         topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         TitledBorder topBorder = BorderFactory.createTitledBorder("Patient Status");
+        topBorder.setTitleFont(topBorder.getTitleFont().deriveFont(Font.BOLD));
         topBorder.setTitleJustification(TitledBorder.CENTER);
         topPanel.setBorder(topBorder);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -206,6 +205,7 @@ public class MHAPanel extends JPanel{
     private JPanel createMiddleSection() {
         JPanel middlePanel = new JPanel();
         TitledBorder middleBorder = BorderFactory.createTitledBorder("MHA Management");
+        middleBorder.setTitleFont(middleBorder.getTitleFont().deriveFont(Font.BOLD));
         middleBorder.setTitleJustification(TitledBorder.CENTER);
         middlePanel.setBorder(middleBorder);
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
@@ -232,6 +232,7 @@ public class MHAPanel extends JPanel{
     private JPanel createExpiryPanel() {
         JPanel expiryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         expiryPanel.setBorder(BorderFactory.createTitledBorder("Section Status"));
+        
         // Section Expiry
         expiryPanel.add(new JLabel("Section Expires: "));
         sectionExpiryLabel = new JLabel("");
@@ -296,6 +297,7 @@ public class MHAPanel extends JPanel{
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder("SOAD Pathway (no capacity)"));
+        
         // SOAD Request section
         soadPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         soadRequestedChk = new JCheckBox("SOAD requested");
@@ -445,6 +447,7 @@ public class MHAPanel extends JPanel{
     private JPanel createBottomSection() {
         JPanel bottomPanel = new JPanel(new GridBagLayout());
         TitledBorder bottomBorder = BorderFactory.createTitledBorder("Leave & Tribunal Management");
+        bottomBorder.setTitleFont(bottomBorder.getTitleFont().deriveFont(Font.BOLD));
         bottomBorder.setTitleJustification(TitledBorder.CENTER);
         bottomPanel.setBorder(bottomBorder);
         
@@ -469,7 +472,6 @@ public class MHAPanel extends JPanel{
         JPanel leavePanel = new JPanel();
         leavePanel.setLayout(new BoxLayout(leavePanel, BoxLayout.Y_AXIS));
         leavePanel.setBorder(BorderFactory.createTitledBorder("Leave Records"));
-
         emergencyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         emergencyLabel = new JLabel("Emergency medical leave: ");
         emergencyLeaveCheckBox = new JCheckBox();

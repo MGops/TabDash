@@ -5,7 +5,8 @@ import src.data_managers.MedicationLookupService;
 import src.model.Medication;
 import src.model.Patient;
 import src.ui.TabDash;
-
+import java.awt.Font;
+import javax.swing.border.TitledBorder;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +24,8 @@ public class ACBSection extends JPanel{
         this.tabDash = tabDash;
         this.medicationLookupService = new MedicationLookupService();
         setBorder(BorderFactory.createTitledBorder("ACB Score"));
+        TitledBorder border = (TitledBorder) getBorder();
+        border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setLayout(new BorderLayout());
         initialiseComponents();
     }

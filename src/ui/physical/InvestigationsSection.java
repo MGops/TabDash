@@ -163,7 +163,8 @@ public class InvestigationsSection extends JPanel {
                 if (checkBox != null && textField != null) {
                     checkBox.setSelected(true);
                     textField.setText(issue.getNotes() != null ? issue.getNotes() : "");
-                    textField.setVisible(true); // Make text field visible since checkbox is selected
+                    textField.setEnabled(true); 
+                    textField.setBackground(Color.WHITE);
                 }
             }
         }
@@ -221,7 +222,7 @@ public class InvestigationsSection extends JPanel {
                 for (MonitoringIssue issue : activeIssues) {
                     JPanel issuePanel = createActiveIssuePanel(issue);
                     activeIssuesPanel.add(issuePanel);
-                    activeIssuesPanel.add(Box.createVerticalStrut(3));
+                    activeIssuesPanel.add(Box.createVerticalStrut(5));
                 }
             }
         }
@@ -239,21 +240,24 @@ public class InvestigationsSection extends JPanel {
         panel.setBackground(new Color(240,248,255));
 
         
-        // Issue info label
-        String displayText = "<html><b>" + issue.getIssueType() + "</b>";
+        // Create display text
+        String displayText = issue.getIssueType();
         if (issue.getNotes() != null && !issue.getNotes().trim().isEmpty()) {
             displayText += ": " + issue.getNotes();
         }
-        displayText += "</html>";
+        JTextArea textArea = new JTextArea(displayText);
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setOpaque(false);
+        textArea.setFont(textArea.getFont().deriveFont(11));
+        textArea.setBorder(null);
+        panel.add(textArea, BorderLayout.CENTER);
 
-        JLabel issueLabel = new JLabel(displayText);
-        //issueLabel.setFont(issueLabel.getFont().deriveFont(11f));
-        panel.add(issueLabel, BorderLayout.CENTER);
-
-        // Remove button
+        // Remove button (same as before)
         JButton removeBtn = new JButton("X");
         removeBtn.setPreferredSize(new Dimension(20,20));
-        //removeBtn.setFont(removeBtn.getFont().deriveFont(10f));
+        removeBtn.setFont(removeBtn.getFont().deriveFont(10f));
         removeBtn.setToolTipText("Remove monitoring issue");
         removeBtn.setMargin(new Insets(0, 0, 0, 0));
 

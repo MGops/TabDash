@@ -43,7 +43,6 @@ public class NotesPanel extends JPanel {
         notesTextArea = new JTextArea();
         notesTextArea.setLineWrap(true);
         notesTextArea.setWrapStyleWord(true);
-        // notesTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         
         JScrollPane scrollPane = new JScrollPane(notesTextArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

@@ -2,10 +2,10 @@ package src.ui.panels;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import java.awt.Font;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import src.data_managers.MHADataManager;
+import src.data_managers.MedicationLookupService;
 import src.model.Patient;
 import src.ui.TabDash;
 import java.awt.*;
@@ -56,6 +56,10 @@ public class MHAPanel extends JPanel{
     private JPanel topPanel;
     private JPanel emergencyPanel;
     private JLabel emergencyLabel;
+    private JLabel alertIcon;
+    private JLabel alertMessage;
+    private JButton alertYesBtn;
+    private JButton alertNoBtn;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -413,32 +417,32 @@ public class MHAPanel extends JPanel{
     private JPanel createAlertPanel() {
         JPanel alertPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         alertPanel.setBorder(BorderFactory.createTitledBorder("Alerts"));
+
         //Medication change alert - intitially hidden
-        JLabel alertIcon = new JLabel("❗");
-        JLabel alertMessage = new JLabel("Medication changed- review required");
-        JButton yesBtn = new JButton("Yes");
-        JButton noBtn = new JButton("No");
+        alertIcon = new JLabel("❗");
+        alertMessage = new JLabel("Medication changed- review required");
+        alertYesBtn = new JButton("Yes");
+        alertNoBtn = new JButton("No");
+
         // Set small button size
-        yesBtn.setPreferredSize(new Dimension(50, 25));
-        noBtn.setPreferredSize(new Dimension(50,25));;
+        alertYesBtn.setPreferredSize(new Dimension(50, 25));
+        alertNoBtn.setPreferredSize(new Dimension(50,25));;
         alertPanel.add(alertIcon);
         alertPanel.add(alertMessage);
         alertPanel.add(Box.createHorizontalStrut(10));
-        alertPanel.add(yesBtn);
-        alertPanel.add(noBtn);
+        alertPanel.add(alertYesBtn);
+        alertPanel.add(alertNoBtn);
 
-        alertIcon.setVisible(false);
-        alertMessage.setVisible(false);
-        yesBtn.setVisible(false);
-        noBtn.setVisible(false);
+        // Initially hidden
+        hideAlert();
 
-        yesBtn.addActionListener(e -> {
+        alertYesBtn.addActionListener(e -> {
             showMedicationReviewDialog();
-            hideAlert(alertIcon, alertMessage, yesBtn, noBtn);
+            hideAlert();
         });
 
-        noBtn.addActionListener(e -> {
-            hideAlert(alertIcon, alertMessage, yesBtn, noBtn);
+        alertNoBtn.addActionListener(e -> {
+            hideAlert();
         });
 
         return alertPanel;
@@ -1056,6 +1060,96 @@ public class MHAPanel extends JPanel{
         if (section3Btn.isSelected()) return "Section3";
         if (dolsBtn.isSelected()) return "DOLS";
         return "Informal";
+    }
+
+
+    public void checkMedicationChangeAlert(String medicationName) {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null || !mh03CheckBox.isSelected()) {
+            return;
+        }
+
+        // Only trigger if patient is on Section 2 or 3
+        if (!section2Btn.isSelected() && !section3Btn.isSelected()) {
+            return;
+        }
+
+        // Only trigger if past 3 month period
+        boolean pastThreeMonths = currentPatient.isT2Completed() ||
+                                currentPatient.isT3Provided() ||
+                                currentPatient.isS62Completed();
+        
+        if (!pastThreeMonths) {
+            return;
+        }
+
+        // Only trigger for specific medication classes
+        if (isControlledMedicationClass(medicationName)) {
+            showAlert();
+        }
+    }
+
+    private boolean isControlledMedicationClass(String medicationName) {
+        // Get medication class info
+        MedicationLookupService lookupService = new MedicationLookupService();
+        MedicationLookupService.MedicationClassInfo classInfo = lookupService.getClassInfo(medicationName);
+
+        if (classInfo == null) {
+            return false;
+        }
+
+        String drugClass = classInfo.drugClass;
+        String drugSubclass = classInfo.drugSubclass;
+
+        // Check for controlled medication classes
+        if ("antipsychotic".equalsIgnoreCase(drugSubclass)) {
+            return true;
+        }
+
+        if ("antidepressant".equalsIgnoreCase(drugSubclass)) {
+            return true;
+        }
+
+        if ("benzodiazepine".equalsIgnoreCase(drugSubclass)) {
+            return true;
+        }           
+
+        if ("anxiolytic".equalsIgnoreCase(drugSubclass)) {
+            return true;
+        }
+        
+        if ("hypnotic".equalsIgnoreCase(drugSubclass)) {
+            return true;
+        }
+
+        // Check specific medication that might be hypnotics
+        String medNameLower = medicationName.toLowerCase();
+        if (medNameLower.contains("zopiclone") || 
+            medNameLower.contains("zopiclone") ||
+            medNameLower.contains("zopiclone")) {
+            return true;
+        }
+        return false;
+    }
+
+    private void showAlert() {
+        alertIcon.setVisible(true);
+        alertMessage.setVisible(true);
+        alertYesBtn.setVisible(true);
+        alertNoBtn.setVisible(true);
+        
+        // Make the panel repaint to show the alert
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void hideAlert() {
+        alertIcon.setVisible(false);
+        alertMessage.setVisible(false);
+        alertYesBtn.setVisible(false);
+        alertNoBtn.setVisible(false);
+        this.revalidate();
+        this.repaint();
     }
 
 

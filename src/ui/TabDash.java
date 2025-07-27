@@ -4,6 +4,7 @@ import javax.swing.*;
 import src.data_managers.AppointmentDataManager;
 import src.data_managers.MHADataManager;
 import src.data_managers.MedicationDatabase;
+import src.data_managers.MonitoringDataManager;
 import src.data_managers.PatientDataManager;
 import src.data_managers.PhysicalHealthDataManager;
 import src.model.Patient;
@@ -57,6 +58,7 @@ public class TabDash {
             PhysicalHealthDataManager.loadPatientPhysicalHealth(patient);
             MHADataManager.loadPatientMHAdata(patient);
             AppointmentDataManager.loadPatientAppointments(patient);
+            MonitoringDataManager.loadPatientMonitoring(patient);
         }
         
         currentPatient = patients.isEmpty() ? null : patients.get(0);
@@ -126,6 +128,7 @@ public class TabDash {
             PhysicalHealthDataManager.loadPatientPhysicalHealth(newPatient);
             MHADataManager.loadPatientMHAdata(newPatient);
             AppointmentDataManager.loadPatientAppointments(newPatient);
+            MonitoringDataManager.loadPatientMonitoring(newPatient);
 
             // Set as current patient
             currentPatient = newPatient;
@@ -175,6 +178,7 @@ public class TabDash {
         PatientDataManager.savePatient(currentPatient);
         PhysicalHealthDataManager.savePatientPhysicalHealth(currentPatient);
         AppointmentDataManager.savePatientAppointments(currentPatient);
+        MonitoringDataManager.savePatientMonitoring(currentPatient);
     }
 
     public void refreshMedicationPanel() {

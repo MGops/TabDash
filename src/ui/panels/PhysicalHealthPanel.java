@@ -61,5 +61,6 @@ public class PhysicalHealthPanel extends JPanel {
     public void refreshForNewPatient() {
         illnessListSection.refreshForNewPatient();
         appointmentsSection.refreshForNewPatient();
+        investigationsSection.refreshForNewPatient();
     }
 } 

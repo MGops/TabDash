@@ -1,9 +1,12 @@
 package src.ui.panels;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.SwingPropertyChangeSupport;
+
 import src.data_managers.MHADataManager;
 import src.data_managers.MedicationLookupService;
 import src.model.Patient;
@@ -23,6 +26,8 @@ public class MHAPanel extends JPanel{
     private JPanel pathwayPanel;
     private JCheckBox t3CheckBox;
     private JPanel s62Panel;
+    private JLabel s62AlertLabel;
+    private Date threeMthExpiry;
     private JPanel soadPanel;
     private JCheckBox mh03CheckBox;
     private JPanel middleSection;
@@ -318,7 +323,22 @@ public class MHAPanel extends JPanel{
         soadPanel.add(soadRefField);
         panel.add(soadPanel);
 
-        // S62 section(will appear after 3 months)
+
+        // S62 Alert label 
+        s62AlertLabel = new JLabel("⚠️ Detained patient. 3 month rule alert! Please complete S62");
+        s62AlertLabel.setOpaque(true);
+        s62AlertLabel.setBackground(Color.RED);
+        s62AlertLabel.setForeground(Color.WHITE);
+        s62AlertLabel.setFont(s62AlertLabel.getFont().deriveFont(Font.BOLD));
+        s62AlertLabel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.BLACK,2),
+            BorderFactory.createEmptyBorder(8,10,8,10)
+        ));
+        s62AlertLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        s62AlertLabel.setVisible(false);
+        panel.add(s62AlertLabel);
+
+        // S62 section(appears after 3 months)
         s62Panel = new JPanel((new FlowLayout(FlowLayout.LEFT)));
         s62CompletedChk = new JCheckBox("S62 completed");
         s62Panel.add(s62CompletedChk);
@@ -329,6 +349,7 @@ public class MHAPanel extends JPanel{
         s62Panel.add(s62DateField);
         s62Panel.setVisible(false);
         panel.add(s62Panel);
+
         // T3 section
         JPanel t3Panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         t3CheckBox = new JCheckBox("T3 Provided");
@@ -353,7 +374,10 @@ public class MHAPanel extends JPanel{
             public void changedUpdate(DocumentEvent e) {updatePatientAndSave();}        
         });
 
-        s62CompletedChk.addActionListener(e -> updatePatientAndSave());
+        s62CompletedChk.addActionListener(e -> {
+            updateS62AlertVisibility();
+            updatePatientAndSave();
+        });
         s62DateField.addPropertyChangeListener("value", e -> updatePatientAndSave());
 
         //Modify existing T3 ActionListener
@@ -362,9 +386,11 @@ public class MHAPanel extends JPanel{
             if (t3Selected) {
                 soadPanel.setVisible(false);
                 s62Panel.setVisible(false);
+                s62AlertLabel.setVisible(false);
             } else {
                 soadPanel.setVisible(true);
                 s62Panel.setVisible(true);
+                updateS62AlertVisibility();
             }
             panel.revalidate();
             panel.repaint();
@@ -376,6 +402,45 @@ public class MHAPanel extends JPanel{
         
         return panel;
     }
+
+
+    private void updateS62AlertVisibility() {
+        if (!mh03CheckBox.isSelected()) {
+            s62AlertLabel.setVisible(false);
+            return;
+        }
+
+        if (!section2Btn.isSelected() && !section3Btn.isSelected()) {
+            s62AlertLabel.setVisible(false);
+            return;
+        }
+
+        if (s62CompletedChk.isSelected()) {
+            s62AlertLabel.setVisible(false);
+            return;
+        }
+
+        if (t3CheckBox.isSelected()) {
+            s62AlertLabel.setVisible(false);
+            return;
+        }
+
+        if (!noCapacityBtn.isSelected()) {
+            s62AlertLabel.setVisible(false);
+            return;
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(threeMthExpiry);
+        cal.add(Calendar.DAY_OF_MONTH, -3);
+        Date s62alertDate = cal.getTime();
+
+        Date today = new Date();
+
+        boolean shouldShowS62Alert = today.compareTo(s62alertDate) >= 0;
+        s62AlertLabel.setVisible(shouldShowS62Alert);
+    }
+
 
     private JPanel createHasCapacityPathway() {
         JPanel panel = new JPanel();
@@ -602,7 +667,7 @@ public class MHAPanel extends JPanel{
         );
 
         if (choice >= 0) {
-            JOptionPane.showMessageDialog(this, "You selected: " + options[choice]);
+            JOptionPane.showMessageDialog(this, "To do: " + options[choice]);
         }
     }
 
@@ -640,11 +705,15 @@ public class MHAPanel extends JPanel{
             return;
         }
 
-        if (detentionDateField.getValue() == null) return;
+        if (detentionDateField.getValue() == null) {
+            threeMthExpiry = null;
+            return;
+        }
         
         // Check if patient is currently detained
         if (!section2Btn.isSelected() && !section3Btn.isSelected()) {
             clearExpiryDisplays();
+            threeMthExpiry = null;
             return;
         }
         Date detentionDate = (Date) detentionDateField.getValue();
@@ -670,7 +739,7 @@ public class MHAPanel extends JPanel{
 
         cal.setTime(originalDetentionDate != null ? originalDetentionDate : detentionDate); // Calculate 3 month-rule expiries
         cal.add(Calendar.MONTH, 3);
-        Date threeMthExpiry = cal.getTime();
+        threeMthExpiry = cal.getTime();
 
         updateExpiryDisplays(sectionExpiry, threeMthExpiry);
     }
@@ -802,6 +871,9 @@ public class MHAPanel extends JPanel{
         s62CompletedChk.setSelected(false);
         s62DateField.setValue(null);
         s62Panel.setVisible(false);
+        if (s62AlertLabel != null) {
+            s62AlertLabel.setVisible(false);
+        }
 
         // Clear T3 fields
         t3CheckBox.setSelected(false);
@@ -925,6 +997,11 @@ public class MHAPanel extends JPanel{
         if (patient.getOtherLeave() != null) {
             otherLeaveTextArea.setText(patient.getOtherLeave());
         }
+
+        SwingUtilities.invokeLater(() -> {
+            updateS62AlertVisibility();
+        });
+        
         autoSaveEnabled = true;
     }
 

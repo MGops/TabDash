@@ -163,10 +163,12 @@ public class MHAPanel extends JPanel{
         section2Btn.addActionListener(e -> {
             updateDetentionFieldVisibility();
             updatePatientAndSave();
+            SwingUtilities.invokeLater(() -> updateS62AlertVisibility());
         });
         section3Btn.addActionListener(e -> {
             updateDetentionFieldVisibility();
             updatePatientAndSave();
+            SwingUtilities.invokeLater(() -> updateS62AlertVisibility());
         });
         informalBtn.addActionListener(e -> {
             updateDetentionFieldVisibility();
@@ -206,6 +208,9 @@ public class MHAPanel extends JPanel{
         mh03CheckBox.addActionListener(e -> {
             boolean mh03Completed = mh03CheckBox.isSelected();
             enableMHAFunctionality(mh03Completed);
+            if (mh03Completed) {
+                SwingUtilities.invokeLater(() -> updateS62AlertVisibility());
+            }
         });
         
         return topPanel;
@@ -279,6 +284,7 @@ public class MHAPanel extends JPanel{
             cardLayout.show(pathwayPanel, "NO_CAPACITY");
             showCapacityChangeMh03Alert();
             updatePatientAndSave();
+            updateS62AlertVisibility();
         });
 
         yesCapacityBtn.addActionListener(e -> {
@@ -742,6 +748,7 @@ public class MHAPanel extends JPanel{
         threeMthExpiry = cal.getTime();
 
         updateExpiryDisplays(sectionExpiry, threeMthExpiry);
+        updateS62AlertVisibility();
     }
 
 
@@ -1001,7 +1008,7 @@ public class MHAPanel extends JPanel{
         SwingUtilities.invokeLater(() -> {
             updateS62AlertVisibility();
         });
-        
+
         autoSaveEnabled = true;
     }
 

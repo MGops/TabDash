@@ -331,7 +331,7 @@ public class MHAPanel extends JPanel{
 
 
         // S62 Alert label 
-        s62AlertLabel = new JLabel("⚠️ Detained patient. 3 month rule alert! Please complete S62");
+        s62AlertLabel = new JLabel("⚠ Detained patient. 3 month rule alert! Please complete S62");
         s62AlertLabel.setOpaque(true);
         s62AlertLabel.setBackground(Color.RED);
         s62AlertLabel.setForeground(Color.WHITE);
@@ -479,8 +479,8 @@ public class MHAPanel extends JPanel{
         alertPanel.setBorder(BorderFactory.createTitledBorder("Alerts"));
 
         //Medication change alert - intitially hidden
-        alertIcon = new JLabel("❗");
-        alertMessage = new JLabel("Medication changed- review required");
+        alertIcon = new JLabel("⚠");
+        alertMessage = new JLabel("Medication changed- CTT review required");
         alertYesBtn = new JButton("Yes");
         alertNoBtn = new JButton("No");
 
@@ -687,21 +687,13 @@ public class MHAPanel extends JPanel{
 
 
     private void showCapacityChangeMh03Alert() { // shows alert to redo MH03 when capacity changed
-        int result = JOptionPane.showConfirmDialog(
+        JOptionPane.showConfirmDialog(
             this,
-            "Capacity status changed. Please redo MH03 form.\n\nDo you want to update MH03 now?", 
+            "Capacity status changed. Please redo MH03 form.", 
             "Capacity changed",
-            JOptionPane.YES_NO_OPTION,
+            JOptionPane.OK_OPTION,
             JOptionPane.WARNING_MESSAGE
         );
-
-        if (result == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(
-                this,
-                "Please complete MH03 form again.",
-                "MH03 Reset",
-                JOptionPane.INFORMATION_MESSAGE);
-        }
     }
 
 
@@ -1147,14 +1139,6 @@ public class MHAPanel extends JPanel{
             return;
         }
 
-        // Only trigger if past 3 month period
-        boolean pastThreeMonths = currentPatient.isT2Completed() ||
-                                currentPatient.isT3Provided() ||
-                                currentPatient.isS62Completed();
-        
-        if (!pastThreeMonths) {
-            return;
-        }
 
         // Only trigger for specific medication classes
         if (isControlledMedicationClass(medicationName)) {

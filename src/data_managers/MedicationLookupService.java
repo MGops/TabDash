@@ -56,4 +56,39 @@ public class MedicationLookupService {
         MedicationClassInfo info = medicationClasses.get(medicationName.toLowerCase());
         return info;
     }
+
+
+    public boolean isPsychotropicMedication(String medName) {
+        MedicationClassInfo classInfo = getClassInfo(medName);
+        if (classInfo == null) {
+            return false;
+        }
+
+        String drugClass = classInfo.drugClass != null ? classInfo.drugClass.toLowerCase(): "";
+        String drugSubClass = classInfo.drugSubclass != null ? classInfo.drugSubclass.toLowerCase(): "";
+
+        if (drugClass.equals("antidepressant") ||
+            drugClass.equals("antipsychotic") ||
+            drugClass.equals("anxiolytic") ||
+            drugClass.equals("mood_stabiliser")) {
+            return true;
+        }
+
+        if (drugSubClass.equals("benzodiazepine") ||
+            drugSubClass.equals("ssri") ||
+            drugSubClass.equals("tca") ||
+            drugSubClass.equals("snri") || 
+            drugSubClass.equals("maoi")) {
+            return true;
+        }
+
+        String medNameLower = medName.toLowerCase();
+        if (medNameLower.contains("zopiclone") || 
+            medNameLower.contains("zopiclone") || 
+            medNameLower.contains("zopiclone")) {
+            return true;
+        }
+        
+        return false;
+    }
 }

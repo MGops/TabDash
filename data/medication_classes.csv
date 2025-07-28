@@ -108,3 +108,18 @@ lactulose,laxative,
 docusate,laxative,
 pregabalin,anxiolytic
 buspirone, anxiolytic
+lithium,mood_stabiliser,
+sodium_valproate,mood_stabiliser,
+lamotrigine,mood_stabiliser,
+venlafaxine,antidepressant,snri
+duloxetine,antidepressant,snri
+mirtazapine,antidepressant,
+trazodone,antidepressant,
+agomelatine,antidepressant,
+bupropion,antidepressant,
+zopiclone,anxiolytic,z_drug
+zolpidem,anxiolytic,z_drug
+zaleplon,anxiolytic,z_drug
+buspirone,anxiolytic,
+pregabalin,anxiolytic,
+gabapentin,anxiolytic,

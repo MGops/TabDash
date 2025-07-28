@@ -17,6 +17,7 @@ import java.util.Calendar;
 
 public class MHAPanel extends JPanel{
     private TabDash tabDash;
+    private MedicationLookupService medicationLookupService;
     private JRadioButton noCapacityBtn;
     private JRadioButton yesCapacityBtn;
     private JPanel pathwayPanel;
@@ -63,6 +64,7 @@ public class MHAPanel extends JPanel{
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
+        this.medicationLookupService = new MedicationLookupService();
         setLayout(new BorderLayout());
         initialiseComponents();
     }
@@ -1077,45 +1079,7 @@ public class MHAPanel extends JPanel{
     }
 
     private boolean isControlledMedicationClass(String medicationName) {
-        // Get medication class info
-        MedicationLookupService lookupService = new MedicationLookupService();
-        MedicationLookupService.MedicationClassInfo classInfo = lookupService.getClassInfo(medicationName);
-
-        if (classInfo == null) {
-            return false;
-        }
-
-        String drugClass = classInfo.drugClass;
-        String drugSubclass = classInfo.drugSubclass;
-
-        // Check for controlled medication classes
-        if ("antipsychotic".equalsIgnoreCase(drugClass)) {
-            return true;
-        }
-
-        if ("antidepressant".equalsIgnoreCase(drugClass)) {
-            return true;
-        }
-
-        if ("benzodiazepine".equalsIgnoreCase(drugSubclass)) {
-            return true;
-        }           
-
-        if ("anxiolytic".equalsIgnoreCase(drugSubclass)) {
-            return true;
-        }
-        
-        if ("hypnotic".equalsIgnoreCase(drugSubclass)) {
-            return true;
-        }
-
-        String medNameLower = medicationName.toLowerCase();
-        if (medNameLower.contains("zopiclone") || 
-            medNameLower.contains("zolpidem") ||
-            medNameLower.contains("zaleplon")) {
-            return true;
-        }
-        return false;
+        return medicationLookupService.isPsychotropicMedication(medicationName);
     }
 
     private void showAlert() {

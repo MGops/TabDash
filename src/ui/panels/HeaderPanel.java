@@ -1,15 +1,21 @@
 package src.ui.panels;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import src.ui.TabDash;
 
 public class HeaderPanel extends JPanel{
-    public HeaderPanel() {
+    private TabDash tabDash;
+    private JLabel initialsLabel;
+
+    public HeaderPanel(TabDash tabDash) {
+        this.tabDash = tabDash;
         setPreferredSize(new Dimension(800, 80));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new GridBagLayout());
@@ -19,7 +25,7 @@ public class HeaderPanel extends JPanel{
         coordinates.fill = GridBagConstraints.BOTH;
         coordinates.weighty = 1;
 
-        JLabel initialsLabel = new JLabel("Placeholder");
+        initialsLabel = new JLabel("Placeholder");
         coordinates.gridx = 0;
         coordinates.gridy = 0;
         coordinates.gridwidth = 4;
@@ -65,5 +71,16 @@ public class HeaderPanel extends JPanel{
         coordinates.gridwidth = 1;
         coordinates.weightx = 0;
         add(editButton, coordinates);
+    }
+
+
+    public void updatePatientInfo(String patientId) {
+        if (patientId != null && !patientId.trim().isEmpty()) {
+            initialsLabel.setText(patientId);
+            initialsLabel.setFont(initialsLabel.getFont().deriveFont(Font.BOLD, 20));
+        } else {
+            initialsLabel.setText("No patient selected");
+        }
+        repaint();
     }
 }

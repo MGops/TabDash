@@ -30,6 +30,7 @@ public class TabDash {
     private PhysicalHealthPanel physicalHealthPanel;
     private NotesPanel notesPanel;
     private SidePanel sidePanel;
+    private HeaderPanel headerPanel;
 
     public TabDash() {
         patients = new ArrayList<>();
@@ -80,8 +81,8 @@ public class TabDash {
 
         MedicationDatabase medDatabase = new MedicationDatabase();
         
-        HeaderPanel panelNorth = new HeaderPanel();
-        mainPanel.add(panelNorth, BorderLayout.NORTH);
+        headerPanel = new HeaderPanel(this);
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
 
         sidePanel = new SidePanel(this);
         mainPanel.add(sidePanel, BorderLayout.WEST);
@@ -170,6 +171,13 @@ public class TabDash {
         currentPatient = null;
     }
 
+    private void updateHeaderPanel() {
+        if (headerPanel != null) {
+            String patientID = (currentPatient != null) ? currentPatient.getPatientId() : null;
+            headerPanel.updatePatientInfo(patientID);
+        }
+    }
+
 
     public void onPatientDataChanged() {
         if (currentPatient == null) {
@@ -213,6 +221,7 @@ public class TabDash {
         if (notesPanel != null) {
             notesPanel.refreshForNewPatient();
         }
+        updateHeaderPanel();
     }
 
     // Method to set the patient list reference

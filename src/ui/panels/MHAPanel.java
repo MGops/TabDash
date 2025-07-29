@@ -485,8 +485,8 @@ public class MHAPanel extends JPanel{
         alertNoBtn = new JButton("No");
 
         // Set small button size
-        alertYesBtn.setPreferredSize(new Dimension(50, 25));
-        alertNoBtn.setPreferredSize(new Dimension(50,25));;
+        alertYesBtn.setPreferredSize(new Dimension(75, 25));
+        alertNoBtn.setPreferredSize(new Dimension(75,25));;
         alertPanel.add(alertIcon);
         alertPanel.add(alertMessage);
         alertPanel.add(Box.createHorizontalStrut(10));

@@ -2,6 +2,7 @@ package src.ui;
 import javax.swing.*;
 
 import src.data_managers.AppointmentDataManager;
+import src.data_managers.HeaderDataManager;
 import src.data_managers.MHADataManager;
 import src.data_managers.MedicationDatabase;
 import src.data_managers.MonitoringDataManager;
@@ -131,6 +132,7 @@ public class TabDash {
             MHADataManager.loadPatientMHAdata(newPatient);
             AppointmentDataManager.loadPatientAppointments(newPatient);
             MonitoringDataManager.loadPatientMonitoring(newPatient);
+            HeaderDataManager.loadPatientHeaderData(newPatient);
 
             // Set as current patient
             currentPatient = newPatient;
@@ -188,6 +190,7 @@ public class TabDash {
         PhysicalHealthDataManager.savePatientPhysicalHealth(currentPatient);
         AppointmentDataManager.savePatientAppointments(currentPatient);
         MonitoringDataManager.savePatientMonitoring(currentPatient);
+        HeaderDataManager.savePatientHeaderData(currentPatient);
     }
 
     public MHAPanel getMHAPanel() {
@@ -237,5 +240,4 @@ public class TabDash {
         }
         refreshAllPanels();
     }
-
 }

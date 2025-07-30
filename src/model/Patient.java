@@ -34,6 +34,10 @@ public class Patient {
     private List<String> physicalHealthConditions;
     private List<Appointment> appointments;
     private List<MonitoringIssue> monitoringIssues;
+    private String careCoordinator;
+    private String resusStatus;
+    private String namedNurse;
+    private String cmht;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -42,6 +46,7 @@ public class Patient {
         this.appointments = new ArrayList<>();
         this.monitoringIssues = new ArrayList<>();
         initialiseMHAFields();
+        initialiseHeaderFields();
     }
 
     private void initialiseMHAFields() {
@@ -67,6 +72,14 @@ public class Patient {
         this.emergencyMedicalLeave = false;
         this.otherLeave = "";
     }
+
+    private void initialiseHeaderFields() {
+        this.careCoordinator = "";
+        this.resusStatus = "For resus";
+        this.namedNurse = "";
+        this.cmht = "";
+    }
+
 
     public void resetMHAdata() {
         initialiseMHAFields();
@@ -223,5 +236,39 @@ public class Patient {
     public void removeMonitoringIssue(MonitoringIssue issue) {
         this.monitoringIssues.remove(issue);
     }
+
+    public String getCareCoordinator() {
+        return careCoordinator;
+    }
+
+    public void setCareCoordinator(String careCoordinator) {
+        this.careCoordinator = careCoordinator;
+    }
+
+    public String getResusStatus() {
+        return resusStatus;
+    }
+
+    public void setResusStatus(String resusStatus) {
+        this.resusStatus = resusStatus;
+    }
+
+    public String getNamedNurse() {
+        return namedNurse;
+    }
+
+    public void setNamedNurse(String namedNurse) {
+        this.namedNurse = namedNurse;
+    }
+
+    public String getCmht() {
+        return cmht;
+    }
+
+    public void setCmht(String cmht) {
+        this.cmht = cmht;
+    }
+
+
 
 }

@@ -60,7 +60,7 @@ public class HeaderDataManager {
                             patient.setCmht(value.isEmpty() ? "" : value);
                             break;
                         default:
-                            System.out.println("Unknown header field:" + key);
+                            System.out.println("Unknown header field: " + key);
                             break;
                     }
                 }

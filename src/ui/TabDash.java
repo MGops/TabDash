@@ -62,6 +62,7 @@ public class TabDash {
             MHADataManager.loadPatientMHAdata(patient);
             AppointmentDataManager.loadPatientAppointments(patient);
             MonitoringDataManager.loadPatientMonitoring(patient);
+            HeaderDataManager.loadPatientHeaderData(patient);
         }
         
         currentPatient = patients.isEmpty() ? null : patients.get(0);

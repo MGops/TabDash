@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -50,7 +49,7 @@ public class HeaderPanel extends JPanel{
         initialsLabel.setForeground(Color.WHITE);
         add(initialsLabel, coordinates);
 
-        JLabel careCoLabel = new JLabel("Care coordinator");
+        careCoLabel = new JLabel("Care coordinator");
         coordinates.gridx = 4;
         coordinates.gridy = 0;
         coordinates.gridwidth = 4;
@@ -58,7 +57,7 @@ public class HeaderPanel extends JPanel{
         careCoLabel.setForeground(Color.WHITE);
         add(careCoLabel, coordinates);
                 
-        JLabel resusLabel = new JLabel("Resus status");
+        resusLabel = new JLabel("Resus status");
         coordinates.gridx = 8;
         coordinates.gridy = 0;
         coordinates.gridwidth = 1;
@@ -66,7 +65,7 @@ public class HeaderPanel extends JPanel{
         resusLabel.setForeground(Color.WHITE);
         add(resusLabel, coordinates);
 
-        JLabel namedNurseLabel = new JLabel("Named nurse:");
+        namedNurseLabel = new JLabel("Named nurse:");
         coordinates.gridx = 0;
         coordinates.gridy = 1;
         coordinates.gridwidth = 4;
@@ -74,7 +73,7 @@ public class HeaderPanel extends JPanel{
         namedNurseLabel.setForeground(Color.WHITE);
         add(namedNurseLabel, coordinates);
 
-        JLabel cmhtLabel = new JLabel("CMHT: ");
+        cmhtLabel = new JLabel("CMHT: ");
         coordinates.gridx = 4;
         coordinates.gridy = 1;
         coordinates.gridwidth = 4;
@@ -83,6 +82,7 @@ public class HeaderPanel extends JPanel{
         add(cmhtLabel, coordinates);
         
         JButton editButton = new JButton("Edit");
+        editButton.addActionListener(e -> showEditDialog());
         coordinates.gridx = 8; 
         coordinates.gridy = 1;
         coordinates.gridwidth = 1;

@@ -1,5 +1,5 @@
 medication,condition,reason
-digoxin,heart_failure,No clear evidence of benefit for heart failure with normal systolic function
+digoxin,CHF,No clear evidence of benefit for heart failure with normal systolic function
 nsaid,peptic_ulcer_disease,Risk of peptic ulcer peptic_ulcer_disease
 ppi,peptic_ulcer_disease, Should be reviewed after 1-2 months for uncomplicated cases
 benzodiazepine,falls_history,Risk of increased falls_history

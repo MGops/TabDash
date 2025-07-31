@@ -79,12 +79,57 @@ public class StoppStartService {
 
 
     private boolean hasMatchingCondition(List<String> patientConditions, String ruleCondition) {
+        // Enhanced matching to handle synonyms and variations
+        String normalizedRuleCondition = ruleCondition.toLowerCase().replace("_", " ");
+        
         for (String condition : patientConditions) {
-            if (condition.contains(ruleCondition) || ruleCondition.contains(condition)) {
+            String normalizedCondition = condition.toLowerCase();
+            
+            // Direct match
+            if (normalizedCondition.equals(normalizedRuleCondition)) {
+                return true;
+            }
+            
+            // Check if rule condition contains patient condition or vice versa
+            if (normalizedCondition.contains(normalizedRuleCondition) || 
+                normalizedRuleCondition.contains(normalizedCondition)) {
+                return true;
+            }
+            
+            // Handle specific condition mappings
+            if (isConditionMatch(normalizedCondition, normalizedRuleCondition)) {
                 return true;
             }
         }
         return false;
+    }
+    
+    private boolean isConditionMatch(String patientCondition, String ruleCondition) {
+        // Handle specific condition synonyms
+        switch (ruleCondition) {
+            case "chf":
+                return patientCondition.equals("chf") || 
+                       patientCondition.contains("heart failure") || 
+                       patientCondition.contains("congestive heart failure") ||
+                       patientCondition.contains("hf");
+            
+            case "peptic ulcer disease":
+                return patientCondition.contains("peptic ulcer") || 
+                       patientCondition.contains("gastric ulcer") ||
+                       patientCondition.equals("gord");
+                       
+            case "dementia":
+                return patientCondition.contains("dementia") || 
+                       patientCondition.contains("alzheimer");
+                       
+            case "falls history":
+                // This might need to be tracked differently - for now just check for falls-related conditions
+                return patientCondition.contains("falls") || 
+                       patientCondition.contains("mobility");
+                       
+            default:
+                return false;
+        }
     }
 
 

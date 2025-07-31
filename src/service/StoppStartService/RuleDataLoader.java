@@ -53,6 +53,7 @@ public class RuleDataLoader {
         } catch (IOException e) {
             System.err.println("Error loading STOPP rules: " + e.getMessage());
         }
+        System.out.println("Loaded " + rules.size() + " STOPP rules");
         return rules;
     }
     

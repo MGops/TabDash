@@ -120,6 +120,8 @@ public class IllnessListSection extends JPanel{
         suggestionScroll.setPreferredSize(new Dimension(380, 100));
         suggestionScroll.setVisible(false);
 
+        populateAllConditions(suggestionModel);
+
         // Real-time search
         conditionField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {updateSuggestions();}
@@ -131,19 +133,14 @@ public class IllnessListSection extends JPanel{
                 suggestionModel.clear();
 
                 if (!searchText.isEmpty()) {
+                    populateAllConditions(suggestionModel);
+                } else {
                     List<PhysicalConditionService.SearchResult> results = 
                         conditionService.searchConditions(searchText);
                     
-                    if (!results.isEmpty()) {
-                        for (PhysicalConditionService.SearchResult result : results) {
-                            suggestionModel.addElement(result.getDisplayText());
-                        }
-                        suggestionScroll.setVisible(true);
-                    } else {
-                        suggestionScroll.setVisible(false);
+                    for (PhysicalConditionService.SearchResult result : results) {
+                        suggestionModel.addElement(result.getDisplayText());
                     }
-                } else {
-                    suggestionScroll.setVisible(false);
                 }
                 dialog.revalidate();
                 dialog.repaint();
@@ -158,15 +155,14 @@ public class IllnessListSection extends JPanel{
                 if (e.getClickCount() == 2) {
                     int selectedIndex = suggestionList.getSelectedIndex();
                     if (selectedIndex >= 0) {
-                        String searchText = conditionField.getText().trim();
-                        List<PhysicalConditionService.SearchResult> results =
-                            conditionService.searchConditions(searchText);
-                        if (selectedIndex < results.size()) {
-                            PhysicalConditionService.SearchResult selected = results.get(selectedIndex);
-                            conditionField.setText(selected.conditionName);
-                            suggestionScroll.setVisible(false);
-                            dialog.revalidate();
-                        }
+                        String selectedItem = suggestionModel.getElementAt(selectedIndex);
+                        String conditionName;
+                        if (selectedItem.contains(" (matched: ")) {
+                            conditionName = selectedItem.substring(0, selectedItem.indexOf(" (matched: "));
+                        } else {
+                            conditionName = selectedItem;
+                        } 
+                        conditionField.setText(conditionName);
                     }
                 }
             }
@@ -206,7 +202,27 @@ public class IllnessListSection extends JPanel{
             dialog.dispose();
         });
         cancelBtn.addActionListener(e -> dialog.dispose());
+        conditionField.requestFocusInWindow();
         dialog.setVisible(true);
+    }
+
+    private void populateAllConditions(DefaultListModel<String> model) {
+        java.util.Set<String> allConditions = new java.util.HashSet<>();
+        String[] commonStarters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
+                                  "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+        
+        for (String starter : commonStarters) {
+            List<PhysicalConditionService.SearchResult> results = conditionService.searchConditions(starter);
+            for (PhysicalConditionService.SearchResult result : results) {
+                allConditions.add(result.conditionName);
+            }
+        }
+        java.util.List<String> sortedConditions = new java.util.ArrayList<>(allConditions);
+        java.util.Collections.sort(sortedConditions);
+        
+        for (String condition : sortedConditions) {
+            model.addElement(condition);
+        }
     }
 
     private void removeSelectedCondition() {

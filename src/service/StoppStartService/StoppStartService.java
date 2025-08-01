@@ -57,10 +57,9 @@ public class StoppStartService {
 
                 String actualMedication = findMatchingPatientMedication(patientMedications, rule.medication);
 
-                String displayCondition = formatConditionForDisplay(rule.condition);
                 recommendations.add(new StoppRecommendation(
                     capitaliseFirst(actualMedication),
-                    displayCondition,
+                    rule.condition,
                     rule.reason
                 ));
             }
@@ -88,7 +87,7 @@ public class StoppStartService {
     private List<String> getPatientConditions(Patient patient) {
         List<String> conditions = new ArrayList<>();
         for (String condition : patient.getPhysicalHealthConditions()) {
-            conditions.add(condition.toLowerCase().replace(" ", "_"));
+            conditions.add(condition);
         }
         return conditions;
     }
@@ -158,64 +157,9 @@ public class StoppStartService {
             return true;
         }
 
-        // Enhanced matching to handle synonyms and variations
-        String normalisedRuleCondition = ruleCondition.toLowerCase().replace("_", " ");
-        
-        for (String condition : patientConditions) {
-            String normalisedCondition = condition.toLowerCase();
-            
-            // Direct match
-            if (normalisedCondition.equals(normalisedRuleCondition)) {
-                return true;
-            }
-            
-            // Check if rule condition contains patient condition or vice versa
-            if (normalisedCondition.contains(normalisedRuleCondition) || 
-                normalisedRuleCondition.contains(normalisedCondition)) {
-                return true;
-            }
-            
-            // Handle specific condition mappings
-            if (isConditionMatch(normalisedCondition, normalisedRuleCondition)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private boolean isConditionMatch(String patientCondition, String ruleCondition) {
-        // Handle specific condition synonyms
-        switch (ruleCondition) {
-            case "heart failure":
-                return patientCondition.equals("chf") || 
-                       patientCondition.contains("heart failure") || 
-                       patientCondition.contains("congestive heart failure") ||
-                       patientCondition.contains("hf");
-            
-            case "peptic ulcer disease":
-                return patientCondition.contains("peptic ulcer") || 
-                       patientCondition.contains("gastric ulcer") ||
-                       patientCondition.equals("gord");
-                       
-            case "dementia":
-                return patientCondition.contains("dementia") || 
-                       patientCondition.contains("alzheimer");
-                       
-            case "falls history":
-                // This might need to be tracked differently - for now just check for falls-related conditions
-                return patientCondition.contains("falls") || 
-                       patientCondition.contains("mobility");
-                       
-            default:
-                return false;
-        }
+        return patientConditions.contains(ruleCondition);
     }
 
-
-    private String formatConditionForDisplay(String condition) {
-        // Convert underscores to spaces and capitalize
-        return capitaliseFirst(condition.replace("_", " "));
-    }
 
     private String capitaliseFirst(String text) {
         if (text == null || text.isEmpty()) {

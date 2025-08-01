@@ -6,6 +6,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.BorderLayout;
@@ -45,22 +46,27 @@ public class StoppStart extends JPanel{
     private void initialiseComponents() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        Border empty = BorderFactory.createEmptyBorder();
 
         // STOPP Panel (light red background)
         stoppPanel = new JPanel();
         stoppPanel.setLayout(new BoxLayout(stoppPanel, BoxLayout.Y_AXIS));
         stoppPanel.setBackground(new Color(255, 230, 230)); // Light red
-        stoppPanel.setBorder(BorderFactory.createTitledBorder("STOPP"));
+        TitledBorder stoppTitledBorder = BorderFactory.createTitledBorder(empty,"STOPP");
+        stoppTitledBorder.setTitleJustification(TitledBorder.CENTER);
+        stoppPanel.setBorder(stoppTitledBorder);
         
         JScrollPane stoppScroll = new JScrollPane(stoppPanel);
         stoppScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         stoppScroll.setPreferredSize(new Dimension(200, 100));
 
-        // START Panel (light green background) - placeholder for tomorrow
+        // START Panel (light green background)
         startPanel = new JPanel();
         startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
         startPanel.setBackground(new Color(230, 255, 230)); // Light green
-        startPanel.setBorder(BorderFactory.createTitledBorder("START"));
+        TitledBorder startTitledBorder = BorderFactory.createTitledBorder(empty,"START");
+        startTitledBorder.setTitleJustification(TitledBorder.CENTER);
+        startPanel.setBorder(startTitledBorder);
         
         JScrollPane startScroll = new JScrollPane(startPanel);
         startScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

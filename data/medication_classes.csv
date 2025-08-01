@@ -129,3 +129,8 @@ lansoprazole,ppi,
 omeprazole,ppi,
 esomeprazole,ppi,
 pantoprazole,ppi,
+clopidogrel,
+warfarin,anticoagulant
+apixaban,anticoagulant,doac
+edoxaban,anticoagulant,doac
+rivaroxaban,anticoagulant,doac

@@ -1,7 +1,24 @@
 medication,condition,reason
 digoxin,CHF,No clear evidence of benefit for heart failure with normal systolic function
 h2_antagonist,Any condition,Consider PPI instead of H2 blocker for long-term use
-nsaid,Gastric ulcer,Risk of peptic ulcer disease
+nsaid,Gastric ulcer,Risk of peptic ulcer disease c/o concomitant PPI
 ppi,Gastric ulcer,Should be reviewed after 1-2 months for uncomplicated cases
 benzodiazepine,Falls,Risk of increased falls
 thiazide_diuretic,Hypokalaemia,In recent/ concurrent gout- can precipitate
+thiazide_diuretic,Hyponatraemia,In recent/ concurrent gout- can precipitate
+thiazide_diuretic,Hypercalcaemia,In recent/ concurrent gout- can precipitate
+loop_diuretic,Hypertension,Safer & more effective options available
+acei,Hyperkalaemia,Increased risk of this
+arb,Hyperkalaemia,Increased risk of this
+alpha_blocker,Hypertension,Less well tolerated by older people in combination with other antihypertensives
+propranolol,CHF,risk of increased bronchospasm
+nsaid,Atrial fibrillation,As monotherapy/ In combination with Warfarin/DOAC (no added benefit)
+nsaid,Hypertension,In severe HTN- high bleeding risk
+clopidogrel,Hypertension,In severe HTN- high bleeding risk
+warfarin,Hypertension,In severe HTN- high bleeding risk
+doac,Hypertension,In severe HTN- high bleeding risk
+warfarin,DVT,no proven added benefit for > 6 months (in absence of continuing provoking factors)
+warfarin,PE,no proven added benefit for > 12 months (in absence of continuing provoking factors)
+doac,DVT,no proven added benefit for > 6 months (in absence of continuing provoking factors)
+doac,PE,no proven added benefit for > 12 months (in absence of continuing provoking factors)
+

@@ -1,6 +1,6 @@
 medication,condition,reason
 digoxin,CHF,No clear evidence of benefit for heart failure with normal systolic function
-h2_antagonist,any_condition,Consider PPI instead of H2 blocker for long-term use
+h2_antagonist,Any condition,Consider PPI instead of H2 blocker for long-term use
 nsaid,Gastric ulcer,Risk of peptic ulcer disease
 ppi,Gastric ulcer,Should be reviewed after 1-2 months for uncomplicated cases
 benzodiazepine,Falls,Risk of increased falls

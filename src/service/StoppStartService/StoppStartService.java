@@ -153,7 +153,7 @@ public class StoppStartService {
 
     private boolean hasMatchingCondition(List<String> patientConditions, String ruleCondition) {
         // Special case: if rule condition is "any condition", always match
-        if (ruleCondition.equals("any_condition")) {
+        if (ruleCondition.equals("Any condition")) {
             return true;
         }
 

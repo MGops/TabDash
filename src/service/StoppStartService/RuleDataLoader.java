@@ -17,7 +17,7 @@ public class RuleDataLoader {
 
         public StoppRule(String medication, String condition, String reason) {
             this.medication = medication.toLowerCase().trim();
-            this.condition = condition.toLowerCase().trim();
+            this.condition = condition.trim();
             this.reason = reason.trim();
         }
     }

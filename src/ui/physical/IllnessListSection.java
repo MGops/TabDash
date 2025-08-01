@@ -108,7 +108,7 @@ public class IllnessListSection extends JPanel{
         dialog.setLocationRelativeTo(this);
 
         JPanel inputPanel = new JPanel(new FlowLayout());
-        inputPanel.add(new JLabel("Condition:"), BorderLayout.WEST);
+        inputPanel.add(new JLabel("Search:"), BorderLayout.WEST);
         JTextField conditionField = new JTextField(20);
         inputPanel.add(conditionField, BorderLayout.CENTER);
 
@@ -123,10 +123,16 @@ public class IllnessListSection extends JPanel{
 
         // Real-time search
         conditionField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {updateSuggestions();}
-            public void removeUpdate(DocumentEvent e) {updateSuggestions();}
-            public void changedUpdate(DocumentEvent e) {updateSuggestions();}
-            
+            public void insertUpdate(DocumentEvent e) {
+                SwingUtilities.invokeLater(() -> updateSuggestions());
+            }
+            public void removeUpdate(DocumentEvent e) {
+                SwingUtilities.invokeLater(() -> updateSuggestions());
+            }
+            public void changedUpdate(DocumentEvent e) {
+                SwingUtilities.invokeLater(() -> updateSuggestions());
+            }
+
             private void updateSuggestions() {
                 String searchText = conditionField.getText().trim();
                 suggestionModel.clear();
@@ -136,13 +142,16 @@ public class IllnessListSection extends JPanel{
                 } else {
                     List<PhysicalConditionService.SearchResult> results = 
                         conditionService.searchConditions(searchText);
-                    
-                    for (PhysicalConditionService.SearchResult result : results) {
-                        suggestionModel.addElement(result.getDisplayText());
+                    if (results.isEmpty()) {
+                        populateAllConditions(suggestionModel);
+                    } else {
+                        for (PhysicalConditionService.SearchResult result : results) {
+                            suggestionModel.addElement(result.getDisplayText());
+                        }
                     }
                 }
-                dialog.revalidate();
-                dialog.repaint();
+                suggestionList.revalidate();
+                suggestionList.repaint();
             }
         });
 
@@ -151,22 +160,27 @@ public class IllnessListSection extends JPanel{
         suggestionList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                int selectedIndex = suggestionList.getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    String selectedItem = suggestionModel.getElementAt(selectedIndex);
+                    String conditionName = extractConditionName(selectedItem);
+                    conditionField.setText(conditionName);
+                    if (e.getClickCount() == 2) {
+                        addConditionToPatient(currentPatient,conditionName,dialog);
+                    }
+                }
+            }
+        });
+
+        suggestionList.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
                     int selectedIndex = suggestionList.getSelectedIndex();
                     if (selectedIndex >= 0) {
                         String selectedItem = suggestionModel.getElementAt(selectedIndex);
-                        String conditionName;
-                        if (selectedItem.contains(" (matched: ")) {
-                            conditionName = selectedItem.substring(0, selectedItem.indexOf(" (matched: "));
-                        } else {
-                            conditionName = selectedItem;
-                        } 
+                        String conditionName = extractConditionName(selectedItem);
                         conditionField.setText(conditionName);
-
-                        if (e.getClickCount() == 2) {
-                            addConditionToPatient(currentPatient,conditionName,dialog);
-                            
-                        }
                     }
                 }
             }
@@ -217,6 +231,15 @@ public class IllnessListSection extends JPanel{
                 "This condition is already in the list.",
                 "Duplicate Condition",
                 JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+
+    private String extractConditionName(String displayText) {
+        if (displayText.contains(" (matched: ")) {
+            return displayText.substring(0, displayText.indexOf(" (matched: "));
+        } else {
+            return displayText;
         }
     }
 

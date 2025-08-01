@@ -1,6 +1,6 @@
 medication,condition,reason
-digoxin,CHF,No clear evidence of benefit for heart failure with normal systolic function
-nsaid,peptic_ulcer_disease,Risk of peptic ulcer peptic_ulcer_disease
-ppi,peptic_ulcer_disease, Should be reviewed after 1-2 months for uncomplicated cases
-benzodiazepine,falls_history,Risk of increased falls_history
-tricyclic_antidepressant,dementia,Risk of worsening cognitive impairment
+digoxin,heart_failure,No clear evidence of benefit for heart failure with normal systolic function
+h2_antagonist,any_condition,Consider PPI instead of H2 blocker for long-term use
+nsaid,peptic_ulcer_disease,Risk of peptic ulcer disease
+ppi,peptic_ulcer_disease,Should be reviewed after 1-2 months for uncomplicated cases
+benzodiazepine,falls_history,Risk of increased falls

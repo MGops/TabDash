@@ -59,6 +59,7 @@ public class MedicationPanel extends JPanel {
         cumulToxSection.refreshForNewPatient();
         cascadeSection.refreshForNewPatient();
         deprescribingSection.refreshForNewPatient();
+        stoppStartSection.refreshForNewPatient();
     }
 
     public void refreshMedicationData() {
@@ -66,5 +67,6 @@ public class MedicationPanel extends JPanel {
         cumulToxSection.refreshForNewPatient();
         cascadeSection.refreshForNewPatient();
         deprescribingSection.refreshForNewPatient();
+        stoppStartSection.refreshForNewPatient();
     }
 }

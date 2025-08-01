@@ -137,6 +137,13 @@ public class PhysicalConditionService {
     }
 
 
+    public List<String> getAllConditions() {
+        List<String> sortedConditions = new ArrayList<>(allConditions);
+        Collections.sort(sortedConditions);
+        return sortedConditions;
+    }
+
+
     public static class SearchResult {
         public final String conditionName;
         public final String matchedText;

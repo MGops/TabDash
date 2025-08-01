@@ -118,7 +118,6 @@ public class IllnessListSection extends JPanel{
         suggestionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane suggestionScroll = new JScrollPane(suggestionList);
         suggestionScroll.setPreferredSize(new Dimension(380, 100));
-        suggestionScroll.setVisible(false);
 
         populateAllConditions(suggestionModel);
 
@@ -163,6 +162,11 @@ public class IllnessListSection extends JPanel{
                             conditionName = selectedItem;
                         } 
                         conditionField.setText(conditionName);
+
+                        if (e.getClickCount() == 2) {
+                            addConditionToPatient(currentPatient,conditionName,dialog);
+                            
+                        }
                     }
                 }
             }
@@ -186,43 +190,43 @@ public class IllnessListSection extends JPanel{
         addBtn.addActionListener(e -> {
             String condition = conditionField.getText().trim();
             if (!condition.isEmpty()) {
-                if (!currentPatient.getPhysicalHealthConditions().contains(condition)) {
-                    currentPatient.addPhysicalHealthConditions(condition);
-                    tabDash.onPatientDataChanged();
-                    loadPatientConditions();
-                    tabDash.refreshMedicationPanel();
-                } else {
-                    JOptionPane.showMessageDialog(dialog,
-                        "This condition is already in the list.",
-                        "Duplicate Condition",
-                        JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+                addConditionToPatient(currentPatient, condition, dialog);
+            } else {
+                JOptionPane.showMessageDialog(dialog,
+                    "Please enter or select a condition.",
+                    "No Condition Selected",
+                    JOptionPane.WARNING_MESSAGE);
             }
-            dialog.dispose();
         });
+
         cancelBtn.addActionListener(e -> dialog.dispose());
-        conditionField.requestFocusInWindow();
+        SwingUtilities.invokeLater(() -> conditionField.requestFocusInWindow());
         dialog.setVisible(true);
     }
 
-    private void populateAllConditions(DefaultListModel<String> model) {
-        java.util.Set<String> allConditions = new java.util.HashSet<>();
-        String[] commonStarters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
-                                  "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-        
-        for (String starter : commonStarters) {
-            List<PhysicalConditionService.SearchResult> results = conditionService.searchConditions(starter);
-            for (PhysicalConditionService.SearchResult result : results) {
-                allConditions.add(result.conditionName);
-            }
+
+    private void addConditionToPatient(Patient patient, String condition, JDialog dialog) {
+        if (!patient.getPhysicalHealthConditions().contains(condition)) {
+            patient.addPhysicalHealthConditions(condition);
+            tabDash.onPatientDataChanged();
+            loadPatientConditions();
+            tabDash.refreshMedicationPanel();
+            dialog.dispose();
+        } else {
+            JOptionPane.showMessageDialog(dialog,
+                "This condition is already in the list.",
+                "Duplicate Condition",
+                JOptionPane.WARNING_MESSAGE);
         }
-        java.util.List<String> sortedConditions = new java.util.ArrayList<>(allConditions);
-        java.util.Collections.sort(sortedConditions);
+    }
+
+    private void populateAllConditions(DefaultListModel<String> model) {
+        List<String> allConditions = conditionService.getAllConditions();
         
-        for (String condition : sortedConditions) {
+        for (String condition : allConditions) {
             model.addElement(condition);
         }
+        System.out.println("Populated " + allConditions.size() + "conditions");
     }
 
     private void removeSelectedCondition() {

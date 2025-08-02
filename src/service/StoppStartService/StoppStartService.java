@@ -87,7 +87,7 @@ public class StoppStartService {
             System.out.println("Checking START rule: " + rule.condition + " -> " + rule.medication);
 
             boolean conditionMatch = patientConditions.contains(rule.condition);
-            boolean alreadyHasMed = hasMatchingMedication(patientMedications, null);
+            boolean alreadyHasMed = hasMatchingMedication(patientMedications, rule.medication);
 
             System.out.println(" Condition match: " + conditionMatch);
             System.out.println(" Already has medication: " + alreadyHasMed);

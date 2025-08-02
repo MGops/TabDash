@@ -27,7 +27,7 @@ public class RuleDataLoader {
         public final String medication;
         public final String reason;
 
-        public StartRule(String medication, String condition, String reason) {
+        public StartRule(String condition, String medication, String reason) {
             this.condition = condition.toLowerCase().trim();
             this.medication = medication.toLowerCase().trim();
             this.reason = reason.trim();
@@ -61,7 +61,7 @@ public class RuleDataLoader {
     public List<StartRule> loadStartRules() {
         List<StartRule> rules = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(STOPP_RULES_FILE))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(START_RULES_FILE))){
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",", 3);

@@ -143,16 +143,14 @@ public class IllnessListSection extends JPanel{
                     populateAllConditions(suggestionModel);
                 } else {
                     // Show filtered search results
-                    List<PhysicalConditionService.SearchResult> results = 
-                        conditionService.searchConditions(searchText);
+                    List<String> results = conditionService.searchConditions(searchText);
                     
                     if (results.isEmpty()) {
-                        // If no search results, still show all conditions for browsing
+                        // If no search results, still show all conditions
                         populateAllConditions(suggestionModel);
                     } else {
-                        for (PhysicalConditionService.SearchResult result : results) {
-                            String displayText = result.getDisplayText();
-                            suggestionModel.addElement(displayText);
+                        for (String condition : results) {
+                            suggestionModel.addElement(condition);
                         }
                     }
                 }
@@ -170,9 +168,6 @@ public class IllnessListSection extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 int selectedIndex = suggestionList.getSelectedIndex();
                 if (selectedIndex >= 0) {
-                    String selectedItem = suggestionModel.getElementAt(selectedIndex);
-                    
-                    // Extract the actual condition name (remove synonym info if present)
                     String selectedCondition = suggestionModel.getElementAt(selectedIndex);
                     conditionField.setText(selectedCondition);
                     

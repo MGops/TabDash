@@ -20,6 +20,7 @@ import src.service.StoppStartService.StoppStartService;
 import src.service.StoppStartService.StoppRecommendation;
 import src.service.StoppStartService.StartRecommendation;
 import src.ui.TabDash;
+import src.utils.UIUtils;
 
 public class StoppStart extends JPanel{
     private MedicationDatabase medDatabase;
@@ -48,28 +49,34 @@ public class StoppStart extends JPanel{
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         Border empty = BorderFactory.createEmptyBorder();
 
-        // STOPP Panel (light red background)
+        // STOPP Panel
         stoppPanel = new JPanel();
         stoppPanel.setLayout(new BoxLayout(stoppPanel, BoxLayout.Y_AXIS));
-        stoppPanel.setBackground(new Color(255, 230, 230)); // Light red
+        stoppPanel.setBackground(new Color(255, 235, 235)); 
         TitledBorder stoppTitledBorder = BorderFactory.createTitledBorder(empty,"STOPP");
+        stoppTitledBorder.setTitleFont(getFont().deriveFont(Font.BOLD, 12f));
         stoppTitledBorder.setTitleJustification(TitledBorder.CENTER);
+        stoppTitledBorder.setTitleColor(new Color(150,0,0));
         stoppPanel.setBorder(stoppTitledBorder);
         
         JScrollPane stoppScroll = new JScrollPane(stoppPanel);
         stoppScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        stoppScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         stoppScroll.setPreferredSize(new Dimension(200, 100));
 
-        // START Panel (light green background)
+        // START Panel
         startPanel = new JPanel();
         startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
-        startPanel.setBackground(new Color(230, 255, 230)); // Light green
+        startPanel.setBackground(new Color(235, 255, 235)); // Light green
         TitledBorder startTitledBorder = BorderFactory.createTitledBorder(empty,"START");
+        startTitledBorder.setTitleFont(getFont().deriveFont(Font.BOLD, 12f));
         startTitledBorder.setTitleJustification(TitledBorder.CENTER);
+        startTitledBorder.setTitleColor(new Color(0,120,0));
         startPanel.setBorder(startTitledBorder);
         
         JScrollPane startScroll = new JScrollPane(startPanel);
         startScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        startScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         startScroll.setPreferredSize(new Dimension(200, 100));
 
         mainPanel.add(stoppScroll);
@@ -95,30 +102,34 @@ public class StoppStart extends JPanel{
         List<StoppRecommendation> stoppRecommendations = stoppStartService.getStoppRecommendations(currentPatient);
 
         if (stoppRecommendations.isEmpty()) {
-            JLabel noStoppLabel = new JLabel("No STOPP recommendations");
-            noStoppLabel.setForeground(Color.GRAY);
+            JLabel noStoppLabel = UIUtils.createInfoLabel("No STOPP recommendations", UIUtils.INFO_GRAY);
             stoppPanel.add(noStoppLabel);
         } else {
             for (StoppRecommendation recommendation : stoppRecommendations) {
-                JLabel medLabel = new JLabel(recommendation.getMedicationName());
-                medLabel.setToolTipText(recommendation.getTooltipText());
-                medLabel.setBorder(BorderFactory.createEmptyBorder(2,5,2,5));
+                JLabel medLabel = createRecommendationLabel(
+                    recommendation.getMedicationName(), 
+                    recommendation.getTooltipText(),
+                    new Color(180, 0, 0) // Dark red text
+                );
                 stoppPanel.add(medLabel);
+                stoppPanel.add(Box.createVerticalStrut(2));
             }
         }
 
         List<StartRecommendation> startRecommendations = stoppStartService.getStartRecommendations(currentPatient);
 
         if (startRecommendations.isEmpty()) {
-            JLabel noStartLabel = new JLabel("No START recommendations");
-            noStartLabel.setForeground(Color.GRAY);
+            JLabel noStartLabel = UIUtils.createInfoLabel("No START recommendations", UIUtils.INFO_GRAY);
             startPanel.add(noStartLabel);
         } else {
             for (StartRecommendation recommendation : startRecommendations) {
-                JLabel medLabel = new JLabel(recommendation.getMedicationName());
-                medLabel.setToolTipText(recommendation.getTooltipText());
-                medLabel.setBorder(BorderFactory.createEmptyBorder(2,5,2,5));
+                JLabel medLabel = createRecommendationLabel(
+                    recommendation.getMedicationName(),
+                    recommendation.getTooltipText(),
+                    new Color(0, 120, 0) // Dark green text
+                );
                 startPanel.add(medLabel);
+                startPanel.add(Box.createVerticalStrut(2));
             }
         }
 
@@ -128,6 +139,27 @@ public class StoppStart extends JPanel{
         startPanel.revalidate();
         startPanel.repaint();
     }
+
+
+    private JLabel createRecommendationLabel(String text, String tooltip, Color textColor) {
+        JLabel label = new JLabel("• " + text);
+        //label.setFont(label.getFont().deriveFont(Font.PLAIN, 11f));
+        label.setForeground(textColor);
+        label.setToolTipText(tooltip);
+        label.setBorder(BorderFactory.createEmptyBorder(3, 8, 3, 8));
+        label.setOpaque(false);
+        return label;
+    }
+
+    public JLabel createInfoLabel(String text, Color color) {
+        JLabel label = new JLabel(text);
+        label.setFont(label.getFont().deriveFont(Font.ITALIC, 11f));
+        label.setForeground(color);
+        label.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
+    }
+
 
     private void addNoPatientMessage() {
         JLabel noPatientLabel = new JLabel("No patient selected");

@@ -18,6 +18,7 @@ import src.model.Medication;
 import src.model.Patient;
 import src.service.CascadeService;
 import src.ui.TabDash;
+import src.utils.UIUtils;
 
 public class CascadeSection extends JPanel {
     private MedicationDatabase medDatabase;
@@ -82,8 +83,7 @@ public class CascadeSection extends JPanel {
 
         // Display results
         if (foundCascades.isEmpty()) {
-            JLabel noCascadeLabel = new JLabel("No prescribing cascades detected");
-            noCascadeLabel.setForeground(Color.GRAY);
+            JLabel noCascadeLabel = UIUtils.createInfoLabel("No prescribing cascades detected", UIUtils.INFO_GRAY);
             cascadeDisplayPanel.add(noCascadeLabel);
         } else {
             for (CascadeDetection cascade : foundCascades) {
@@ -110,7 +110,7 @@ public class CascadeSection extends JPanel {
         JLabel mainLabel = new JLabel("<html><b>" + cascade.causativeMed.toUpperCase() +
             "</b> --> ?<b>" + cascade.sideEffect +
             "</b> --> ?<b>" + cascade.cascadeMed.toUpperCase() + "</html>");
-        mainLabel.setFont(mainLabel.getFont().deriveFont(Font.PLAIN, 12f));
+        //mainLabel.setFont(mainLabel.getFont().deriveFont(Font.PLAIN, 12f));
         panel.add(mainLabel);
         return panel;
     }

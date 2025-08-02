@@ -18,6 +18,7 @@ import src.model.Patient;
 import src.service.DeprescribingService;
 import src.service.DeprescribingService.DeprescribingCategory;
 import src.ui.TabDash;
+import src.utils.UIUtils;
 
 public class DeprescribingSection extends JPanel {
     private MedicationDatabase medDatabase;
@@ -90,8 +91,7 @@ public class DeprescribingSection extends JPanel {
 
         // Show message if no deprescribing considerations found
         if (!hasAnyMeds) {
-            JLabel noDeprescribingLabel = new JLabel("No deprescribing considerations detected");
-            noDeprescribingLabel.setForeground(Color.GRAY);
+            JLabel noDeprescribingLabel = UIUtils.createInfoLabel("No deprescribing considerations evident", UIUtils.INFO_GRAY);
             columnsPanel.add(noDeprescribingLabel);
         }
 

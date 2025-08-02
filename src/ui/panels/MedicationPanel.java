@@ -54,6 +54,7 @@ public class MedicationPanel extends JPanel {
         add(cascadeSection, gbc);
     }
 
+
     public void refreshForNewPatient() {
         acbSection.refreshForNewPatient();
         cumulToxSection.refreshForNewPatient();

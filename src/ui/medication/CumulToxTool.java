@@ -17,6 +17,7 @@ import src.model.Medication;
 import src.model.Patient;
 import src.service.ADRService;
 import src.ui.TabDash;
+import src.utils.UIUtils;
 
 public class CumulToxTool extends JPanel {
     private MedicationDatabase medDatabase;
@@ -70,8 +71,7 @@ public class CumulToxTool extends JPanel {
         adrDisplayPanel.removeAll(); // Clear prev results
         Patient currentPatient = tabDash.getCurrentPatient();
         if (currentPatient == null) {
-            JLabel noPatientLabel = new JLabel("No patient selected");
-            noPatientLabel.setForeground(Color.GRAY);
+            JLabel noPatientLabel = UIUtils.createInfoLabel("No patient selected", UIUtils.INFO_GRAY);
             adrDisplayPanel.add(noPatientLabel);
             adrDisplayPanel.revalidate();
             adrDisplayPanel.repaint();
@@ -107,8 +107,7 @@ public class CumulToxTool extends JPanel {
         }
         
         if (sortedADRs.isEmpty()) {
-            JLabel noADRLabel = new JLabel("No ADRs detected for current medications");
-            noADRLabel.setForeground(Color.GRAY);
+            JLabel noADRLabel = UIUtils.createInfoLabel("No ADRs detected for current medications", UIUtils.INFO_GRAY);
             adrDisplayPanel.add(noADRLabel);
         }
 

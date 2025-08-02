@@ -10,19 +10,16 @@ public class PhysicalConditionService {
     private static final String CONDITIONS_FILE = "data/physical_health_conditions.csv";
     private Set<String> allConditions;
     private Map<String, ConditionInfo> conditionDetails;
-    private Map<String, String> synonymToCondition;
 
     // Data container for all information about a condition
     // Gets returned when UI needs full details about a condition
     public static class ConditionInfo {
         public final String name;
         public final String category;
-        public final List<String> synonyms;
 
-        public ConditionInfo(String name, String category, List<String> synonyms) {
+        public ConditionInfo(String name, String category) {
             this.name = name;
             this.category = category;
-            this.synonyms = synonyms;
         }
     }
 
@@ -31,7 +28,6 @@ public class PhysicalConditionService {
     public PhysicalConditionService() {
         allConditions = new HashSet<>();
         conditionDetails = new HashMap<>();
-        synonymToCondition = new HashMap<>();
         loadConditionsFromCSV();
     }
 
@@ -42,26 +38,13 @@ public class PhysicalConditionService {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] parts = parseCSVLine(line);
-                if (parts.length >= 3) {
+                if (parts.length >= 2) {
                     String conditionName = parts[0].trim();
                     String category = parts[1].trim();
-                    String synonymStr = parts[2].trim();
 
-                    List<String> synonyms = new ArrayList<>();
-                    if (!synonymStr.isEmpty() && !synonymStr.equals("\"\"")) {
-                        synonymStr = synonymStr.replaceAll("^\"|\"$", "");
-                        for (String synonym : synonymStr.split(",")) {
-                            String cleanedSynonym = synonym.trim();
-                            if (!cleanedSynonym.isEmpty()) {
-                                synonyms.add(cleanedSynonym);
-                                // Map synonym to main condition; lowecase so search is case insensitive
-                                synonymToCondition.put(cleanedSynonym.toLowerCase(), conditionName);
-                            }
-                        }
-                    }
                     allConditions.add(conditionName); // Store condition name in main set
                     conditionDetails.put(conditionName.toLowerCase(), 
-                        new ConditionInfo(conditionName, category, synonyms));
+                        new ConditionInfo(conditionName, category));
                 }
             }
         } catch (IOException e) {
@@ -91,40 +74,28 @@ public class PhysicalConditionService {
         return result.toArray(new String[0]);
     }
 
-    public List<SearchResult> searchConditions(String searchText) {
+    public List<String> searchConditions(String searchText) {
         if (searchText == null || searchText.trim().isEmpty()) {
             return new ArrayList<>();
         }
 
         String lowerSearch = searchText.toLowerCase();
-        List<SearchResult> results = new ArrayList<>();
+        List<String> results = new ArrayList<>();
 
         // Search main condition names
         for (String condition : allConditions) {
             if (condition.toLowerCase().contains(lowerSearch)) {
-                results.add(new SearchResult(condition, condition, false));
+                results.add(condition);
             }
         }
-
-        // Search synonyms
-        for (Map.Entry<String, String> entry : synonymToCondition.entrySet()) {
-            String synonym = entry.getKey();
-            String mainCondition = entry.getValue();
-            if (synonym.contains(lowerSearch)) {
-                results.add(new SearchResult(mainCondition, synonym, true));
-            }
-        }
-
         // Sort results alphabetically
         results.sort((a, b) -> {
             // Prioritize results that start with the search term
-            boolean aStarts = a.conditionName.toLowerCase().startsWith(lowerSearch);
-            boolean bStarts = b.conditionName.toLowerCase().startsWith(lowerSearch);
+            boolean aStarts = a.toLowerCase().startsWith(lowerSearch);
+            boolean bStarts = b.toLowerCase().startsWith(lowerSearch);
             if (aStarts && !bStarts) return -1;
             if (!aStarts && bStarts) return 1;
-            
-            // Then sort alphabetically
-            return a.conditionName.compareToIgnoreCase(b.conditionName);
+            return a.compareToIgnoreCase(b);
         });
 
         // Limit results to prevent overwhelming the UI
@@ -141,33 +112,8 @@ public class PhysicalConditionService {
     }
 
 
-    public static class SearchResult {
-        public final String conditionName;
-        public final String matchedText;
-        public final boolean isSynonymMatch;
-
-        public SearchResult(String conditionName, String matchedText, boolean isSynonymMatch) {
-            this.conditionName = conditionName;
-            this.matchedText = matchedText;
-            this.isSynonymMatch = isSynonymMatch;
-        }
-
-        public String getDisplayText() {
-            return conditionName;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof SearchResult)) return false;
-            SearchResult other = (SearchResult) obj;
-            return conditionName.equals(other.conditionName);
-        }
-
-        @Override
-        public int hashCode() {
-            return conditionName.hashCode();
-        }
+    public ConditionInfo getConditionInfo(String conditionName) {
+        return conditionDetails.get(conditionName.toLowerCase());
     }
 
     // Fallback conditions if CSV fails to load

@@ -173,13 +173,12 @@ public class IllnessListSection extends JPanel{
                     String selectedItem = suggestionModel.getElementAt(selectedIndex);
                     
                     // Extract the actual condition name (remove synonym info if present)
-                    String conditionName = extractConditionName(selectedItem);
-                    
-                    conditionField.setText(conditionName);
+                    String selectedCondition = suggestionModel.getElementAt(selectedIndex);
+                    conditionField.setText(selectedCondition);
                     
                     // If double-click, add immediately
                     if (e.getClickCount() == 2) {
-                        addConditionToPatient(currentPatient, conditionName, dialog);
+                        addConditionToPatient(currentPatient, selectedCondition, dialog);
                     }
                 }
             }
@@ -191,9 +190,8 @@ public class IllnessListSection extends JPanel{
                 if (e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
                     int selectedIndex = suggestionList.getSelectedIndex();
                     if (selectedIndex >= 0) {
-                        String selectedItem = suggestionModel.getElementAt(selectedIndex);
-                        String conditionName = extractConditionName(selectedItem);
-                        conditionField.setText(conditionName);
+                        String selectedCondition = suggestionModel.getElementAt(selectedIndex);
+                        conditionField.setText(selectedCondition);
                     }
                 }
             }
@@ -247,10 +245,6 @@ public class IllnessListSection extends JPanel{
         }
     }
 
-
-    private String extractConditionName(String displayText) {
-        return displayText;
-    }
 
     private void populateAllConditions(DefaultListModel<String> model) {
         List<String> allConditions = conditionService.getAllConditions();

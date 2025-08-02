@@ -29,10 +29,13 @@ public class PhysicalConditionService {
     // Initialises data structures and loads CSV data
     // Created by TabDash once, then used by IllnessListSection for all searches
     public PhysicalConditionService() {
+        System.out.println("=== INITIALIZING PhysicalConditionService ===");
         allConditions = new HashSet<>();
         conditionDetails = new HashMap<>();
         synonymToCondition = new HashMap<>();
         loadConditionsFromCSV();
+        System.out.println("=== PhysicalConditionService INITIALIZATION COMPLETE ===");
+        System.out.println("Total conditions loaded: " + allConditions.size());
     }
 
 
@@ -97,43 +100,45 @@ public class PhysicalConditionService {
         }
 
         String lowerSearch = searchText.toLowerCase();
-        Set<SearchResult> results = new HashSet<>();
+        List<SearchResult> results = new ArrayList<>();
+        System.out.println("Searching for: '" + searchText + "' (lowercase: '" + lowerSearch + "')");
 
         // Search main condition names
         for (String condition : allConditions) {
             if (condition.toLowerCase().contains(lowerSearch)) {
                 results.add(new SearchResult(condition, condition, false));
+                System.out.println(" Found condition match: " + condition);
             }
         }
 
         // Search synonyms
+        System.out.println("Checking " + synonymToCondition.size() + " synonyms...");
         for (Map.Entry<String, String> entry : synonymToCondition.entrySet()) {
             String synonym = entry.getKey();
             String mainCondition = entry.getValue();
             if (synonym.contains(lowerSearch)) {
                 results.add(new SearchResult(mainCondition, synonym, true));
+                System.out.println("  Found synonym match: '" + synonym + "' -> " + mainCondition);
             }
         }
+        System.out.println("Total search results: " + results.size());
 
-        //Convert to list and sort
-        return results.stream()
-            .sorted((a, b) -> {
-                //Prioritise main condition matches over synonym matches
-                if (!a.isSynonymMatch && b.isSynonymMatch) return -1;
-                if (a.isSynonymMatch && !b.isSynonymMatch) return 1;
+        // Sort results alphabetically
+        results.sort((a, b) -> {
+            // Prioritize results that start with the search term
+            boolean aStarts = a.conditionName.toLowerCase().startsWith(lowerSearch);
+            boolean bStarts = b.conditionName.toLowerCase().startsWith(lowerSearch);
+            if (aStarts && !bStarts) return -1;
+            if (!aStarts && bStarts) return 1;
+            
+            // Then sort alphabetically
+            return a.conditionName.compareToIgnoreCase(b.conditionName);
+        });
 
-                String aMatchText = a.isSynonymMatch ? a.matchedText : a.conditionName;
-                String bMatchText = b.isSynonymMatch ? b.matchedText : b.conditionName;
-
-                boolean aStarts = aMatchText.toLowerCase().startsWith(lowerSearch);
-                boolean bStarts = bMatchText.toLowerCase().startsWith(lowerSearch);
-                if (aStarts && !bStarts) return -1;
-                if (!aStarts && bStarts) return 1;
-
-                return a.conditionName.compareToIgnoreCase(b.conditionName);
-            })
-            .limit(10)
-            .collect(Collectors.toList());
+        // Limit results to prevent overwhelming the UI
+        int maxResults = searchText.length() <= 2 ? 20 : 15;
+        return results.size() > maxResults ? 
+               results.subList(0, maxResults) : results;
     }
 
 
@@ -156,11 +161,7 @@ public class PhysicalConditionService {
         }
 
         public String getDisplayText() {
-            if (isSynonymMatch) {
-                return conditionName + " (matched: " + matchedText + ")";
-            } else {
-                return conditionName;
-            }
+            return conditionName;
         }
 
         @Override
@@ -185,6 +186,5 @@ public class PhysicalConditionService {
         };
         allConditions.addAll(Arrays.asList(fallback));
         System.out.println("Using fallback conditions: " + allConditions.size());
-
     }
 }

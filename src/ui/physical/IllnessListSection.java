@@ -36,8 +36,10 @@ public class IllnessListSection extends JPanel{
 
     public IllnessListSection(TabDash tabDash) {
         this.tabDash = tabDash;
+        System.out.println("Creating PhysicalConditionService in IllnessListSection...");
         this.conditionService = new PhysicalConditionService();
         setBorder(BorderFactory.createTitledBorder("Illness List"));
+        System.out.println("PhysicalConditionService created successfully");
         TitledBorder border = (TitledBorder) getBorder();
         border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setPreferredSize(new Dimension(200, 250));  
@@ -163,10 +165,20 @@ public class IllnessListSection extends JPanel{
                 int selectedIndex = suggestionList.getSelectedIndex();
                 if (selectedIndex >= 0) {
                     String selectedItem = suggestionModel.getElementAt(selectedIndex);
+                    System.out.println("=== MOUSE CLICK ON SUGGESTION ===");
+                    System.out.println("Selected item: '" + selectedItem + "'");
+                    
+                    // Extract the actual condition name (remove synonym info if present)
                     String conditionName = extractConditionName(selectedItem);
+                    System.out.println("Extracted condition name: '" + conditionName + "'");
+                    
                     conditionField.setText(conditionName);
+                    System.out.println("Set text field to: '" + conditionName + "'");
+                    
+                    // If double-click, add immediately
                     if (e.getClickCount() == 2) {
-                        addConditionToPatient(currentPatient,conditionName,dialog);
+                        System.out.println("Double-click detected, adding condition...");
+                        addConditionToPatient(currentPatient, conditionName, dialog);
                     }
                 }
             }
@@ -236,20 +248,21 @@ public class IllnessListSection extends JPanel{
 
 
     private String extractConditionName(String displayText) {
-        if (displayText.contains(" (matched: ")) {
-            return displayText.substring(0, displayText.indexOf(" (matched: "));
-        } else {
-            return displayText;
-        }
+        return displayText;
     }
 
     private void populateAllConditions(DefaultListModel<String> model) {
         List<String> allConditions = conditionService.getAllConditions();
         
+        System.out.println("=== POPULATING ALL CONDITIONS ===");
+        System.out.println("Number of conditions to populate: " + allConditions.size());
+        
         for (String condition : allConditions) {
             model.addElement(condition);
         }
-        System.out.println("Populated " + allConditions.size() + "conditions");
+        
+        System.out.println("Populated " + allConditions.size() + " conditions in dialog");
+        System.out.println("Model now has " + model.getSize() + " elements");
     }
 
     private void removeSelectedCondition() {

@@ -36,10 +36,8 @@ public class IllnessListSection extends JPanel{
 
     public IllnessListSection(TabDash tabDash) {
         this.tabDash = tabDash;
-        System.out.println("Creating PhysicalConditionService in IllnessListSection...");
         this.conditionService = new PhysicalConditionService();
         setBorder(BorderFactory.createTitledBorder("Illness List"));
-        System.out.println("PhysicalConditionService created successfully");
         TitledBorder border = (TitledBorder) getBorder();
         border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
         setPreferredSize(new Dimension(200, 250));  
@@ -106,7 +104,7 @@ public class IllnessListSection extends JPanel{
 
         JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Add Medical Condition", true);
         dialog.setLayout(new BorderLayout());
-        dialog.setSize(400, 250);
+        dialog.setSize(400, 500);
         dialog.setLocationRelativeTo(this);
 
         JPanel inputPanel = new JPanel(new FlowLayout());
@@ -134,24 +132,32 @@ public class IllnessListSection extends JPanel{
             public void changedUpdate(DocumentEvent e) {
                 SwingUtilities.invokeLater(() -> updateSuggestions());
             }
-
+            
             private void updateSuggestions() {
                 String searchText = conditionField.getText().trim();
+                
                 suggestionModel.clear();
 
-                if (!searchText.isEmpty()) {
+                if (searchText.isEmpty()) {
+                    // If search field is empty, show all conditions
                     populateAllConditions(suggestionModel);
                 } else {
+                    // Show filtered search results
                     List<PhysicalConditionService.SearchResult> results = 
                         conditionService.searchConditions(searchText);
+                    
                     if (results.isEmpty()) {
+                        // If no search results, still show all conditions for browsing
                         populateAllConditions(suggestionModel);
                     } else {
                         for (PhysicalConditionService.SearchResult result : results) {
-                            suggestionModel.addElement(result.getDisplayText());
+                            String displayText = result.getDisplayText();
+                            suggestionModel.addElement(displayText);
                         }
                     }
                 }
+                
+                // Force UI refresh
                 suggestionList.revalidate();
                 suggestionList.repaint();
             }
@@ -165,19 +171,14 @@ public class IllnessListSection extends JPanel{
                 int selectedIndex = suggestionList.getSelectedIndex();
                 if (selectedIndex >= 0) {
                     String selectedItem = suggestionModel.getElementAt(selectedIndex);
-                    System.out.println("=== MOUSE CLICK ON SUGGESTION ===");
-                    System.out.println("Selected item: '" + selectedItem + "'");
                     
                     // Extract the actual condition name (remove synonym info if present)
                     String conditionName = extractConditionName(selectedItem);
-                    System.out.println("Extracted condition name: '" + conditionName + "'");
                     
                     conditionField.setText(conditionName);
-                    System.out.println("Set text field to: '" + conditionName + "'");
                     
                     // If double-click, add immediately
                     if (e.getClickCount() == 2) {
-                        System.out.println("Double-click detected, adding condition...");
                         addConditionToPatient(currentPatient, conditionName, dialog);
                     }
                 }
@@ -254,15 +255,9 @@ public class IllnessListSection extends JPanel{
     private void populateAllConditions(DefaultListModel<String> model) {
         List<String> allConditions = conditionService.getAllConditions();
         
-        System.out.println("=== POPULATING ALL CONDITIONS ===");
-        System.out.println("Number of conditions to populate: " + allConditions.size());
-        
         for (String condition : allConditions) {
             model.addElement(condition);
         }
-        
-        System.out.println("Populated " + allConditions.size() + " conditions in dialog");
-        System.out.println("Model now has " + model.getSize() + " elements");
     }
 
     private void removeSelectedCondition() {

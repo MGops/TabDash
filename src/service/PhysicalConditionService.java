@@ -29,13 +29,10 @@ public class PhysicalConditionService {
     // Initialises data structures and loads CSV data
     // Created by TabDash once, then used by IllnessListSection for all searches
     public PhysicalConditionService() {
-        System.out.println("=== INITIALIZING PhysicalConditionService ===");
         allConditions = new HashSet<>();
         conditionDetails = new HashMap<>();
         synonymToCondition = new HashMap<>();
         loadConditionsFromCSV();
-        System.out.println("=== PhysicalConditionService INITIALIZATION COMPLETE ===");
-        System.out.println("Total conditions loaded: " + allConditions.size());
     }
 
 
@@ -101,27 +98,22 @@ public class PhysicalConditionService {
 
         String lowerSearch = searchText.toLowerCase();
         List<SearchResult> results = new ArrayList<>();
-        System.out.println("Searching for: '" + searchText + "' (lowercase: '" + lowerSearch + "')");
 
         // Search main condition names
         for (String condition : allConditions) {
             if (condition.toLowerCase().contains(lowerSearch)) {
                 results.add(new SearchResult(condition, condition, false));
-                System.out.println(" Found condition match: " + condition);
             }
         }
 
         // Search synonyms
-        System.out.println("Checking " + synonymToCondition.size() + " synonyms...");
         for (Map.Entry<String, String> entry : synonymToCondition.entrySet()) {
             String synonym = entry.getKey();
             String mainCondition = entry.getValue();
             if (synonym.contains(lowerSearch)) {
                 results.add(new SearchResult(mainCondition, synonym, true));
-                System.out.println("  Found synonym match: '" + synonym + "' -> " + mainCondition);
             }
         }
-        System.out.println("Total search results: " + results.size());
 
         // Sort results alphabetically
         results.sort((a, b) -> {

@@ -107,11 +107,21 @@ public class StoppStart extends JPanel{
             }
         }
 
+        List<StartRecommendation> startRecommendations = stoppStartService.getStartRecommendations(currentPatient);
 
-        // Start panel 
-        JLabel startPlaceholder = new JLabel("START functionality");
-        startPlaceholder.setForeground(Color.GRAY);
-        startPanel.add(startPlaceholder);
+        if (startRecommendations.isEmpty()) {
+            JLabel noStartLabel = new JLabel("No START recommendations");
+            noStartLabel.setForeground(Color.GRAY);
+            startPanel.add(noStartLabel);
+        } else {
+            for (StartRecommendation recommendation : startRecommendations) {
+                JLabel medLabel = new JLabel(recommendation.getMedicationName());
+                medLabel.setToolTipText(recommendation.getTooltipText());
+                medLabel.setBorder(BorderFactory.createEmptyBorder(2,5,2,5));
+                startPanel.add(medLabel);
+            }
+        }
+
 
         stoppPanel.revalidate();
         stoppPanel.repaint();

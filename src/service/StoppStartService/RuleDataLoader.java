@@ -28,7 +28,7 @@ public class RuleDataLoader {
         public final String reason;
 
         public StartRule(String condition, String medication, String reason) {
-            this.condition = condition.toLowerCase().trim();
+            this.condition = condition.trim();
             this.medication = medication.toLowerCase().trim();
             this.reason = reason.trim();
         }
@@ -63,19 +63,26 @@ public class RuleDataLoader {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(START_RULES_FILE))){
             String line = reader.readLine();
+            System.out.println("START rules file header: " + line);
             while ((line = reader.readLine()) != null) {
+                System.out.println("Reading START rule line: " + line);
                 String[] parts = line.split(",", 3);
                 if (parts.length >= 3) {
                     String condition = parts[0].trim();
                     String medication = parts[1].trim();
                     String reason = parts[2].trim();
                     
+                    System.out.println("Creating START rule: condition='" + condition + "', medication='" + medication + "'");
                     rules.add(new StartRule(condition, medication, reason));
+                } else {
+                    System.out.println("Skipping invalid START rule line (not enough parts): " + line);
                 }
             }
         } catch (IOException e) {
             System.err.println("Error loading START rules: " + e.getMessage());
+            e.printStackTrace();
         }
+        System.out.println("Loaded " + rules.size() + " START rules");
         return rules;
         
     }

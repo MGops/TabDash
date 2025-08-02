@@ -23,6 +23,13 @@ public class StoppStartService {
     private void loadRules() {
         stoppRules = dataLoader.loadStoppRules();
         startRules = dataLoader.loadStartRules();
+        System.out.println("StoppStartService initialized:");
+        System.out.println("  STOPP rules: " + stoppRules.size());
+        System.out.println("  START rules: " + startRules.size());
+        
+        for (StartRule rule : startRules) {
+            System.out.println("  START rule: " + rule.condition + " -> " + rule.medication);
+        }
     }
 
     public List<StoppRecommendation> getStoppRecommendations(Patient patient) {

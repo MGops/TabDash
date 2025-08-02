@@ -1,2 +1,7 @@
 condition,medication,reason
 CHF,ramipril,Proven benefit in systolic heart failure
+CHF,bisoprolol,Proven mortality benefit in heart failure
+Atrial fibrillation,apixaban,Stroke prevention in AF
+Type 2 diabetes,metformin,First-line therapy for T2DM
+Hypertension,amlodipine,Effective antihypertensive for most patients
+Osteoarthritis,paracetamol,First-line analgesic for OA pain

@@ -71,9 +71,41 @@ public class StoppStartService {
 
     public List<StartRecommendation> getStartRecommendations(Patient patient) {
         List<StartRecommendation> recommendations = new ArrayList<>();
+        if (patient == null) {
+            return recommendations;
+        }
 
+        List<String> patientMedications = getPatientMedicationNames(patient);
+        List<String> patientConditions = getPatientConditions(patient);
+
+        System.out.println("=== START ANALYSIS DEBUG ===");
+        System.out.println("Patient medications: " + patientMedications);
+        System.out.println("Patient conditions: " + patientConditions);
+        System.out.println("Number of START rules: " + startRules.size());
+
+        for (StartRule rule : startRules) {
+            System.out.println("Checking START rule: " + rule.condition + " -> " + rule.medication);
+
+            boolean conditionMatch = patientConditions.contains(rule.condition);
+            boolean alreadyHasMed = hasMatchingMedication(patientMedications, null);
+
+            System.out.println(" Condition match: " + conditionMatch);
+            System.out.println(" Already has medication: " + alreadyHasMed);
+
+            if (conditionMatch && !alreadyHasMed) {
+                System.out.println(" START MATCH FOUND. Adding medication");
+
+                recommendations.add(new StartRecommendation(
+                    capitaliseFirst(rule.medication.replace("_", " ")),
+                    rule.condition,
+                    rule.reason
+                ));
+            }
+        }
+        System.out.println("Total START recommendations: " + recommendations.size());
         return recommendations;
     }
+
 
     private List<String> getPatientMedicationNames(Patient patient) {
         List<String> medications = new ArrayList<>();
@@ -82,7 +114,6 @@ public class StoppStartService {
         }
         return medications;
     }
-
 
     private List<String> getPatientConditions(Patient patient) {
         List<String> conditions = new ArrayList<>();
@@ -94,6 +125,10 @@ public class StoppStartService {
 
 
     private boolean hasMatchingMedication(List<String> patientMedications, String ruleMedication) {
+        if (ruleMedication == null) {
+            return false;
+        }
+
         if (patientMedications.contains(ruleMedication.toLowerCase())) {
             return true;
         }
@@ -107,6 +142,9 @@ public class StoppStartService {
     }
 
     private boolean isMedicationInClass(String patientMedication, String ruleClass) {
+        if (ruleClass == null) {
+            return false;
+        }
         // Use existing MedicationLookupService to get class info
         MedicationLookupService.MedicationClassInfo classInfo = 
             medicationLookupService.getClassInfo(patientMedication);
@@ -156,7 +194,6 @@ public class StoppStartService {
         if (ruleCondition.equals("Any condition")) {
             return true;
         }
-
         return patientConditions.contains(ruleCondition);
     }
 

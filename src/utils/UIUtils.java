@@ -11,6 +11,7 @@ public final class UIUtils {
         throw new UnsupportedOperationException("Utility class - cannot be instantiated");
     }
 
+    
     /**
      * Creates a standardized info label for empty states or messages
      * @param text The message to display

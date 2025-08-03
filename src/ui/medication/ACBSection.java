@@ -5,6 +5,8 @@ import src.data_managers.MedicationLookupService;
 import src.model.Medication;
 import src.model.Patient;
 import src.ui.TabDash;
+import src.utils.UIUtils;
+
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
 import javax.swing.*;
@@ -186,7 +188,8 @@ public class ACBSection extends JPanel{
             }
             Integer acbScore = med.getAcbScore();
             Object displayScore = (acbScore != null) ? acbScore : "-";
-            model.addRow(new Object[]{medName, displayScore});
+            String displayName = UIUtils.capitaliseFirst(medName);
+            model.addRow(new Object[]{displayName, displayScore});
         }
         updateTotalACB();
     }    

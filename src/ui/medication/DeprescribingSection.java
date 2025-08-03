@@ -121,7 +121,8 @@ public class DeprescribingSection extends JPanel {
 
         // Add meds as bulletpoints
         for (String medication : medications) {
-            JLabel medLabel = new JLabel("• " + medication);
+            String capitalisedMedName = UIUtils.capitaliseFirst(medication);
+            JLabel medLabel = new JLabel("• " + capitalisedMedName);
             medLabel.setForeground(Color.BLACK);
             medLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             contentPanel.add(medLabel);

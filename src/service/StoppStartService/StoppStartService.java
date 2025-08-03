@@ -7,6 +7,7 @@ import src.data_managers.MedicationLookupService;
 import src.model.Patient;
 import src.service.StoppStartService.RuleDataLoader.StartRule;
 import src.service.StoppStartService.RuleDataLoader.StoppRule;
+import src.utils.UIUtils;
 
 public class StoppStartService {
     private List<StoppRule> stoppRules;
@@ -65,7 +66,7 @@ public class StoppStartService {
                 String actualMedication = findMatchingPatientMedication(patientMedications, rule.medication);
 
                 recommendations.add(new StoppRecommendation(
-                    capitaliseFirst(actualMedication),
+                    UIUtils.capitaliseFirst(actualMedication),
                     rule.condition,
                     rule.reason
                 ));
@@ -103,7 +104,7 @@ public class StoppStartService {
                 System.out.println(" START MATCH FOUND. Adding medication");
 
                 recommendations.add(new StartRecommendation(
-                    capitaliseFirst(rule.medication.replace("_", " ")),
+                    UIUtils.capitaliseFirst(rule.medication.replace("_", " ")),
                     rule.condition,
                     rule.reason
                 ));
@@ -202,13 +203,5 @@ public class StoppStartService {
             return true;
         }
         return patientConditions.contains(ruleCondition);
-    }
-
-
-    private String capitaliseFirst(String text) {
-        if (text == null || text.isEmpty()) {
-            return text;
-        }
-        return text.substring(0, 1).toUpperCase() + text.substring(1);
     }
 }

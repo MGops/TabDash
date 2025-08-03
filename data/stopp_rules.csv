@@ -21,4 +21,7 @@ warfarin,DVT,no proven added benefit for > 6 months (in absence of continuing pr
 warfarin,PE,no proven added benefit for > 12 months (in absence of continuing provoking factors)
 doac,DVT,no proven added benefit for > 6 months (in absence of continuing provoking factors)
 doac,PE,no proven added benefit for > 12 months (in absence of continuing provoking factors)
-
+ipratropium,Narrow angle glaucoma,May cause urinary retention
+tiotropium,Narrow angle glaucoma,May cause urinary retention
+theophylline,Asthma,As monotherapy-safer/more effective alternatives available. Narrow therapeutic window- risk of ADRs
+systemic_steroid,COPD,(For maintenance in moderate to severe)-long-term side-effects of systemic corticosteroids.

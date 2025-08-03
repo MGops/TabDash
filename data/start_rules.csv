@@ -2,6 +2,16 @@ condition,medication,reason
 CHF,ramipril,Proven benefit in systolic heart failure
 CHF,bisoprolol,Proven mortality benefit in heart failure
 Atrial fibrillation,apixaban,Stroke prevention in AF
+Atrial fibrillation,warfarin,Reduce embolism risk
 Type 2 diabetes,metformin,First-line therapy for T2DM
 Hypertension,amlodipine,Effective antihypertensive for most patients
 Osteoarthritis,paracetamol,First-line analgesic for OA pain
+Stable angina,beta_blocker,First line treatment
+Stable angina,verapamil,Second line treatment after beta blockers/ in combination
+Ischaemic heart disease,atorvastatin,If QRISK >10%/DM/CKD>=stage 3A
+Ischaemic heart disease,ramipril,Commonly given post- MI/Improves LV function at rest/post-exercise
+Ischaemic heart disease,aspirin,Reduce MI risk
+Ischaemic heart disease,clopidogrel,Reduce MI risk
+COPD,ipratropium,For mild-moderate
+COPD,inhaled_corticosteroid,For moderate-severe (if repeated exacerbations)
+Asthma,inhaled_corticosteroid,For moderate-severe (if repeated exacerbations)

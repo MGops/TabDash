@@ -8,6 +8,8 @@ Type 2 diabetes,Endocrine,"T2DM,DM"
 Type 1 diabetes,Endocrine,"T1DM"
 CHF,Cardiovascular,"Heart failure,Congestive heart failure"
 MI,Cardiovascular,"Heart attack,Myocardial infarction"
+Ischaemic heart disease,Cardiovascular,
+Stable angina,Cardiovascular,
 Osteoporosis,Musculoskeletal,
 Osteoarthritis,Musculoskeletal,"OA,Arthritis"
 Rheumatoid Arthritis,Musculoskeletal,"RA,Arthritis"
@@ -37,3 +39,4 @@ Falls,Musculoskeletal,"Falls history"
 Gout,Musculoskeletal,
 Heart block,Cardiovascular,
 Bradycardia,Cardiovascular,
+Narrow angle glaucoma,Ophthalmologic,

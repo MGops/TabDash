@@ -134,3 +134,13 @@ warfarin,anticoagulant
 apixaban,anticoagulant,doac
 edoxaban,anticoagulant,doac
 rivaroxaban,anticoagulant,doac
+ipratropium,bronchodilator,sama,
+tiotropium,bronchodilator,lama,
+salbutamol,bronchodilator,saba,
+theophylline,bronchodilator,
+prednisolone,systemic_steroid,
+hydrocortisone,systemic_steroid,
+beclometasone,inhaled_corticosteroid,
+budesonide,inhaled_corticosteroid,
+fluticasone,inhaled_corticosteroid,
+mometasone,inhaled_corticosteroid,

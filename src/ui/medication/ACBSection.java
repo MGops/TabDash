@@ -74,7 +74,14 @@ public class ACBSection extends JPanel{
             // Dialog code for selecting medications
             String[] medicationNames = medDatabase.getAllMedications().keySet().toArray(new String[0]);
             java.util.Arrays.sort(medicationNames);
-            JComboBox<String> medComboBox = new JComboBox<>(medicationNames);
+
+            // Create display names array with capitalised first letters.
+            String[]displayNames = new String[medicationNames.length];
+            for (int i = 0; i < medicationNames.length; i++) {
+                displayNames[i] = UIUtils.capitaliseFirst(medicationNames[i]);
+            }
+
+            JComboBox<String> medComboBox = new JComboBox<>(displayNames);
             medComboBox.setEditable(true);
             int result = JOptionPane.showConfirmDialog(
                 medicationTable,
@@ -88,9 +95,14 @@ public class ACBSection extends JPanel{
                 if (selectedMed != null && !selectedMed.trim().isEmpty()) {
                     DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
                     boolean alreadyExists = false;
+
+                    // Convert back to lowercase to check against existing medications
+                    // As data stored in lowercase
+                    String medNameForCheck = selectedMed.trim().toLowerCase();
+                    
                     for (int row = 0; row < model.getRowCount(); row++) {
                         String existingMed = (String) model.getValueAt(row, 0);
-                        if (existingMed.equalsIgnoreCase(selectedMed)) {
+                        if (existingMed.toLowerCase().equals(medNameForCheck)) {
                             alreadyExists = true;
                             break;
                         }
@@ -104,29 +116,30 @@ public class ACBSection extends JPanel{
                     }
 
                     // Logic to update patient data
-                    Integer acbScore = medDatabase.getACBScore(selectedMed);
+                    Integer acbScore = medDatabase.getACBScore(medNameForCheck);
+                    
                     // Dont change null to 0- keep as null for meds without ACB scores.
                     Object displayScore = (acbScore != null) ? acbScore : "-";
                     model.addRow(new Object[] {selectedMed, displayScore});
                     updateTotalACB();
 
                     //Create medication object with class information
-                    Medication medication = new Medication(selectedMed);
+                    Medication medication = new Medication(medNameForCheck);
                     medication.setAcbScore(acbScore);
 
                     //Look up and set class/subclass information
-                    MedicationLookupService.MedicationClassInfo classInfo = medicationLookupService.getClassInfo(selectedMed);
+                    MedicationLookupService.MedicationClassInfo classInfo = medicationLookupService.getClassInfo(medNameForCheck);
                     if (classInfo != null) {
                         medication.setDrugClass(classInfo.drugClass);
                         medication.setDrugSubclass(classInfo.drugSubclass);
                     } else {
-                        System.out.println("No medication class information found for: " + selectedMed);
+                        System.out.println("No medication class information found for: " + medNameForCheck);
                     }
-                    currentPatient.getMedications().put(selectedMed, medication);
+                    currentPatient.getMedications().put(medNameForCheck, medication);
                     tabDash.onPatientDataChanged();
                     tabDash.refreshMedicationPanel();
                     // Check for medication alert when adding medication
-                    tabDash.checkMedicationAlert(selectedMed);
+                    tabDash.checkMedicationAlert(medNameForCheck);
                 }
             } 
         });

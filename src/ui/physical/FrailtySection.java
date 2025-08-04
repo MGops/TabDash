@@ -31,11 +31,10 @@ public class FrailtySection extends JPanel {
         JPanel quadrant3 = createQuadrant("Immobility", new Color(220, 255, 220));
         JPanel quadrant4 = createQuadrant("Delirium", new Color(255, 220, 220));
         
-        // Add quadrants to the main panel
-        add(quadrant1); // Top-left
-        add(quadrant2); // Top-right
-        add(quadrant3); // Bottom-left
-        add(quadrant4); // Bottom-right
+        add(quadrant1);
+        add(quadrant2);
+        add(quadrant3);
+        add(quadrant4);
     }
 
     private JPanel createQuadrant(String title, Color backgroundColour) {

@@ -24,7 +24,7 @@ public class InvestigationsSection extends JPanel {
 
     // Define available monitoring issue types
     private static final String[] ISSUE_TYPES = {
-        "Bloods", "ECG", "BM", "Diet", "Fluids", "Stool chart", "Bodymap"
+        "Physical obs", "Bloods", "ECG", "BM", "Diet", "Fluids", "Stool chart", "Bodymap"
     };
 
     public InvestigationsSection(TabDash tabDash) {

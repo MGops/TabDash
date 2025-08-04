@@ -8,11 +8,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
 import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URI;
 import java.util.List;
+import java.awt.Desktop;
 
 import src.data_managers.MedicationDatabase;
 import src.model.Patient;
@@ -83,9 +88,50 @@ public class StoppStart extends JPanel{
         mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(startScroll);
 
+        JLabel medstopperLinkLabel = createMedstopperHyperlink();
+        mainPanel.add(Box.createVerticalStrut(5));
+        mainPanel.add(medstopperLinkLabel);
+
         add(mainPanel, BorderLayout.CENTER);
     }
 
+    private JLabel createMedstopperHyperlink() {
+        JLabel linkLabel = new JLabel("<html><a href=''>medstopper.com</a></html>");
+        linkLabel.setFont(linkLabel.getFont().deriveFont(Font.PLAIN, 11f));
+        linkLabel.setForeground(new Color(0,0,238));
+        linkLabel.setHorizontalAlignment(JLabel.RIGHT);
+        linkLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        //linkLabel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+
+        linkLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://medstopper.com/"));
+                } catch (Exception ex) {
+                    System.err.println("Error opening hyperlink: " + ex.getMessage());
+                    // Fallback: show message with URL
+                    javax.swing.JOptionPane.showMessageDialog(
+                        StoppStart.this,
+                        "Please visit: https://medstopper.com/",
+                        "Link",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+            }
+            
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                linkLabel.setForeground(new Color(0, 0, 139)); // Darker blue on hover
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                linkLabel.setForeground(new Color(0, 0, 238)); // Return to original blue
+            }
+        });
+        return linkLabel;
+    }
 
     private void analyseCurrentPatient() {
         stoppPanel.removeAll();

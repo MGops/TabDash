@@ -1,4 +1,4 @@
-package src.ui.physical;
+package src.ui.physical.FrailtySection;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;

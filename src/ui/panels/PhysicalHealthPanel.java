@@ -4,9 +4,9 @@ import javax.swing.*;
 
 import src.ui.TabDash;
 import src.ui.physical.AppointmentsSection;
+import src.ui.physical.FrailtySection;
 import src.ui.physical.IllnessListSection;
 import src.ui.physical.InvestigationsSection;
-import src.ui.physical.FrailtySection;
 import src.ui.physical.PlaceholderSection;
 
 import java.awt.*;

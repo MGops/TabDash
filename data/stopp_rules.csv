@@ -31,7 +31,7 @@ benzodiazepine,COPD,Risk of exacerbation of respiratory failure
 achE-i,Bradycardia,Cardiac conduction failure/syncopy/injury
 achE-i,Heart block,Cardiac conduction failure/syncopy/injury
 achE-i,Syncope,Cardiac conduction failure/syncopy/injury
-sulfonylureas,Type 2 diabetes,Risk of prolonged hypoglycaemia
+sulfonylurea,Type 2 diabetes,Risk of prolonged hypoglycaemia
 metformin,CKD,Risk of lactic acidosis
 pioglitazone,CHF,Risk of exacerbation of heart failure
 alendronate,Gastritis,Risk of relapse/exacerbation

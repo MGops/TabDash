@@ -57,7 +57,7 @@ public class StoppStart extends JPanel{
         // STOPP Panel
         stoppPanel = new JPanel();
         stoppPanel.setLayout(new BoxLayout(stoppPanel, BoxLayout.Y_AXIS));
-        stoppPanel.setBackground(new Color(255, 235, 235)); 
+        stoppPanel.setBackground(new Color(255, 220, 220)); 
         TitledBorder stoppTitledBorder = BorderFactory.createTitledBorder(empty,"STOPP");
         stoppTitledBorder.setTitleFont(getFont().deriveFont(Font.BOLD, 12f));
         stoppTitledBorder.setTitleJustification(TitledBorder.CENTER);

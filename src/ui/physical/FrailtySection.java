@@ -19,6 +19,7 @@ public class FrailtySection extends JPanel {
         setBorder(BorderFactory.createTitledBorder("Frailty"));
         TitledBorder border = (TitledBorder) getBorder();
         border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
+        border.setTitleJustification(TitledBorder.CENTER);
 
         setLayout(new GridLayout(2,2,5,5));
         initialiseQuadrants();

@@ -1,4 +1,4 @@
-package src.ui.physical.FrailtySection;
+package src.ui.physical;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -27,15 +27,15 @@ public class FrailtySection extends JPanel {
 
     private void initialiseQuadrants() {
 
-        JPanel quadrant1 = createQuadrant("Falls", Color.LIGHT_GRAY);
-        JPanel quadrant2 = createQuadrant("Incontinence", new Color(220, 220, 255));
-        JPanel quadrant3 = createQuadrant("Immobility", new Color(220, 255, 220));
-        JPanel quadrant4 = createQuadrant("Delirium", new Color(255, 220, 220));
+        JPanel fallsPanel = createQuadrant("Falls", Color.LIGHT_GRAY);
+        JPanel incontinencePanel = createQuadrant("Incontinence", new Color(220, 220, 255));
+        JPanel immobilityPanel = createQuadrant("Immobility", new Color(220, 255, 220));
+        JPanel deliriumPanel = createQuadrant("Delirium", new Color(255, 220, 220));
         
-        add(quadrant1);
-        add(quadrant2);
-        add(quadrant3);
-        add(quadrant4);
+        add(fallsPanel);
+        add(incontinencePanel);
+        add(immobilityPanel);
+        add(deliriumPanel);
     }
 
     private JPanel createQuadrant(String title, Color backgroundColour) {

@@ -15,3 +15,7 @@ Ischaemic heart disease,clopidogrel,Reduce MI risk
 COPD,ipratropium,For mild-moderate
 COPD,inhaled_corticosteroid,For moderate-severe (if repeated exacerbations)
 Asthma,inhaled_corticosteroid,For moderate-severe (if repeated exacerbations)
+CKD,acei,(With proteinuria) Slow disease progression and reduce cardiovascular risks
+CKD,arb,(With proteinuria) (If ACEI intolerant) Slow disease progression and reduce cardiovascular risks
+Osteoporosis,adcal-D3,If dietary Calcium inadequate- to reduce fragility fracture risk
+Osteoporosis,alendronate,If no contraindication- to reduce fragility fracture risk

@@ -31,6 +31,9 @@ Hypophosphataemia,Electrolyte abnormalities,
 Iron deficiency anaemia,Electrolyte abnormalities,
 SIADH,Electrolyte abnormalities,
 Gastric ulcer,Gastrointestinal,"GORD,Gastrooesophageal reflux disease"
+Gastritis,Gastrointestinal,
+Oesophagitis,Gastrointestinal,
+Oesophageal ulcer,Gastrointestinal,
 Hiatus hernia,Gastrointestinal,
 CKD,Renal,"Chronic kidney disease"
 Breast cancer,Oncology,
@@ -39,4 +42,5 @@ Falls,Musculoskeletal,"Falls history"
 Gout,Musculoskeletal,
 Heart block,Cardiovascular,
 Bradycardia,Cardiovascular,
-Narrow angle glaucoma,Ophthalmologic,
+Glaucoma,Ophthalmologic,
+Syncope,Neurological,

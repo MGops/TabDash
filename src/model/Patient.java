@@ -1,6 +1,7 @@
 package src.model;
 
 import java.util.HashMap;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,7 +91,7 @@ public class Patient {
 
     private void initialiseFrailtyFields(){
         this.fallsCount = 0;
-        this.fallsButtonColour = "RED";
+        this.fallsButtonColour = "GREEN";
     }
 
 

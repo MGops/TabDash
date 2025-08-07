@@ -38,6 +38,8 @@ public class Patient {
     private String resusStatus;
     private String namedNurse;
     private String cmht;
+    private int fallsCount;
+    private String fallsButtonColour;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -47,6 +49,7 @@ public class Patient {
         this.monitoringIssues = new ArrayList<>();
         initialiseMHAFields();
         initialiseHeaderFields();
+        initialisePhysicalHealthFields();
     }
 
     private void initialiseMHAFields() {
@@ -78,6 +81,16 @@ public class Patient {
         this.resusStatus = "For resus";
         this.namedNurse = "";
         this.cmht = "";
+
+    }
+
+    private void initialisePhysicalHealthFields() {
+        initialiseFrailtyFields();
+    }
+
+    private void initialiseFrailtyFields(){
+        this.fallsCount = 0;
+        this.fallsButtonColour = "RED";
     }
 
 
@@ -270,5 +283,19 @@ public class Patient {
     }
 
 
+    public int getFallsCount() {
+        return fallsCount;
+    }
 
+    public void setFallsCount(int fallsCount) {
+        this.fallsCount = fallsCount;
+    }
+
+    public String getFallsButtonColour() {
+        return fallsButtonColour;
+    }
+
+    public void setFallsButtonColour(String fallsButtonColour) {
+        this.fallsButtonColour = fallsButtonColour;
+    }
 }

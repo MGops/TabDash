@@ -2,6 +2,7 @@ package src.ui;
 import javax.swing.*;
 
 import src.data_managers.AppointmentDataManager;
+import src.data_managers.FrailtyDataManager;
 import src.data_managers.HeaderDataManager;
 import src.data_managers.MHADataManager;
 import src.data_managers.MedicationDatabase;
@@ -63,6 +64,7 @@ public class TabDash {
             AppointmentDataManager.loadPatientAppointments(patient);
             MonitoringDataManager.loadPatientMonitoring(patient);
             HeaderDataManager.loadPatientHeaderData(patient);
+            FrailtyDataManager.loadPatientFrailtyData(patient);
         }
         
         currentPatient = patients.isEmpty() ? null : patients.get(0);
@@ -192,6 +194,7 @@ public class TabDash {
         AppointmentDataManager.savePatientAppointments(currentPatient);
         MonitoringDataManager.savePatientMonitoring(currentPatient);
         HeaderDataManager.savePatientHeaderData(currentPatient);
+        FrailtyDataManager.savePatientFrailtyData(currentPatient);
     }
 
     public MHAPanel getMHAPanel() {

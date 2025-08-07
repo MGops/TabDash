@@ -1,7 +1,6 @@
 package src.ui.physical;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import java.awt.Font;
@@ -10,9 +9,11 @@ import java.awt.Color;
 import javax.swing.border.Border;
 
 import src.ui.TabDash;
+import src.ui.physical.frailty.FallsPanel;
 
 public class FrailtySection extends JPanel {
     private TabDash tabDash;
+    private FallsPanel fallsPanel;
 
     public FrailtySection(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -26,8 +27,9 @@ public class FrailtySection extends JPanel {
     }
 
     private void initialiseQuadrants() {
+        fallsPanel = new FallsPanel(tabDash);
+        //fallsPanel.setBackground(Color.LIGHT_GRAY);
 
-        JPanel fallsPanel = createQuadrant("Falls", Color.LIGHT_GRAY);
         JPanel incontinencePanel = createQuadrant("Incontinence", new Color(220, 220, 255));
         JPanel immobilityPanel = createQuadrant("Immobility", new Color(220, 255, 220));
         JPanel deliriumPanel = createQuadrant("Delirium", new Color(255, 220, 220));
@@ -45,5 +47,12 @@ public class FrailtySection extends JPanel {
         quadrant.setBorder(BorderFactory.createTitledBorder(empty, title));
         quadrant.setBackground(backgroundColour);
         return quadrant;
+    }
+
+
+    public void refreshForNewPatient() {
+        if (fallsPanel != null) {
+            fallsPanel.refreshForNewPatient();
+        }
     }
 }

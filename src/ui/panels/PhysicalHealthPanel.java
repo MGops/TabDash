@@ -72,5 +72,6 @@ public class PhysicalHealthPanel extends JPanel {
         illnessListSection.refreshForNewPatient();
         appointmentsSection.refreshForNewPatient();
         investigationsSection.refreshForNewPatient();
+        frailtySection.refreshForNewPatient();
     }
 } 

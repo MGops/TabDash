@@ -57,12 +57,16 @@ public class FallsPanel extends JPanel {
                     fallsCount ++;
                     fallsCountBtn.setText(String.valueOf(fallsCount));
                     fallsCountBtn.setForeground(Color.RED);
+                    saveFallsCount();
+                    saveButtonColour("RED");
                 } else if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
                     fallsCount = 0;
                     fallsCountBtn.setText(String.valueOf(fallsCount));
+                    saveFallsCount();
                 } else if (e.getButton() == MouseEvent.BUTTON3) {
                     if (fallsCountBtn.getForeground().equals(Color.RED)) {
                         fallsCountBtn.setForeground(new Color(40,190,40));
+                        saveButtonColour("GREEN");
                     }
                 }
             } 

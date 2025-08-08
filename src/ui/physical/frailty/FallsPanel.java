@@ -82,7 +82,7 @@ public class FallsPanel extends JPanel {
                         updateLastFallDisplay();
                     }
 
-                } else if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+                } else if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON3) {
                     fallsCount = 0;
                     fallsCountBtn.setText(String.valueOf(fallsCount));
 
@@ -146,9 +146,9 @@ public class FallsPanel extends JPanel {
         Patient currentPatient = tabDash.getCurrentPatient();
         if (currentPatient != null && currentPatient.getLastFallDate() != null) {
             String formattedDate = dateFormat.format(currentPatient.getLastFallDate());
-            lastFallLabel.setText("<html><center>Last fall:<br>" + formattedDate + "</center></html>");
+            lastFallLabel.setText("<html><center>Last fall:" + formattedDate + "</center></html>");
         } else {
-            lastFallLabel.setText("<html><center>Last fall:<br>None recorded</center></html>");
+            lastFallLabel.setText("<html><center>Last fall: None recorded</center></html>");
         }
     }
 

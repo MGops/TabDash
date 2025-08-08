@@ -41,6 +41,7 @@ public class Patient {
     private String cmht;
     private int fallsCount;
     private String fallsButtonColour;
+    private Date lastFallDate;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -92,6 +93,7 @@ public class Patient {
     private void initialiseFrailtyFields(){
         this.fallsCount = 0;
         this.fallsButtonColour = "GREEN";
+        this.lastFallDate = null;
     }
 
 
@@ -298,5 +300,14 @@ public class Patient {
 
     public void setFallsButtonColour(String fallsButtonColour) {
         this.fallsButtonColour = fallsButtonColour;
+    }
+
+
+    public Date getLastFallDate() {
+        return lastFallDate;
+    }
+
+    public void setLastFallDate(Date lastFallDate) {
+        this.lastFallDate = lastFallDate;
     }
 }

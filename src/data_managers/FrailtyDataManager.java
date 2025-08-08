@@ -1,10 +1,13 @@
 package src.data_managers;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import src.model.Patient;
 
 public class FrailtyDataManager {
     private static final String FRAILTY_DIR = "data/frailty/";
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static void savePatientFrailtyData(Patient patient) {
         File dir = new File(FRAILTY_DIR);
@@ -18,6 +21,8 @@ public class FrailtyDataManager {
             writer.write("falls_count=" + patient.getFallsCount());
             writer.newLine();
             writer.write("falls_button_color=" + (patient.getFallsButtonColour() != null ? patient.getFallsButtonColour() : "RED"));
+            writer.newLine();
+            writer.write("last_fall_date=" + formatDate(patient.getLastFallDate()));
             writer.newLine();
         } catch (IOException e) {
             System.err.println("Error saving frailty data for " + patient.getPatientId() + ": " + e.getMessage());
@@ -46,6 +51,9 @@ public class FrailtyDataManager {
                         case "falls_button_color":
                             patient.setFallsButtonColour(value.isEmpty() ? "RED" : value);
                             break;
+                        case "last_falls_date":
+                            patient.setLastFallDate(parseDate(value));;
+                            break;
                         default:
                             System.out.println("Unknown frailty field: " + key);
                             break;
@@ -56,6 +64,24 @@ public class FrailtyDataManager {
             System.out.println("No frailty data found for " + patient.getPatientId() + " - using defaults");
         } catch (IOException e) {
             System.err.println("Error loading frailty data for " + patient.getPatientId() + ": " + e.getMessage());
+        }
+    }
+
+
+    private static String formatDate(Date date) {
+        return date != null ? dateFormat.format(date) : null;
+    }
+
+
+    private static Date parseDate(String dateStr) {
+        if (dateStr == null || dateStr.equals("null") || dateStr.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return dateFormat.parse(dateStr);
+        } catch (Exception e) {
+            System.err.println("Error parsing last falls date: " + dateStr);
+            return null;
         }
     }
 }

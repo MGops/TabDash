@@ -14,7 +14,7 @@ import java.awt.event.MouseAdapter;
 
 public class FallsPanel extends JPanel {
 
-    private JPanel risksSection;
+    private JPanel fallsActionSection;
     private JPanel fallsNumberSection;
 
     private int fallsCount = 0;
@@ -34,7 +34,7 @@ public class FallsPanel extends JPanel {
     }
 
 
-    private JPanel createRisksSection() {
+    private JPanel createActionSection() {
         JPanel section = new JPanel();
         section.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         return section;
@@ -78,15 +78,15 @@ public class FallsPanel extends JPanel {
 
 
     private void createSections() {
-        risksSection = createRisksSection();
+        fallsActionSection = createActionSection();
         fallsNumberSection = createNumberSection();
     }
 
 
     private void initialiseComponents() {
-        add(risksSection);
-        add(createVerticalSeparator());
         add(fallsNumberSection);
+        add(createVerticalSeparator());
+        add(fallsActionSection);
     }
 
 

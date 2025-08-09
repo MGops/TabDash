@@ -79,6 +79,7 @@ public class FallsPanel extends JPanel {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         
         JCheckBox fallsProformaChk = new JCheckBox("Falls proforma");
+        JCheckBox medsReviewChk = new JCheckBox("Meds review?");
         JCheckBox bpObsChk = new JCheckBox("L/S BP & Obs");
         JCheckBox bmChk = new JCheckBox("BM");
         JCheckBox ramblegardChk = new JCheckBox("Ramblegard?");
@@ -113,6 +114,7 @@ public class FallsPanel extends JPanel {
         });
 
         panel.add(fallsProformaChk);
+        panel.add(medsReviewChk);
         panel.add(bpObsChk);
 
         if (isPatientDiabetic()) {
@@ -183,6 +185,7 @@ public class FallsPanel extends JPanel {
                     if (fallsCountBtn.getForeground().equals(Color.RED)) {
                         fallsCountBtn.setForeground(new Color(40,190,40));
                         saveButtonColour("GREEN");
+                        removeCheckboxPanelFromActionSection();
                     }
                 }
             } 

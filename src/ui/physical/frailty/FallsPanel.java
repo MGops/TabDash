@@ -27,7 +27,7 @@ public class FallsPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         Border empty = BorderFactory.createEmptyBorder();
         setBorder(BorderFactory.createTitledBorder(empty,"Falls"));
-        //setBackground(Color.LIGHT_GRAY);
+        setBackground(Color.LIGHT_GRAY);
 
         createSections();
         initialiseComponents();
@@ -83,14 +83,23 @@ public class FallsPanel extends JPanel {
         JCheckBox bpObsChk = new JCheckBox("L/S BP & Obs");
         JCheckBox bmChk = new JCheckBox("BM");
         JCheckBox ramblegardChk = new JCheckBox("Ramblegard?");
+        JCheckBox gerisReviewChk = new JCheckBox("Geriatrics referral?");
 
         fallsProformaChk.setOpaque(false);
+        medsReviewChk.setOpaque(false);
         bpObsChk.setOpaque(false);
         bmChk.setOpaque(false);
         ramblegardChk.setOpaque(false);
+        gerisReviewChk.setOpaque(false);
 
         fallsProformaChk.addActionListener(e -> {
             fallsProformaChk.setVisible(false);
+            panel.revalidate();
+            panel.repaint();
+        });
+
+        medsReviewChk.addActionListener(e -> {
+            medsReviewChk.setVisible(false);
             panel.revalidate();
             panel.repaint();
         });
@@ -113,6 +122,12 @@ public class FallsPanel extends JPanel {
             panel.repaint();
         });
 
+        gerisReviewChk.addActionListener(e -> {
+            gerisReviewChk.setVisible(false);
+            panel.revalidate();
+            panel.repaint();
+        });
+
         panel.add(fallsProformaChk);
         panel.add(medsReviewChk);
         panel.add(bpObsChk);
@@ -122,6 +137,11 @@ public class FallsPanel extends JPanel {
         }
 
         panel.add(ramblegardChk);
+        panel.add(gerisReviewChk);
+        
+        panel.setMaximumSize(panel.getPreferredSize());
+        panel.setAlignmentY(Component.TOP_ALIGNMENT);
+
         return panel;
     }
 

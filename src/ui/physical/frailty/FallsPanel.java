@@ -46,10 +46,98 @@ public class FallsPanel extends JPanel {
         lastFallLabel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
         updateLastFallDisplay();
-        section.add(lastFallLabel, BorderLayout.NORTH);
 
+        section.add(lastFallLabel, BorderLayout.NORTH);
         return section;
     }
+
+
+    private void addCheckboxPanelToActionSection() {
+        removeCheckboxPanelFromActionSection();
+
+        JPanel fallsCheckboxPanel = createCheckboxPanel();
+        fallsActionSection.add(fallsCheckboxPanel, BorderLayout.CENTER);
+        fallsActionSection.revalidate();
+        fallsActionSection.repaint();
+    }
+
+
+    private void removeCheckboxPanelFromActionSection() {
+        Component[] components = fallsActionSection.getComponents();
+        for (Component component : components) {
+            if (component != lastFallLabel) {
+                fallsActionSection.remove(component);
+            }
+        }
+        fallsActionSection.revalidate();
+        fallsActionSection.repaint();
+    }
+
+
+    private JPanel createCheckboxPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        JCheckBox fallsProformaChk = new JCheckBox("Falls proforma");
+        JCheckBox bpObsChk = new JCheckBox("L/S BP & Obs");
+        JCheckBox bmChk = new JCheckBox("BM");
+        JCheckBox ramblegardChk = new JCheckBox("Ramblegard?");
+
+        fallsProformaChk.setOpaque(false);
+        bpObsChk.setOpaque(false);
+        bmChk.setOpaque(false);
+        ramblegardChk.setOpaque(false);
+
+        fallsProformaChk.addActionListener(e -> {
+            fallsProformaChk.setVisible(false);
+            panel.revalidate();
+            panel.repaint();
+        });
+
+        bpObsChk.addActionListener(e -> {
+            bpObsChk.setVisible(false);
+            panel.revalidate();
+            panel.repaint();
+        });
+
+        bmChk.addActionListener(e -> {
+            bmChk.setVisible(false);
+            panel.revalidate();
+            panel.repaint();
+        });
+
+        ramblegardChk.addActionListener(e -> {
+            ramblegardChk.setVisible(false);
+            panel.revalidate();
+            panel.repaint();
+        });
+
+        panel.add(fallsProformaChk);
+        panel.add(bpObsChk);
+
+        if (isPatientDiabetic()) {
+            panel.add(bmChk);
+        }
+
+        panel.add(ramblegardChk);
+        return panel;
+    }
+
+
+    private boolean isPatientDiabetic() {
+        Patient currentPatient = tabDash.getCurrentPatient();
+        if (currentPatient == null) {
+            return false;
+        }
+
+        for (String condition : currentPatient.getPhysicalHealthConditions()) {
+            if (condition.contains("diabetes")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private JPanel createNumberSection() {
         JPanel section = new JPanel(new BorderLayout());
@@ -80,6 +168,7 @@ public class FallsPanel extends JPanel {
                         saveFallsCount();
                         saveButtonColour("RED");
                         updateLastFallDisplay();
+                        addCheckboxPanelToActionSection();
                     }
 
                 } else if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON3) {
@@ -88,6 +177,8 @@ public class FallsPanel extends JPanel {
 
                     saveFallsCount();
                     updateLastFallDisplay();
+                    removeCheckboxPanelFromActionSection();
+
                 } else if (e.getButton() == MouseEvent.BUTTON3) {
                     if (fallsCountBtn.getForeground().equals(Color.RED)) {
                         fallsCountBtn.setForeground(new Color(40,190,40));
@@ -253,11 +344,14 @@ public class FallsPanel extends JPanel {
                 fallsCountBtn.setForeground(Color.RED);    
             }
             updateLastFallDisplay();
+            removeCheckboxPanelFromActionSection();
+
         } else if (fallsCountBtn != null) {
             fallsCount = 0;
             fallsCountBtn.setText("0");
             fallsCountBtn.setForeground(new Color(40,190,40));
             updateLastFallDisplay();
+            removeCheckboxPanelFromActionSection();
         }
     }
 }

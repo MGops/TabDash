@@ -24,6 +24,8 @@ public class FrailtyDataManager {
             writer.newLine();
             writer.write("last_fall_date=" + formatDate(patient.getLastFallDate()));
             writer.newLine();
+            writer.write("vte_assessment_date=" + formatDate(patient.getVteAssessmentDate()));
+            writer.newLine();
         } catch (IOException e) {
             System.err.println("Error saving frailty data for " + patient.getPatientId() + ": " + e.getMessage());
         }
@@ -53,6 +55,9 @@ public class FrailtyDataManager {
                             break;
                         case "last_falls_date":
                             patient.setLastFallDate(parseDate(value));;
+                            break;
+                        case "vte_assessment_date":
+                            patient.setVteAssessmentDate(parseDate(value));
                             break;
                         default:
                             System.out.println("Unknown frailty field: " + key);

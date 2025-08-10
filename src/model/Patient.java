@@ -42,6 +42,7 @@ public class Patient {
     private int fallsCount;
     private String fallsButtonColour;
     private Date lastFallDate;
+    private Date vteAssessmentDate;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -94,6 +95,7 @@ public class Patient {
         this.fallsCount = 0;
         this.fallsButtonColour = "GREEN";
         this.lastFallDate = null;
+        this.vteAssessmentDate = null;
     }
 
 
@@ -309,5 +311,14 @@ public class Patient {
 
     public void setLastFallDate(Date lastFallDate) {
         this.lastFallDate = lastFallDate;
+    }
+
+
+    public Date getVteAssessmentDate() {
+        return vteAssessmentDate;
+    }
+
+    public void setVteAssessmentDate(Date vteAssessmentDate) {
+        this.vteAssessmentDate = vteAssessmentDate;
     }
 }

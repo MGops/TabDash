@@ -123,7 +123,6 @@ public class ImmobilityPanel extends JPanel {
                         " (" + daysDifference + " days)<br>" +
                         "<i>Unless change in mobility</i></center></html>";
             
-            // Color coding based on days remaining
             if (daysDifference <= 7) {
                 nextAssessmentLabel.setBackground(Color.ORANGE);
                 nextAssessmentLabel.setForeground(Color.BLACK);

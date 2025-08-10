@@ -27,7 +27,6 @@ public class FallsPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         Border empty = BorderFactory.createEmptyBorder();
         setBorder(BorderFactory.createTitledBorder(empty,"Falls"));
-        setBackground(Color.LIGHT_GRAY);
 
         createSections();
         initialiseComponents();

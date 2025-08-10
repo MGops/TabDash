@@ -32,7 +32,6 @@ public class FrailtySection extends JPanel {
         fallsPanel = new FallsPanel(tabDash);
         //fallsPanel.setBackground(Color.LIGHT_GRAY);
         immobilityPanel = new ImmobilityPanel(tabDash);
-        immobilityPanel.setBackground(new Color(220, 255,220));
 
         JPanel incontinencePanel = createQuadrant("Incontinence", new Color(220, 220, 255));
         JPanel deliriumPanel = createQuadrant("Delirium", new Color(255, 220, 220));

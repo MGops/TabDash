@@ -23,6 +23,7 @@ public class ImmobilityPanel extends JPanel {
         Border empty = BorderFactory.createEmptyBorder();
         setBorder(BorderFactory.createTitledBorder(empty, "Immobility"));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(new Color(220, 255,220));
         initialiseComponents();
     }
 
@@ -103,14 +104,14 @@ public class ImmobilityPanel extends JPanel {
         String statusText;
         if (isOverdue) {
             long daysOverdue = Math.abs(daysDifference);
-            statusText = "<html><center><b>VTE assessment OVERDUE</b><br>" +
+            statusText = "<html><center>VTE assessment OVERDUE<br>" +
                         "Due: " + formattedNextDate + "<br>" +
                         "(" + daysOverdue + " days overdue)<br>" +
                         "<i>Unless change in mobility</i></center></html>";
             nextAssessmentLabel.setBackground(Color.RED);
             nextAssessmentLabel.setForeground(Color.WHITE);
         } else {
-            statusText = "<html><center><b>Next VTE assessment due:</b><br>" +
+            statusText = "<html><center>Next VTE assessment due:" +
                         formattedNextDate + "<br>" +
                         "(" + daysDifference + " days)<br>" +
                         "<i>Unless change in mobility</i></center></html>";

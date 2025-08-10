@@ -28,18 +28,25 @@ public class ImmobilityPanel extends JPanel {
     }
 
     private void initialiseComponents() {
-        JPanel vtePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel vtePanel = new JPanel();
+        vtePanel.setLayout(new BoxLayout(vtePanel, BoxLayout.X_AXIS));
         vtePanel.setOpaque(false);
+        vtePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel vteLabel = new JLabel("VTE risk done:");
 
         vteAssessmentDateField = new JFormattedTextField(dateFormat);
         vteAssessmentDateField.setColumns(8);
+        vteAssessmentDateField.setMaximumSize(vteAssessmentDateField.getPreferredSize());
 
         vtePanel.add(vteLabel);
         vtePanel.add(vteAssessmentDateField);
 
         nextAssessmentLabel = new JLabel();
+        nextAssessmentLabel.setOpaque(true);
+        nextAssessmentLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        nextAssessmentLabel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+
         add(vtePanel);
         add(Box.createVerticalStrut(5));
         add(nextAssessmentLabel);
@@ -105,15 +112,15 @@ public class ImmobilityPanel extends JPanel {
         if (isOverdue) {
             long daysOverdue = Math.abs(daysDifference);
             statusText = "<html><center>VTE assessment OVERDUE<br>" +
-                        "Due: " + formattedNextDate + "<br>" +
-                        "(" + daysOverdue + " days overdue)<br>" +
+                        "Due: " + formattedNextDate + 
+                        " (" + daysOverdue + " days overdue)<br>" +
                         "<i>Unless change in mobility</i></center></html>";
             nextAssessmentLabel.setBackground(Color.RED);
             nextAssessmentLabel.setForeground(Color.WHITE);
         } else {
-            statusText = "<html><center>Next VTE assessment due:" +
-                        formattedNextDate + "<br>" +
-                        "(" + daysDifference + " days)<br>" +
+            statusText = "<html><center>Next VTE assessment due: " +
+                        formattedNextDate + 
+                        " (" + daysDifference + " days)<br>" +
                         "<i>Unless change in mobility</i></center></html>";
             
             // Color coding based on days remaining

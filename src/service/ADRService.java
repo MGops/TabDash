@@ -30,7 +30,7 @@ public class ADRService {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 17) { // medication_identifier + type + 15 ADRs
+                if (parts.length >= 18) { // medication_identifier + type + 16 ADRs
                     String medicationID = parts[0].trim().toLowerCase();
                     List<String> adrs = new ArrayList<>();
                     // Check each ADR column starting from index 2

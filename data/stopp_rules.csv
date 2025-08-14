@@ -12,7 +12,7 @@ acei,Hyperkalaemia,Increased risk of this
 arb,Hyperkalaemia,Increased risk of this
 alpha_blocker,Hypertension,Less well tolerated by older people in combination with other antihypertensives
 propranolol,CHF,risk of increased bronchospasm
-nsaid,Atrial fibrillation,As monotherapy/ In combination with Warfarin/DOAC (no added benefit)
+nsaid,Atrial fibrillation,As monotherapy/In combination with Warfarin/DOAC (no added benefit + bleeding risk)
 nsaid,Hypertension,In severe HTN- high bleeding risk
 clopidogrel,Hypertension,In severe HTN- high bleeding risk
 warfarin,Hypertension,In severe HTN- high bleeding risk
@@ -38,3 +38,12 @@ alendronate,Gastritis,Risk of relapse/exacerbation
 alendronate,Gastric ulcer,Risk of relapse/exacerbation
 alendronate,Oesophageal ulcer,Risk of relapse/exacerbation
 alendronate,Oesophagitis,Risk of relapse/exacerbation
+alpha_blocker,Orthostatic Hypotension,Risk of precipitating recurrent syncope
+alpha_blocker,Syncope,Risk of precipitating recurrent syncope
+procyclidine,Dementia,Risk of increased confusion
+procyclidine,Glaucoma,Risk of acute exacerbation
+thiazide_diuretic,Incontinence,May exacerbate
+loop_diuretic,Incontinence,May exacerbate
+potassium_sparing_diuretic,Incontinence,May exacerbate
+nsaid,CHF,Risk of exacerbation of heart failure (esp. Diclofenac)
+nsaid,CKD,Risk of deterioration in renal function

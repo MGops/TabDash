@@ -19,3 +19,6 @@ CKD,acei,(With proteinuria) Slow disease progression and reduce cardiovascular r
 CKD,arb,(With proteinuria) (If ACEI intolerant) Slow disease progression and reduce cardiovascular risks
 Osteoporosis,adcal-D3,If dietary Calcium inadequate- to reduce fragility fracture risk
 Osteoporosis,alendronate,If no contraindication- to reduce fragility fracture risk
+Ischaemic heart disease,ppi,If on Aspirin/oral corticosteroid/SSRI- increased risk of peptic ulcer
+Rheumatoid Arthritis,methotrexate,In active disabling RA
+Rheumatoid Arthritis,folic_acid,Supplement for those taking methotrexate

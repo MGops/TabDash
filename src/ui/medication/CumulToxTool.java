@@ -43,6 +43,7 @@ public class CumulToxTool extends JPanel {
         tempMap.put("hyperkalaemia", new Color(255, 20, 147));// Deep pink
         tempMap.put("serotonin_syndrome", new Color(255, 215, 0));// Gold
         tempMap.put("angle_closure_glaucoma", new Color(255, 165, 0));// Orange
+        tempMap.put("urinary_incontinence", new Color(90, 145, 230));// Deep blue
         ADR_COLORS = Collections.unmodifiableMap(tempMap);
     }
 

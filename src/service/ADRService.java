@@ -17,7 +17,7 @@ public class ADRService {
         "falls_fractures", "constipation", "urinary_retention", "cns_depression",
         "bleeding", "heart_failure", "bradycardia", "cv_events", "respiratory",
         "hypoglycaemia", "renal_injury", "hypokalaemia", "hyperkalaemia", 
-        "serotonin_syndrome", "angle_closure_glaucoma"
+        "serotonin_syndrome", "angle_closure_glaucoma", "urinary_incontinence"
     };
 
     public ADRService() {

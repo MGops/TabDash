@@ -53,7 +53,7 @@ public class FrailtyDataManager {
                         case "falls_button_color":
                             patient.setFallsButtonColour(value.isEmpty() ? "RED" : value);
                             break;
-                        case "last_falls_date":
+                        case "last_fall_date":
                             patient.setLastFallDate(parseDate(value));;
                             break;
                         case "vte_assessment_date":

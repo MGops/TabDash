@@ -39,7 +39,7 @@ public class LogSection extends JPanel {
     private void loadPatientLogEntries() {
         logContentPanel.removeAll();
 
-        Patient currentPatient = tabDash.getCurrentPatient();
+        Patient currentPatient = (tabDash != null) ? tabDash.getCurrentPatient() : null;
         if (currentPatient == null) {
             JLabel noPatientLabel = new JLabel("No patient selected");
             noPatientLabel.setFont(noPatientLabel.getFont().deriveFont(Font.ITALIC, 11f));

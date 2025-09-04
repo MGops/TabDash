@@ -9,6 +9,7 @@ import src.data_managers.MedicationDatabase;
 import src.data_managers.MonitoringDataManager;
 import src.data_managers.PatientDataManager;
 import src.data_managers.PhysicalHealthDataManager;
+import src.data_managers.LogEntryDataManager;
 import src.model.Patient;
 import src.ui.panels.ContentPanel;
 import src.ui.panels.HeaderPanel;
@@ -65,6 +66,7 @@ public class TabDash {
             MonitoringDataManager.loadPatientMonitoring(patient);
             HeaderDataManager.loadPatientHeaderData(patient);
             FrailtyDataManager.loadPatientFrailtyData(patient);
+            LogEntryDataManager.loadPatientLogEntries(patient);
         }
         
         currentPatient = patients.isEmpty() ? null : patients.get(0);
@@ -136,6 +138,7 @@ public class TabDash {
             AppointmentDataManager.loadPatientAppointments(newPatient);
             MonitoringDataManager.loadPatientMonitoring(newPatient);
             HeaderDataManager.loadPatientHeaderData(newPatient);
+            LogEntryDataManager.loadPatientLogEntries(newPatient);
 
             // Set as current patient
             currentPatient = newPatient;
@@ -195,6 +198,7 @@ public class TabDash {
         MonitoringDataManager.savePatientMonitoring(currentPatient);
         HeaderDataManager.savePatientHeaderData(currentPatient);
         FrailtyDataManager.savePatientFrailtyData(currentPatient);
+        LogEntryDataManager.savePatientLogEntries(currentPatient);
     }
 
     public MHAPanel getMHAPanel() {

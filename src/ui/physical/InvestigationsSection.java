@@ -1,5 +1,7 @@
 package src.ui.physical;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,13 +12,13 @@ import java.awt.Insets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.*;
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
 import src.data_managers.MonitoringDataManager;
 import src.model.MonitoringIssue;
 import src.model.Patient;
 import src.ui.TabDash;
+import src.model.LogEntry;
 
 public class InvestigationsSection extends JPanel {
     private TabDash tabDash;
@@ -183,6 +185,17 @@ public class InvestigationsSection extends JPanel {
     private void saveSelectedIssues(Patient patient,
                                     Map<String, JCheckBox> checkBoxes,
                                     Map<String, JTextField> textFields) {
+        // Load existing monitoring issues to compare changes
+        MonitoringDataManager.loadPatientMonitoring(patient);
+        Map<String, Boolean> previousStates = new HashMap<>();
+        
+        // Record previous states of chart-type issues
+        for (MonitoringIssue issue : patient.getMonitoringIssues()) {
+            if (getChartTypeForIssueType(issue.getIssueType()) != null) {
+                previousStates.put(issue.getIssueType(), issue.isActive());
+            }
+        }
+        
         // Clear existing monitoring issues 
         patient.getMonitoringIssues().clear();
         
@@ -190,6 +203,9 @@ public class InvestigationsSection extends JPanel {
         for (String issueType : ISSUE_TYPES) {
             JCheckBox checkBox = checkBoxes.get(issueType);
             JTextField textField = textFields.get(issueType);
+
+            boolean isCurrentlySelected = checkBox.isSelected();
+            boolean wasPreviouslyActive = previousStates.getOrDefault(issueType, false);
             
             if (checkBox.isSelected()) {
                 // Create new active monitoring issue
@@ -198,14 +214,47 @@ public class InvestigationsSection extends JPanel {
                     notes.isEmpty() ? null : notes);
                 issue.setActive(true);
                 patient.addMonitoringIssue(issue);
+
+                // Generate log entry if this is a chart-type issue that wasn't previously active
+                LogEntry.ChartType chartType = getChartTypeForIssueType(issueType);
+                if (chartType != null && !wasPreviouslyActive) {
+                    patient.addChartEvent(chartType, LogEntry.Action.STARTED);
+                    System.out.println("Log entry created: " + chartType.displayName + " started");
+                }
+            } else {
+                // Generate log entry if this chart-type issue was previously active but now stopped
+                LogEntry.ChartType chartType = getChartTypeForIssueType(issueType);
+                if (chartType != null && wasPreviouslyActive) {
+                    patient.addChartEvent(chartType, LogEntry.Action.STOPPED);
+                    System.out.println("Log entry created: " + chartType.displayName + " stopped");
+                }
             }
         }
         
         // Save to file
         MonitoringDataManager.savePatientMonitoring(patient);
         tabDash.onPatientDataChanged();
+
+        refreshLogDisplay();
     }
 
+    private void refreshLogDisplay() {
+        // Get reference to the physical health panel and refresh its log section
+        SwingUtilities.invokeLater(() -> {
+            Container parent = this.getParent();
+            while (parent != null && !(parent instanceof src.ui.panels.PhysicalHealthPanel)) {
+                parent = parent.getParent();
+            }
+            if (parent instanceof src.ui.panels.PhysicalHealthPanel) {
+                src.ui.panels.PhysicalHealthPanel physicalPanel = 
+                    (src.ui.panels.PhysicalHealthPanel) parent;
+                PlaceholderSection placeholderSection = physicalPanel.getPlaceholderSection();
+                if (placeholderSection != null && placeholderSection.getLogSection() != null) {
+                    placeholderSection.getLogSection().refreshLogEntries();
+                }
+            }
+        });
+    }
 
     private void loadActiveIssues() {
         activeIssuesPanel.removeAll();
@@ -288,6 +337,19 @@ public class InvestigationsSection extends JPanel {
 
         panel.add(removeBtn, BorderLayout.EAST);
         return panel;
+    }
+
+    private LogEntry.ChartType getChartTypeForIssueType(String issueType) {
+        switch (issueType.toLowerCase()) {
+            case "fluids":
+                return LogEntry.ChartType.FLUID;
+            case "diet":
+                return LogEntry.ChartType.FOOD;   
+            case "stool chart":
+                return LogEntry.ChartType.STOOL;
+            default:
+                return null;
+        }
     }
 
 

@@ -4,12 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.TitledBorder;
 
+import src.ui.TabDash;
+
 public class PlaceholderSection extends JPanel {
 
     private JPanel phitToolSection;
-    private JPanel logSection;
+    private LogSection logSection;
+    private TabDash tabDash;
 
-    public PlaceholderSection() {
+    public PlaceholderSection(TabDash tabDash) {
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(150,400));
 
@@ -23,7 +26,11 @@ public class PlaceholderSection extends JPanel {
 
         phitToolSection = createPhitToolSection();
 
-        logSection = createLogSection();
+        if (tabDash != null) {
+            logSection = new LogSection(tabDash);
+        } else {
+            logSection = createPlaceholderLogSection();
+        }
 
         mainContainer.add(phitToolSection);
         mainContainer.add(Box.createVerticalStrut(5));
@@ -49,29 +56,22 @@ public class PlaceholderSection extends JPanel {
     }
     
 
-    private JPanel createLogSection() {
-        JPanel section = new JPanel(new BorderLayout());
-        section.setBorder(BorderFactory.createTitledBorder("Log"));
-
-        section.setMinimumSize(new Dimension(150,150));
-
-        JPanel logContent = new JPanel();
-        logContent.setLayout(new BoxLayout(logContent, BoxLayout.Y_AXIS));
-
-        JLabel logLabel = new JLabel("<html><center>Monitoring<br>Log</center></html>");
-        logLabel.setFont(logLabel.getFont().deriveFont(Font.PLAIN, 11f));
-        logLabel.setForeground(Color.GRAY);
-        logLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        
-        logContent.add(logLabel);
-        
-        JScrollPane scrollPane = new JScrollPane(logContent);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        
-        section.add(scrollPane, BorderLayout.CENTER);
-        
-        return section;
+    private LogSection createPlaceholderLogSection() {
+        return new LogSection(null) {
+            @Override
+            public void refreshForNewPatient() {
+                // Override to show placeholder content when TabDash is null
+                logContentPanel.removeAll();
+                JLabel placeholderLabel = new JLabel("<html><center>Monitoring<br>Log</center></html>");
+                placeholderLabel.setFont(placeholderLabel.getFont().deriveFont(Font.ITALIC, 11f));
+                placeholderLabel.setForeground(Color.GRAY);
+                placeholderLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                placeholderLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                logContentPanel.add(placeholderLabel);
+                logContentPanel.revalidate();
+                logContentPanel.repaint();
+            }
+        };
     }
 
 
@@ -80,7 +80,13 @@ public class PlaceholderSection extends JPanel {
     }
     
 
-    public JPanel getLogSection() {
+    public LogSection getLogSection() {
         return logSection;
+    }
+
+    public void refreshForNewPatient() {
+        if (logSection != null) {
+            logSection.refreshForNewPatient();
+        }
     }
 }

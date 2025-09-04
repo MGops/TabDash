@@ -249,7 +249,8 @@ public class SidePanel extends JPanel{
             "data/physical_health/",
             "data/mha/",
             "data/appointments/",
-            "data/header/"
+            "data/header/",
+            "data/logs/"
         };
         
         for (String dir : directories) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import src.model.MonitoringIssue;
+import src.model.LogEntry;
 
 public class Patient {
     private String patientId;
@@ -43,6 +44,7 @@ public class Patient {
     private String fallsButtonColour;
     private Date lastFallDate;
     private Date vteAssessmentDate;
+    private List<LogEntry> logEntries;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -89,15 +91,19 @@ public class Patient {
 
     private void initialisePhysicalHealthFields() {
         initialiseFrailtyFields();
+        intialiseLogFields();
     }
 
-    private void initialiseFrailtyFields(){
+    private void initialiseFrailtyFields() {
         this.fallsCount = 0;
         this.fallsButtonColour = "GREEN";
         this.lastFallDate = null;
         this.vteAssessmentDate = null;
     }
 
+    private void intialiseLogFields() {
+        this.logEntries = new ArrayList<>();
+    }
 
     public void resetMHAdata() {
         initialiseMHAFields();
@@ -320,5 +326,32 @@ public class Patient {
 
     public void setVteAssessmentDate(Date vteAssessmentDate) {
         this.vteAssessmentDate = vteAssessmentDate;
+    }
+
+    public List<LogEntry> getLogEntries() {
+        return logEntries;
+    }
+
+    public void setLogEntries(List<LogEntry> logEntries) {
+        this.logEntries = logEntries;
+    }
+
+    public void addLogEntry(LogEntry entry) {
+        this.logEntries.add(entry);
+    }
+
+    public void removeLogEntry(LogEntry entry) {
+        this.logEntries.remove(entry);
+    }
+
+    public void addChartEvent(LogEntry.ChartType chartType, LogEntry.Action action) {
+        LogEntry entry = new LogEntry(new Date(), chartType, action);
+        addLogEntry(entry);
+    }
+
+    public List<LogEntry> getSortedLogEntries() {
+        List<LogEntry> sorted = new ArrayList<>(logEntries);
+        sorted.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
+        return sorted;
     }
 }

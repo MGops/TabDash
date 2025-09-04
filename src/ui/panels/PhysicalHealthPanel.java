@@ -38,7 +38,7 @@ public class PhysicalHealthPanel extends JPanel {
         investigationsSection = new InvestigationsSection(tabDash);
         frailtySection = new FrailtySection(tabDash);
         appointmentsSection = new AppointmentsSection(tabDash);
-        placeholderSection = new PlaceholderSection();
+        placeholderSection = new PlaceholderSection(tabDash);
 
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1; gbc.gridheight = 1;
@@ -73,5 +73,10 @@ public class PhysicalHealthPanel extends JPanel {
         appointmentsSection.refreshForNewPatient();
         investigationsSection.refreshForNewPatient();
         frailtySection.refreshForNewPatient();
+        placeholderSection.refreshForNewPatient();
+    }
+
+    public PlaceholderSection getPlaceholderSection() {
+        return placeholderSection;
     }
 } 

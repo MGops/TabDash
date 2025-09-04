@@ -6,8 +6,8 @@ import java.util.Date;
 public class LogEntry {
     public enum ChartType {
         FLUID("Fluid chart", "#ADD8E6"),
-        FOOD("Food chart", "#FFE4B5"),
-        STOOL("Stool chart", "#D2B48C");
+        FOOD("Food chart", "#E6ADD8"),
+        STOOL("Stool chart", "#b69c79");
 
         public final String displayName;
         public final String colorHex;

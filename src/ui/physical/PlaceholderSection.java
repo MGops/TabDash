@@ -36,7 +36,7 @@ public class PlaceholderSection extends JPanel {
     public PlaceholderSection(TabDash tabDash) {
         this.tabDash = tabDash;
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(150,400));
+        setMinimumSize(new Dimension(180,400));
 
         initialiseComponents();
     }

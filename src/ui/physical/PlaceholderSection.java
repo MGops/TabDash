@@ -54,7 +54,6 @@ public class PlaceholderSection extends JPanel {
         }
 
         mainContainer.add(phitToolSection, BorderLayout.NORTH);
-        mainContainer.add(Box.createVerticalStrut(5));
         mainContainer.add(logSection, BorderLayout.CENTER);
 
         add(mainContainer, BorderLayout.CENTER);
@@ -66,7 +65,9 @@ public class PlaceholderSection extends JPanel {
         section.setBorder(BorderFactory.createTitledBorder("PHIT Tool"));
         TitledBorder border = (TitledBorder) section.getBorder();
         border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
-        section.setMinimumSize(new Dimension(150, 200));
+
+        section.setPreferredSize(new Dimension(150, 180));
+        section.setMinimumSize(new Dimension(150, 180));
 
         addInvestigationField(section, "Lipid profile:", createLipidProfileComponents());
         addInvestigationField(section, "HbA1c:", createHba1cComponents());

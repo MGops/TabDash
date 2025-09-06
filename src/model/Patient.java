@@ -45,6 +45,12 @@ public class Patient {
     private Date lastFallDate;
     private Date vteAssessmentDate;
     private List<LogEntry> logEntries;
+    private Date lipidProfileDate;
+    private Date hba1cDate;
+    private Date tftDate;
+    private Date prolactinDate;
+    private Date b12Date;
+    private Date folateDate;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -91,6 +97,7 @@ public class Patient {
 
     private void initialisePhysicalHealthFields() {
         initialiseFrailtyFields();
+        initialisePhitFields();
         intialiseLogFields();
     }
 
@@ -354,4 +361,30 @@ public class Patient {
         sorted.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
         return sorted;
     }
+
+    public Date getLipidProfileDate() {return lipidProfileDate;}
+    public Date getHba1cDate() {return hba1cDate;}
+    public Date getTftDate() {return tftDate;}
+    public Date getProlactinDate() {return prolactinDate;}
+    public Date getB12Date() {return b12Date;}
+    public Date getFolateDate() {return folateDate;}
+
+
+    public void setLipidProfileDate(Date lipidProfileDate) {this.lipidProfileDate = lipidProfileDate;}
+    public void setHba1cDate(Date hba1cDate) {this.hba1cDate = hba1cDate;}
+    public void setTftDate(Date tftDate) {this.tftDate = tftDate;}
+    public void setProlactinDate(Date prolactinDate) {this.prolactinDate = prolactinDate;}
+    public void setB12Date(Date b12Date) {this.b12Date = b12Date;}
+    public void setFolateDate(Date folateDate) {this.folateDate = folateDate;}
+
+
+    private void initialisePhitFields() {
+        this.lipidProfileDate = null;
+        this.hba1cDate = null;
+        this.tftDate = null;
+        this.prolactinDate = null;
+        this.b12Date = null;
+        this.folateDate = null;
+    }
+
 }

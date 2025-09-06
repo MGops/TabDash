@@ -10,6 +10,7 @@ import src.data_managers.MonitoringDataManager;
 import src.data_managers.PatientDataManager;
 import src.data_managers.PhysicalHealthDataManager;
 import src.data_managers.LogEntryDataManager;
+import src.data_managers.PhitDataManager;
 import src.model.Patient;
 import src.ui.panels.ContentPanel;
 import src.ui.panels.HeaderPanel;
@@ -66,6 +67,7 @@ public class TabDash {
             MonitoringDataManager.loadPatientMonitoring(patient);
             HeaderDataManager.loadPatientHeaderData(patient);
             FrailtyDataManager.loadPatientFrailtyData(patient);
+            PhitDataManager.loadPatientPhitData(patient);
             LogEntryDataManager.loadPatientLogEntries(patient);
         }
         
@@ -138,6 +140,7 @@ public class TabDash {
             AppointmentDataManager.loadPatientAppointments(newPatient);
             MonitoringDataManager.loadPatientMonitoring(newPatient);
             HeaderDataManager.loadPatientHeaderData(newPatient);
+            PhitDataManager.loadPatientPhitData(newPatient);
             LogEntryDataManager.loadPatientLogEntries(newPatient);
 
             // Set as current patient
@@ -198,6 +201,7 @@ public class TabDash {
         MonitoringDataManager.savePatientMonitoring(currentPatient);
         HeaderDataManager.savePatientHeaderData(currentPatient);
         FrailtyDataManager.savePatientFrailtyData(currentPatient);
+        PhitDataManager.savePatientPhitData(currentPatient);
         LogEntryDataManager.savePatientLogEntries(currentPatient);
     }
 

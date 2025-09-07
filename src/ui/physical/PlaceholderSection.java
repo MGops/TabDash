@@ -6,6 +6,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Calendar;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import src.data_managers.PhitDataManager;
@@ -69,6 +70,8 @@ public class PlaceholderSection extends JPanel {
         section.setPreferredSize(new Dimension(150, 180));
         section.setMinimumSize(new Dimension(150, 180));
 
+        section.add(Box.createVerticalStrut(5));
+
         addInvestigationField(section, "Lipid profile:", createLipidProfileComponents());
         addInvestigationField(section, "HbA1c:", createHba1cComponents());
         addInvestigationField(section, "TFT:", createTftComponents());
@@ -76,23 +79,27 @@ public class PlaceholderSection extends JPanel {
         addInvestigationField(section, "B12:", createB12Components());
         addInvestigationField(section, "Folate:", createFolateComponents());
 
+        section.add(Box.createVerticalStrut(5));
+
         return section;
     }
     
     private void addInvestigationField(JPanel parent, String labelText, JComponent[] components) {
-        JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 2));
-        rowPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 3));
+        rowPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
         rowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         JLabel label = (JLabel) components[0];
         JFormattedTextField field = (JFormattedTextField) components[1];
         
         label.setText(labelText);
-        label.setPreferredSize(new Dimension(85, 20));
+        label.setPreferredSize(new Dimension(90, 20));
+        label.setFont(label.getFont().deriveFont(Font.PLAIN, 12f));
         
         rowPanel.add(label);
         rowPanel.add(field);
         parent.add(rowPanel);
+        parent.add(Box.createVerticalStrut(2));
     }
 
     private JComponent[] createLipidProfileComponents() {
@@ -134,8 +141,10 @@ public class PlaceholderSection extends JPanel {
     private JFormattedTextField createDateField() {
         JFormattedTextField field = new JFormattedTextField(dateFormat);
         field.setColumns(8);
-        field.setPreferredSize(new Dimension(80, 20));
-        field.setMaximumSize(new Dimension(80, 20));
+        field.setPreferredSize(new Dimension(85, 22));
+        field.setMaximumSize(new Dimension(85, 22));
+        field.setFont(field.getFont().deriveFont(Font.PLAIN, 11f));
+        field.setBorder(BorderFactory.createLoweredBevelBorder());
         
         field.addFocusListener(new FocusAdapter() {
             @Override
@@ -147,9 +156,62 @@ public class PlaceholderSection extends JPanel {
             }
         });
         
-        field.addPropertyChangeListener("value", e -> updatePatientAndSave());
+        field.addPropertyChangeListener("value", e -> {
+            SwingUtilities.invokeLater(() -> updatePatientAndSave());
+        });
         
         return field;
+    }
+
+
+    private int calculateDaysBetween(Date investigationDate, Date currentDate) {
+        if (investigationDate == null || currentDate == null) {
+            return 0;
+        }
+
+        long diffInMillis = currentDate.getTime() - investigationDate.getTime();
+        return (int) (diffInMillis / (1000 * 60 * 60 * 24));
+    }
+
+
+    private void updateLabelColours() {
+        if (tabDash == null || tabDash.getCurrentPatient() == null) {
+            return;
+        }
+
+        Patient currentPatient = tabDash.getCurrentPatient();
+        Date today = new Date();
+
+        updateInvestigationLabelColour(lipidProfileLabel, currentPatient.getLipidProfileDate(), today, true);
+
+        updateInvestigationLabelColour(hba1cLabel, currentPatient.getHba1cDate(), today, true);
+
+        updateInvestigationLabelColour(tftLabel, currentPatient.getTftDate(), today, false);
+        updateInvestigationLabelColour(prolactinLabel, currentPatient.getProlactinDate(), today, false);
+        updateInvestigationLabelColour(b12Label, currentPatient.getB12Date(), today, false);
+        updateInvestigationLabelColour(folateLabel, currentPatient.getFolateDate(), today, false);
+    }
+
+
+    private void updateInvestigationLabelColour(JLabel label, Date investigationDate, Date today, boolean alertRequired) {
+        if (label == null) return;        
+
+        if (!alertRequired || investigationDate == null) {
+            label.setOpaque(false);
+            label.setForeground(Color.BLACK);
+            return;
+        }
+
+        int daysSinceInvestigation = calculateDaysBetween(investigationDate, today);
+
+        if (daysSinceInvestigation > 90) {
+            label.setOpaque(true);
+            label.setBackground(Color.RED);
+            label.setForeground(Color.WHITE);
+        } else {
+            label.setOpaque(false);
+            label.setForeground(Color.BLACK);
+        }
     }
 
     private void updatePatientAndSave() {
@@ -158,6 +220,8 @@ public class PlaceholderSection extends JPanel {
         Patient currentPatient = tabDash.getCurrentPatient();
         
         updatePatientFromFields(currentPatient);
+
+        updateLabelColours();
         
         PhitDataManager.savePatientPhitData(currentPatient);
     }
@@ -235,6 +299,8 @@ public class PlaceholderSection extends JPanel {
         setFieldValue(prolactinField, currentPatient.getProlactinDate());
         setFieldValue(b12Field, currentPatient.getB12Date());
         setFieldValue(folateField, currentPatient.getFolateDate());
+
+        updateLabelColours();
     }
 
     private void setFieldValue(JFormattedTextField field, Date date) {
@@ -255,5 +321,19 @@ public class PlaceholderSection extends JPanel {
         if (prolactinField != null) setFieldValue(prolactinField, null);
         if (b12Field != null) setFieldValue(b12Field, null);
         if (folateField != null) setFieldValue(folateField, null);
+
+        resetLabelColour(lipidProfileLabel);
+        resetLabelColour(hba1cLabel);
+        resetLabelColour(tftLabel);
+        resetLabelColour(prolactinLabel);
+        resetLabelColour(b12Label);
+        resetLabelColour(folateLabel);
+    }
+
+    private void resetLabelColour(JLabel label) {
+        if (label != null) {
+            label.setOpaque(false);
+            label.setForeground(Color.BLACK);
+        }
     }
 }

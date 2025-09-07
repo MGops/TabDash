@@ -74,12 +74,7 @@ public class TabDash {
         currentPatient = patients.isEmpty() ? null : patients.get(0);
 
         JFrame frame = new JFrame("Dashboard");
-        // frame.setBounds(0, 0, 1000, 700);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) (screenSize.width * 0.8);
-        int height = (int) (screenSize.height * 0.8);
-        frame.setSize(width, height);
-        frame.setLocationRelativeTo(null);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         JPanel mainPanel = new JPanel();

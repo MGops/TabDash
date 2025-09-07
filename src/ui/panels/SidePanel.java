@@ -21,7 +21,7 @@ public class SidePanel extends JPanel{
     public SidePanel(TabDash tabDash) {
         this.tabDash = tabDash;
 
-        setPreferredSize(new Dimension(200, 700));
+        setPreferredSize(new Dimension(150, 700));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     

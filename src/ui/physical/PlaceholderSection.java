@@ -37,7 +37,7 @@ public class PlaceholderSection extends JPanel {
     public PlaceholderSection(TabDash tabDash) {
         this.tabDash = tabDash;
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(150,400));
+        setMinimumSize(new Dimension(180,400));
 
         initialiseComponents();
     }
@@ -67,8 +67,8 @@ public class PlaceholderSection extends JPanel {
         TitledBorder border = (TitledBorder) section.getBorder();
         border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
 
-        section.setPreferredSize(new Dimension(150, 200));
-        section.setMinimumSize(new Dimension(150, 200));
+        section.setPreferredSize(new Dimension(180, 200));
+        section.setMinimumSize(new Dimension(180, 200));
 
         section.add(Box.createVerticalStrut(5));
 

@@ -67,8 +67,8 @@ public class PlaceholderSection extends JPanel {
         TitledBorder border = (TitledBorder) section.getBorder();
         border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD));
 
-        section.setPreferredSize(new Dimension(150, 180));
-        section.setMinimumSize(new Dimension(150, 180));
+        section.setPreferredSize(new Dimension(150, 200));
+        section.setMinimumSize(new Dimension(150, 200));
 
         section.add(Box.createVerticalStrut(5));
 

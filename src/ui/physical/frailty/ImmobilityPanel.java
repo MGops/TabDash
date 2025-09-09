@@ -38,6 +38,7 @@ public class ImmobilityPanel extends JPanel {
         vteAssessmentDateField = new JFormattedTextField(dateFormat);
         vteAssessmentDateField.setColumns(8);
         vteAssessmentDateField.setMaximumSize(vteAssessmentDateField.getPreferredSize());
+        vteAssessmentDateField.setBorder(BorderFactory.createLoweredBevelBorder());
 
         vtePanel.add(vteLabel);
         vtePanel.add(vteAssessmentDateField);

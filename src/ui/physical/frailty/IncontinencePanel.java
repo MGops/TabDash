@@ -23,7 +23,7 @@ public class IncontinencePanel extends JPanel {
         this.tabDash = tabDash;
         Border empty = BorderFactory.createEmptyBorder();
         setBorder(BorderFactory.createTitledBorder(empty, "Incontinence"));
-        setLayout(new GridLayout(3,3,0,0));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(220,220,255));
         initialiseComponents();
     }
@@ -46,6 +46,11 @@ public class IncontinencePanel extends JPanel {
         containedIncontinenceBtn.setOpaque(false);
         incontinentBtn.setOpaque(false);
 
+        continentBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        dependentContinenceBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        containedIncontinenceBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        incontinentBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         ActionListener saveListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,30 +63,13 @@ public class IncontinencePanel extends JPanel {
         containedIncontinenceBtn.addActionListener(saveListener);
         incontinentBtn.addActionListener(saveListener);
 
-        Color borderColor = new Color(190, 190, 225);
-
-        add(createBorderedPanel(new JLabel(""), borderColor));
-        add(createBorderedPanel(continentBtn, borderColor));
-        add(createBorderedPanel(new JLabel(""), borderColor));
-        
-        add(createBorderedPanel(dependentContinenceBtn, borderColor));
-        add(createBorderedPanel(new JLabel(""), borderColor));
-        add(createBorderedPanel(containedIncontinenceBtn, borderColor));
-
-        add(createBorderedPanel(new JLabel(""), borderColor));
-        add(createBorderedPanel(incontinentBtn, borderColor));
-        add(createBorderedPanel(new JLabel(""), borderColor));
+        add(continentBtn);
+        add(dependentContinenceBtn);
+        add(containedIncontinenceBtn);
+        add(incontinentBtn);
     }
 
-    private JPanel createBorderedPanel(JComponent component, Color borderColor) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createLineBorder(borderColor, 1));
-        panel.setBackground(getBackground());
-        panel.add(component, BorderLayout.CENTER);
-        return panel;
-    }
-
-
+    
     private void saveIncontinenceStatus() {
         Patient currentPatient = tabDash.getCurrentPatient();
         if (currentPatient == null) {

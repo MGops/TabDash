@@ -51,6 +51,7 @@ public class Patient {
     private Date prolactinDate;
     private Date b12Date;
     private Date folateDate;
+    private String incontinenceStatus;
    
     public Patient(String patientId) {
         this.patientId = patientId;
@@ -106,6 +107,7 @@ public class Patient {
         this.fallsButtonColour = "GREEN";
         this.lastFallDate = null;
         this.vteAssessmentDate = null;
+        this.incontinenceStatus = "";
     }
 
     private void intialiseLogFields() {
@@ -360,6 +362,15 @@ public class Patient {
         List<LogEntry> sorted = new ArrayList<>(logEntries);
         sorted.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
         return sorted;
+    }
+
+
+    public String getIncontinenceStatus() {
+        return incontinenceStatus;
+    }
+
+    public void setIncontinenceStatus(String incontinenceStatus) {
+        this.incontinenceStatus = incontinenceStatus;
     }
 
     public Date getLipidProfileDate() {return lipidProfileDate;}

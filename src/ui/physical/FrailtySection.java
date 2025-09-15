@@ -11,11 +11,13 @@ import javax.swing.border.Border;
 import src.ui.TabDash;
 import src.ui.physical.frailty.FallsPanel;
 import src.ui.physical.frailty.ImmobilityPanel;
+import src.ui.physical.frailty.IncontinencePanel;
 
 public class FrailtySection extends JPanel {
     private TabDash tabDash;
     private FallsPanel fallsPanel;
     private ImmobilityPanel immobilityPanel;
+    private IncontinencePanel incontinencePanel;
 
     public FrailtySection(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -32,8 +34,8 @@ public class FrailtySection extends JPanel {
         fallsPanel = new FallsPanel(tabDash);
         //fallsPanel.setBackground(Color.LIGHT_GRAY);
         immobilityPanel = new ImmobilityPanel(tabDash);
+        incontinencePanel = new IncontinencePanel(tabDash);
 
-        JPanel incontinencePanel = createQuadrant("Incontinence", new Color(220, 220, 255));
         JPanel deliriumPanel = createQuadrant("Delirium", new Color(255, 220, 220));
         
         add(fallsPanel);
@@ -58,6 +60,9 @@ public class FrailtySection extends JPanel {
         }
         if (immobilityPanel != null) {
             immobilityPanel.refreshForNewPatient();
+        }
+        if (incontinencePanel != null) {
+            incontinencePanel.refreshForNewPatient();
         }
     }
 }

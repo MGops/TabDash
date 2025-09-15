@@ -26,6 +26,7 @@ public class FrailtyDataManager {
             writer.newLine();
             writer.write("vte_assessment_date=" + formatDate(patient.getVteAssessmentDate()));
             writer.newLine();
+            writer.write("incontinence_status=" + (patient.getIncontinenceStatus() != null ? patient.getIncontinenceStatus() : ""));
         } catch (IOException e) {
             System.err.println("Error saving frailty data for " + patient.getPatientId() + ": " + e.getMessage());
         }
@@ -58,6 +59,9 @@ public class FrailtyDataManager {
                             break;
                         case "vte_assessment_date":
                             patient.setVteAssessmentDate(parseDate(value));
+                            break;
+                        case "incontinence_status":
+                            patient.setIncontinenceStatus(value.isEmpty() ? "" : value);
                             break;
                         default:
                             System.out.println("Unknown frailty field: " + key);

@@ -6,8 +6,7 @@ import src.model.Medication;
 import src.model.Patient;
 import src.ui.TabDash;
 import src.utils.UIUtils;
-
-import java.awt.Font;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.border.TitledBorder;
 import javax.swing.*;
 import java.awt.*;
@@ -44,6 +43,7 @@ public class ACBSection extends JPanel{
         medicationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         medicationTable.setRowSelectionAllowed(true);
         medicationTable.setFillsViewportHeight(true);
+        setupTableRenderers();
 
         JScrollPane medScrollPane = new JScrollPane(medicationTable);
 
@@ -180,6 +180,30 @@ public class ACBSection extends JPanel{
             // If acbValue is "-" (String), skip it and don't add to total
         }
         totalAcbScore.setText("Total ACB Score: " + total);
+    }
+
+    private class ACBScoreCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (column == 1 && value != null && value.equals(3)) {
+                label.setText("<html><span style='background-color: red; color: white; padding: 2px 4px;'>3</span></html>");
+            } else if (!isSelected) {
+                label.setText(value != null ? value.toString() : "");
+            }
+            if (!isSelected) {
+                label.setBackground(Color.WHITE);
+                label.setForeground(Color.BLACK);
+            }
+            return label;
+        }
+    }
+
+
+    private void setupTableRenderers() {
+        medicationTable.getColumnModel().getColumn(1).setCellRenderer(new ACBScoreCellRenderer());
     }
     
     private void loadPatientMedications() {

@@ -328,10 +328,17 @@ public class InvestigationsSection extends JPanel {
             );
 
             if (confirm == JOptionPane.YES_OPTION) {
+                LogEntry.ChartType chartType = getChartTypeForIssueType(issue.getIssueType());
+                if (chartType != null) {
+                    tabDash.getCurrentPatient().addChartEvent(chartType, LogEntry.Action.STOPPED);
+                }
+                
                 issue.setActive(false);
                 MonitoringDataManager.savePatientMonitoring(tabDash.getCurrentPatient());
                 tabDash.onPatientDataChanged();
                 loadActiveIssues(); // refresh display
+                
+                refreshLogDisplay();
             }
         });
 

@@ -187,11 +187,20 @@ public class ACBSection extends JPanel{
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
             JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            Object medNameObj = table.getValueAt(row, 0);
+            String medicationName = medNameObj != null ? medNameObj.toString().toLowerCase() : "";
+            boolean hasHighACB = hasAnyMedicationWithACBGreaterThan2();
+            boolean isDonepezilWithHighACB = medicationName.contains("donepezil") && hasHighACB;
 
             if (column == 1 && value != null && value.equals(3)) {
                 label.setText("<html><span style='background-color: red; color: white; padding: 2px 4px;'>3</span></html>");
             } else if (!isSelected) {
                 label.setText(value != null ? value.toString() : "");
+            }
+
+            if (column == 0 && isDonepezilWithHighACB && !isSelected) {
+                label.setBackground(Color.YELLOW);
+                label.setForeground(Color.BLACK);
             }
             if (!isSelected) {
                 label.setBackground(Color.WHITE);
@@ -199,13 +208,26 @@ public class ACBSection extends JPanel{
             }
             return label;
         }
+
+        private boolean hasAnyMedicationWithACBGreaterThan2() {
+            DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                Object acbValue = model.getValueAt(i, 1);
+                if (acbValue instanceof Integer && (Integer) acbValue > 2) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 
     private void setupTableRenderers() {
+        medicationTable.getColumnModel().getColumn(0).setCellRenderer(new ACBScoreCellRenderer());
         medicationTable.getColumnModel().getColumn(1).setCellRenderer(new ACBScoreCellRenderer());
     }
     
+
     private void loadPatientMedications() {
         Patient currentPatient = tabDash.getCurrentPatient();
         if (currentPatient == null) {

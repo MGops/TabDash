@@ -38,26 +38,6 @@ public class TabDash {
 
     public TabDash() {
         patients = new ArrayList<>();
-        patients.add(new Patient("AB 123456"));
-        patients.add(new Patient("CD 678907"));
-        patients.add(new Patient("EF 234561"));
-        patients.add(new Patient("GH 890123"));
-        patients.add(new Patient("IJ 456789"));
-        patients.add(new Patient("KL 012345"));
-        patients.add(new Patient("MN 678901"));
-        patients.add(new Patient("OP 234567"));
-        patients.add(new Patient("QR 890123"));
-        patients.add(new Patient("ST 456789"));
-        patients.add(new Patient("UV 012345"));
-        patients.add(new Patient("WX 678901"));
-        patients.add(new Patient("YZ 234567"));
-        patients.add(new Patient("AA 890123"));
-        patients.add(new Patient("BB 456789"));
-        patients.add(new Patient("CC 012345"));
-        patients.add(new Patient("DD 678901"));
-        patients.add(new Patient("EE 234567"));
-        patients.add(new Patient("FF 890123"));
-        patients.add(new Patient("GG 456789"));
 
         for (Patient patient : patients) {
             PatientDataManager.loadPatient(patient);

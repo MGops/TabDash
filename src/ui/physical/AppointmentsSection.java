@@ -129,11 +129,6 @@ public class AppointmentsSection extends JPanel {
         //Load appointments from current patient
         List<Appointment> appointments = currentPatient.getAppointments();
 
-        // If no appointments exist, add sample data (for testing)
-        if (appointments.isEmpty()) {
-            addSampleAppointments();
-            return;
-        }
 
         // Distribute appointments to appropriate columns based on status
         for (Appointment appointment : appointments) {
@@ -179,27 +174,6 @@ public class AppointmentsSection extends JPanel {
         attendedPanel.repaint();
         missedPanel.revalidate();
         missedPanel.repaint();
-    }
-
-    private void addSampleAppointments() {
-        // Add some sample draggable appointments to add to pt date
-        Appointment cardio = new Appointment("Cardiology", 
-            LocalDateTime.now().plusDays(30), null);
-        Appointment neuro = new Appointment("Neurology", 
-            LocalDateTime.now().plusDays(30), null);
-        Appointment ortho = new Appointment("Orthopaedics", 
-            LocalDateTime.now().plusDays(30), null);
-
-        // Add to pt data
-        Patient currentPatient = tabDash.getCurrentPatient();
-        currentPatient.addAppointment(cardio);
-        currentPatient.addAppointment(neuro);
-        currentPatient.addAppointment(ortho);
-        
-        // Save data
-        tabDash.onPatientDataChanged();
-        
-        loadPatientAppointments();
     }
 
 

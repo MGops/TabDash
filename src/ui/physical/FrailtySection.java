@@ -9,6 +9,7 @@ import java.awt.Color;
 import javax.swing.border.Border;
 
 import src.ui.TabDash;
+import src.ui.physical.frailty.DeliriumPanel;
 import src.ui.physical.frailty.FallsPanel;
 import src.ui.physical.frailty.ImmobilityPanel;
 import src.ui.physical.frailty.IncontinencePanel;
@@ -18,6 +19,7 @@ public class FrailtySection extends JPanel {
     private FallsPanel fallsPanel;
     private ImmobilityPanel immobilityPanel;
     private IncontinencePanel incontinencePanel;
+    private DeliriumPanel deliriumPanel;
 
     public FrailtySection(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -63,6 +65,9 @@ public class FrailtySection extends JPanel {
         }
         if (incontinencePanel != null) {
             incontinencePanel.refreshForNewPatient();
+        }
+        if (deliriumPanel != null) {
+            deliriumPanel.refreshForNewPatient();
         }
     }
 }

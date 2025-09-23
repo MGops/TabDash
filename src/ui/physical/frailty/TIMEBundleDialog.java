@@ -23,17 +23,14 @@ public class TIMEBundleDialog extends JDialog {
         setLayout(new BorderLayout());
         
         try {
-            // Load the TIME_Bundle image from the same package
             java.net.URL imageURL = getClass().getResource("TIME_Bundle.png");
             
             if (imageURL != null) {
                 BufferedImage originalImage = ImageIO.read(imageURL);
                 
-                // Set maximum dimensions (adjust these as needed)
                 int maxWidth = 800;
                 int maxHeight = 700;
                 
-                // Calculate scaled dimensions while maintaining aspect ratio
                 int originalWidth = originalImage.getWidth();
                 int originalHeight = originalImage.getHeight();
                 
@@ -51,7 +48,6 @@ public class TIMEBundleDialog extends JDialog {
                 imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 imageLabel.setVerticalAlignment(SwingConstants.CENTER);
                 
-                // Add image directly to center (no scroll pane needed)
                 add(imageLabel, BorderLayout.CENTER);
                 
             } else {
@@ -70,20 +66,11 @@ public class TIMEBundleDialog extends JDialog {
             add(errorLabel, BorderLayout.CENTER);
         }
         
-        // Create close button
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> dispose());
-        buttonPanel.add(closeButton);
         
-        add(buttonPanel, BorderLayout.SOUTH);
-        
-        // Size and position dialog
-        pack(); // Size to fit content
+        pack();
         setLocationRelativeTo(getParent());
         setResizable(true);
         
-        // Set minimum size
         setMinimumSize(new Dimension(400, 300));
     }
 

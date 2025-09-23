@@ -47,11 +47,8 @@ public class DeliriumPanel extends JPanel {
         // Add button actions
         fourATButton.addActionListener(e -> FourATDialog.showDialog(this, tabDash));
         
-        timeBundleButton.addActionListener(e -> {
-            // TODO: Open TIME Bundle dialog or panel
-            JOptionPane.showMessageDialog(this, "TIME Bundle - To be implemented", 
-                "TIME Bundle", JOptionPane.INFORMATION_MESSAGE);
-        });
+        timeBundleButton.addActionListener(e -> TIMEBundleDialog.showDialog(this, tabDash));
+        
     }
     
 

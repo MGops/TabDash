@@ -23,14 +23,11 @@ public class FourATDialog extends JDialog {
         
         // Create button panel for dialog
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton closeButton = new JButton("Close");
         JButton resetButton = new JButton("Reset");
         
-        closeButton.addActionListener(e -> dispose());
         resetButton.addActionListener(e -> calculator.resetAssessment());
         
         buttonPanel.add(resetButton);
-        buttonPanel.add(closeButton);
         
         // Set up dialog layout
         setLayout(new BorderLayout());

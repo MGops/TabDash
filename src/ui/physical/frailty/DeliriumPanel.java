@@ -8,9 +8,8 @@ import src.ui.TabDash;
 
 public class DeliriumPanel extends JPanel {
     private TabDash tabDash;
-    private JTabbedPane tabbedPane;
-    private JPanel fourATPanel;
-    private JPanel timeBundlePanel;
+    private JButton fourATButton;
+    private JButton timeBundleButton;
 
     public DeliriumPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -22,63 +21,50 @@ public class DeliriumPanel extends JPanel {
     }
 
     private void initialiseComponents() {
-        // Create tabbed pane with custom styling
-        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPane.setOpaque(false);
-        tabbedPane.setBackground(new Color(255, 220, 220));
+        // Create panel for buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setOpaque(false);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        // Set smaller font for tab titles to fit better in the panel
-        Font tabFont = tabbedPane.getFont().deriveFont(Font.PLAIN, 11f);
-        tabbedPane.setFont(tabFont);
+        // Create buttons
+        fourATButton = new JButton("4AT");
+        timeBundleButton = new JButton("TIME Bundle");
         
-        // Create placeholder panels for now
-        fourATPanel = createTabPanel("4AT Assessment");
-        timeBundlePanel = createTabPanel("TIME Bundle");
+        // Set button properties
+        fourATButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        timeBundleButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        // Add tabs
-        tabbedPane.addTab("4AT", fourATPanel);
-        tabbedPane.addTab("TIME", timeBundlePanel);
+        // Add some spacing between buttons
+        buttonPanel.add(Box.createVerticalGlue());
+        buttonPanel.add(fourATButton);
+        buttonPanel.add(Box.createVerticalStrut(10));
+        buttonPanel.add(timeBundleButton);
+        buttonPanel.add(Box.createVerticalGlue());
         
-        // Ensure the tabbed pane fills the available space but doesn't expand beyond it
-        add(tabbedPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.CENTER);
         
-        // Set preferred size to match the original delirium panel dimensions
-        // This prevents the frailty section from growing
-        setPreferredSize(getPreferredSize());
-        setMinimumSize(getPreferredSize());
+        // Add button actions
+        fourATButton.addActionListener(e -> FourATDialog.showDialog(this, tabDash));
+        
+        timeBundleButton.addActionListener(e -> {
+            // TODO: Open TIME Bundle dialog or panel
+            JOptionPane.showMessageDialog(this, "TIME Bundle - To be implemented", 
+                "TIME Bundle", JOptionPane.INFORMATION_MESSAGE);
+        });
     }
-
-    private JPanel createTabPanel(String contentText) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
-        panel.setBackground(new Color(255, 220, 220));
-        
-        // Add a placeholder label for now (will be replaced with actual content later)
-        JLabel placeholderLabel = new JLabel("<html><center><i>" + contentText + " content<br>will be added here</i></center></html>");
-        placeholderLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        placeholderLabel.setVerticalAlignment(SwingConstants.CENTER);
-        placeholderLabel.setForeground(Color.GRAY);
-        
-        panel.add(placeholderLabel, BorderLayout.CENTER);
-        
-        return panel;
-    }
+    
 
     public void refreshForNewPatient() {
-        // This method will be called when switching patients
-        // Content refresh logic will be added when actual content is implemented
+        // No persistent data to refresh
     }
 
-    // Getter methods for future content implementation
-    public JPanel getFourATPanel() {
-        return fourATPanel;
+    // Getter methods for future implementation
+    public JButton getFourATButton() {
+        return fourATButton;
     }
 
-    public JPanel getTimeBundlePanel() {
-        return timeBundlePanel;
-    }
-
-    public JTabbedPane getTabbedPane() {
-        return tabbedPane;
+    public JButton getTimeBundleButton() {
+        return timeBundleButton;
     }
 }

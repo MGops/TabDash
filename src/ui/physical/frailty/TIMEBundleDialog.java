@@ -31,7 +31,7 @@ public class TIMEBundleDialog extends JDialog {
                 
                 // Set maximum dimensions (adjust these as needed)
                 int maxWidth = 800;
-                int maxHeight = 1000;
+                int maxHeight = 700;
                 
                 // Calculate scaled dimensions while maintaining aspect ratio
                 int originalWidth = originalImage.getWidth();

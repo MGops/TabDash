@@ -113,7 +113,8 @@ aspirin,0
 ibuprofen,0
 naproxen,0
 diclofenac,0
-insulin,0
+humulin,0
+novorapid,0
 omeprazole,1
 lansoprazole,1
 esomeprazole,0
@@ -172,7 +173,12 @@ hydrocortisone,1
 fluticasone,0
 mometasone,0
 pioglitazone,0
-adcal,0
+adcal_D3,0
 alendronate,0
 folic_acid,0
 methotrexate,0
+hydralazine,1
+simple_linctus,0
+hypromellose,0
+loratadine,0
+

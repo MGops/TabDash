@@ -157,10 +157,11 @@ public class ACBSection extends JPanel{
             if (selectedRow >= 0) {
                 DefaultTableModel model = (DefaultTableModel) medicationTable.getModel();
                 String medName = (String) model.getValueAt(selectedRow, 0);
+                String medNameLowercase = medName.toLowerCase();
                 model.removeRow(selectedRow);
                 updateTotalACB();
 
-                currentPatient.removeMedication(medName);
+                currentPatient.removeMedication(medNameLowercase);
                 tabDash.onPatientDataChanged();
                 tabDash.refreshMedicationPanel();
             } else {

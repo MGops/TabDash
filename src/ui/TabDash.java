@@ -20,6 +20,7 @@ import src.ui.panels.NotesPanel;
 import src.ui.panels.PhysicalHealthPanel;
 import src.ui.panels.SidePanel;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class TabDash {
 
     public TabDash() {
         patients = new ArrayList<>();
+        loadExistingPatients();
 
         for (Patient patient : patients) {
             PatientDataManager.loadPatient(patient);
@@ -152,7 +154,22 @@ public class TabDash {
     }
 
 
-    // New method to clear current patient reference
+    private void loadExistingPatients() {
+        File patientsDir = new File("data/patients/");
+        if (!patientsDir.exists() || !patientsDir.isDirectory()) {
+            return;
+        }
+
+        File[] files = patientsDir.listFiles((dir, name) -> name.endsWith(".txt"));
+        if (files != null) {
+            for (File file : files) {
+                String filename = file.getName();
+                String patientId = filename.substring(0, filename.length() - 4).replace("_", " ");
+                patients.add(new Patient(patientId));
+            }
+        }
+    }
+
     public void clearCurrentPatient() {
         currentPatient = null;
     }

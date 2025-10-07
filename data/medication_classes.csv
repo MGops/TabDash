@@ -140,8 +140,11 @@ salbutamol,bronchodilator,saba
 theophylline,bronchodilator,
 prednisolone,systemic_steroid,
 hydrocortisone,systemic_steroid,
-beclometasone,inhaled_corticosteroid,
-budesonide,inhaled_corticosteroid,
+luforbec(beclo/formo),inhaled_corticosteroid,
+trimbow(beclo/formo/glyco),inhaled_corticosteroid,
+trixeo(budeso/formo/glyco),inhaled_corticosteroid,
+symbicort(budeso/formo),inhaled_corticosteroid,
+relvar(fluti/vilant),inhaled_corticosteroid,
 fluticasone,inhaled_corticosteroid,
 mometasone,inhaled_corticosteroid,
 donepezil,anti_dementia,achE-i

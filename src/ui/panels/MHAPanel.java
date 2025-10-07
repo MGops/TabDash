@@ -66,6 +66,7 @@ public class MHAPanel extends JPanel{
     private JLabel alertMessage;
     private JButton alertYesBtn;
     private JButton alertNoBtn;
+    private JLabel consentToTreatmentLabel;
 
     public MHAPanel(TabDash tabDash) {
         this.tabDash = tabDash;
@@ -258,7 +259,8 @@ public class MHAPanel extends JPanel{
         
         expiryPanel.add(Box.createHorizontalStrut(30));
         // 3 month rule with traffic light
-        expiryPanel.add(new JLabel("Consent to treatment (3 month rule)"));
+        consentToTreatmentLabel = new JLabel("Consent to treatment (3 month rule)");
+        expiryPanel.add(consentToTreatmentLabel);
         threeMonthLabel = new JLabel("");
         threeMonthLabel.setOpaque(true);
         threeMonthLabel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
@@ -393,10 +395,14 @@ public class MHAPanel extends JPanel{
                 soadPanel.setVisible(false);
                 s62Panel.setVisible(false);
                 s62AlertLabel.setVisible(false);
+                consentToTreatmentLabel.setVisible(false);
+                threeMonthLabel.setVisible(false);
             } else {
                 soadPanel.setVisible(true);
                 s62Panel.setVisible(true);
                 updateS62AlertVisibility();
+                consentToTreatmentLabel.setVisible(true);
+                threeMonthLabel.setVisible(true);
             }
             panel.revalidate();
             panel.repaint();
@@ -966,8 +972,12 @@ public class MHAPanel extends JPanel{
             if (t3CheckBox.isSelected()) {
                 soadPanel.setVisible(false);
                 s62Panel.setVisible(false);
+                consentToTreatmentLabel.setVisible(false);
+                threeMonthLabel.setVisible(false);
             } else {
                 soadPanel.setVisible(true);
+                consentToTreatmentLabel.setVisible(true);
+                threeMonthLabel.setVisible(true);
             }
 
         } else {

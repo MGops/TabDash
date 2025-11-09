@@ -152,4 +152,7 @@ galantamine,anti_dementia,achE-i
 rivastigmine,anti_dementia,achE-i
 pioglitazone,antidiabetic,thiazolidinedione
 alendronate,bisphosphonate,
-adcal-D3,supplement
+adcal-D3,supplement,
+atorvastatin,statin,
+rosuvastatin,statin,
+simvstatin,statin,

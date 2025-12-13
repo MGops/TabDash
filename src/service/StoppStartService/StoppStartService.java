@@ -93,7 +93,7 @@ public class StoppStartService {
 
             boolean excludeDueToDoac = isExcludedDueToDoac(patientMedications, rule.medication);
 
-            if (conditionMatch && !alreadyHasMed) {
+            if (conditionMatch && !alreadyHasMed &!excludeDueToDoac) {
                 System.out.println(" START MATCH FOUND. Adding medication");
 
                 recommendations.add(new StartRecommendation(

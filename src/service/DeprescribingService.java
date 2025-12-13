@@ -72,7 +72,6 @@ public class DeprescribingService {
         // Anti-epileptics
         addMedicationRule("phenytoin", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
         addMedicationRule("carbamazepine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
-        addMedicationRule("sodium_valproate", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
         addMedicationRule("levetiracetam", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
         addMedicationRule("lamotrigine", DeprescribingCategory.DISCUSS_BEFORE_ALTERING);
         

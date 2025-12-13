@@ -86,19 +86,12 @@ public class StoppStartService {
         List<String> patientMedications = getPatientMedicationNames(patient);
         List<String> patientConditions = getPatientConditions(patient);
 
-        System.out.println("=== START ANALYSIS DEBUG ===");
-        System.out.println("Patient medications: " + patientMedications);
-        System.out.println("Patient conditions: " + patientConditions);
-        System.out.println("Number of START rules: " + startRules.size());
 
         for (StartRule rule : startRules) {
-            System.out.println("Checking START rule: " + rule.condition + " -> " + rule.medication);
-
             boolean conditionMatch = patientConditions.contains(rule.condition);
             boolean alreadyHasMed = hasMatchingMedication(patientMedications, rule.medication);
 
-            System.out.println(" Condition match: " + conditionMatch);
-            System.out.println(" Already has medication: " + alreadyHasMed);
+            boolean excludeDueToDoac = isExcludedDueToDoac(patientMedications, rule.medication);
 
             if (conditionMatch && !alreadyHasMed) {
                 System.out.println(" START MATCH FOUND. Adding medication");
@@ -198,10 +191,21 @@ public class StoppStartService {
 
 
     private boolean hasMatchingCondition(List<String> patientConditions, String ruleCondition) {
-        // Special case: if rule condition is "any condition", always match
         if (ruleCondition.equals("Any condition")) {
             return true;
         }
         return patientConditions.contains(ruleCondition);
     }
+
+    private boolean isExcludedDueToDoac(List<String> patientMedications, String ruleMedication) {
+    if (ruleMedication.equals("apixaban") && patientMedications.contains("rivaroxaban")) {
+        return true;
+    }
+    
+    if (ruleMedication.equals("rivaroxaban") && patientMedications.contains("apixaban")) {
+        return true;
+    }
+    
+    return false;
+}
 }

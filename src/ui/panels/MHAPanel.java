@@ -732,7 +732,7 @@ public class MHAPanel extends JPanel{
 
         Date sectionExpiry; // Calculate seciton expiry based on section type
         if (section2Btn.isSelected()) {
-            cal.add(Calendar.DAY_OF_MONTH, 28);
+            cal.add(Calendar.DAY_OF_MONTH, 27);
             sectionExpiry = cal.getTime();
         } else if (section3Btn.isSelected()) {
             cal.add(Calendar.MONTH, 6);
